@@ -1,6 +1,12 @@
 <html>
     <h1>Dev Page</h1>
 
+    <h2>Endpoint documentation</h2>
+
+    <a href="/swagger-ui/index.html#/">Swagger Doc</a>
+
+    <hr>
+
     <h2>General</h2>
 
     <button id="sendRequestBtn">Send REST Request to health</button>
@@ -45,7 +51,7 @@
                 email: document.getElementById('input1').value,
                 password: document.getElementById('input2').value
             };
-            fetch('/api/auth/register', {
+            fetch('/api/v1/auth/register', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -70,7 +76,7 @@
                 email: document.getElementById('input12').value,
                 password: document.getElementById('input22').value
             };
-            fetch('/api/auth/login', {
+            fetch('/api/v1/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -80,25 +86,26 @@
                 .then(response => response.json())
                 .then(data=> {
                     document.getElementById('output32').innerHTML=JSON.stringify(data)
-                    document.getElementById('input4').value = data.token
+                    document.getElementById('input5').value = data.token
                 })
                 .catch(error => console.error('Error:', error));
         });
     </script>
 
-    <input id="input4" placeholder="jwt">
-    <button id="button4">Test Credentials</button>
-    <p id="output4">false</p>
+
+    <input id="input5" placeholder="jwt">
+    <button id="button5">Auth Status</button>
+    <p id="output5">false</p>
     <script>
-        document.getElementById('button4').addEventListener('click', function() {
-            fetch('/authTest', {
+        document.getElementById('button5').addEventListener('click', function() {
+            fetch('/api/v1/auth/status', {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization':'Bearer ' + document.getElementById('input4').value
+                    'Authorization':'Bearer ' + document.getElementById('input5').value
                 },
             })
                 .then(response => response.text())
-                .then(data => document.getElementById('output4').innerHTML=data)
+                .then(data => document.getElementById('output5').innerHTML=data)
                 .catch(error => console.error('Error:', error));
         });
     </script>

@@ -11,11 +11,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtResponse {
 
-    @NotBlank
     @NonNull
     private String token;
 
-    @NotBlank
     @NonNull
     private String type="Bearer";
 
