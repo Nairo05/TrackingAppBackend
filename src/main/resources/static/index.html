@@ -1,0 +1,30 @@
+<html>
+    <h1>Dev Page</h1>
+
+    <button id="sendRequestBtn">Send REST Request to health</button>
+    <p id="output1">output</p>
+    <br>
+    <br>
+    <script>
+        document.getElementById('sendRequestBtn').addEventListener('click', function() {
+            fetch('/dev/health')
+                .then(response => response.text())
+                .then(data => document.getElementById('output1').innerHTML=data)
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+
+    <button id="sendRequestBtn2">Send REST Request to health and get example data from Database</button>
+    <p id="output2">output</p>
+    <br>
+    <br>
+    <script>
+        document.getElementById('sendRequestBtn2').addEventListener('click', function() {
+            fetch('/dev/database')
+                .then(response => response.text())
+                .then(data => document.getElementById('output2').innerHTML=data)
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+
+</html>
