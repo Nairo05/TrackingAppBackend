@@ -11,8 +11,6 @@
 
     <button id="sendRequestBtn">Send REST Request to health</button>
     <p id="output1">output</p>
-    <br>
-    <br>
     <script>
         document.getElementById('sendRequestBtn').addEventListener('click', function() {
             fetch('/dev/health')
@@ -24,8 +22,6 @@
 
     <button id="sendRequestBtn2">Dumb all Users from database</button>
     <p id="output2">output</p>
-    <br>
-    <br>
     <script>
         document.getElementById('sendRequestBtn2').addEventListener('click', function() {
             fetch('/dev/database')
@@ -43,8 +39,6 @@
     <input id="input2" type="text" placeholder="password" value="password123">
     <button id="sendRequestBtn3">Register User</button>
     <p id="output3">output</p>
-    <br>
-    <br>
     <script>
         document.getElementById('sendRequestBtn3').addEventListener('click', function() {
             const payload = {
@@ -70,8 +64,6 @@
     <input id="input22" type="text" placeholder="password" value="password123">
     <button id="sendRequestBtn32">Login User</button>
     <p id="output32">output</p>
-    <br>
-    <br>
     <script>
         document.getElementById('sendRequestBtn32').addEventListener('click', function() {
             const payload = {
@@ -108,6 +100,73 @@
             })
                 .then(response => response.text())
                 .then(data => document.getElementById('output5').innerHTML=data)
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+
+    <hr>
+    <h2>Friend Controller</h2>
+
+    <input id="input522" placeholder="jwt">
+    <button id="button522">get Friends</button>
+    <p id="output522">null</p>
+    <script>
+        document.getElementById('button522').addEventListener('click', function() {
+            fetch('/api/v1/friends', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization':'Bearer ' + document.getElementById('input522').value
+                },
+            })
+                .then(response => response.text())
+                .then(data => document.getElementById('output522').innerHTML=data)
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+
+    <input id="input5222" placeholder="jwt">
+    <input id="input52222" placeholder="friendID">
+    <button id="button5222">Delete Friend</button>
+    <p id="output5222">null</p>
+    <script>
+        document.getElementById('button5222').addEventListener('click', function() {
+            fetch('/api/v1/friend/'+document.getElementById('input52222').value, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization':'Bearer ' + document.getElementById('input5222').value
+                },
+            })
+                .then(response => response.text())
+                .then(data => document.getElementById('output5222').innerHTML=data)
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+
+    <hr>
+    <h2>Utility Controller</h2>
+
+    <input id="input9" type="text" placeholder="uuids" value="">
+    <input id="input99" type="text" placeholder="jwt" value="">
+    <button id="sendRequestBtn9">Login User</button>
+    <p id="output9">output</p>
+    <script>
+        document.getElementById('sendRequestBtn9').addEventListener('click', function() {
+            const uuidsInput = document.getElementById('input9').value;
+            const uuids = uuidsInput.split(',').map(uuid => uuid.trim()); // Split by comma and trim each UUID
+            console.log(uuids);
+            fetch('/api/v1/utility/identity', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization':'Bearer ' + document.getElementById('input99').value
+                },
+                body: JSON.stringify(uuids)
+            })
+                .then(response => response.json())
+                .then(data=> {
+                    document.getElementById('output9').innerHTML=JSON.stringify(data)
+                })
                 .catch(error => console.error('Error:', error));
         });
     </script>

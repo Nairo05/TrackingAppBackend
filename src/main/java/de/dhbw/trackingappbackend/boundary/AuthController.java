@@ -2,10 +2,11 @@ package de.dhbw.trackingappbackend.boundary;
 
 import de.dhbw.trackingappbackend.entity.AppUser;
 import de.dhbw.trackingappbackend.entity.UserRepository;
-import de.dhbw.trackingappbackend.model.ForgotPasswordModel;
-import de.dhbw.trackingappbackend.model.JwtResponse;
-import de.dhbw.trackingappbackend.model.LoginRequest;
-import de.dhbw.trackingappbackend.model.RegisterRequest;
+import de.dhbw.trackingappbackend.model.request.LoginRequest;
+import de.dhbw.trackingappbackend.model.request.RegisterRequest;
+import de.dhbw.trackingappbackend.model.response.ForgotPasswordModel;
+import de.dhbw.trackingappbackend.model.response.JwtResponse;
+import de.dhbw.trackingappbackend.model.response.ResetPasswordModel;
 import de.dhbw.trackingappbackend.security.JwtUtils;
 import de.dhbw.trackingappbackend.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -84,6 +85,12 @@ public class AuthController {
     @Operation(summary = "sends an email to reset the password")
     @PostMapping("/reset")
     public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordModel forgotPasswordModel) {
+        return ResponseEntity.status(501).build();
+    }
+
+    @Operation(summary = "needs the token from the email, resets the password")
+    @PostMapping("/reset/accepted")
+    public ResponseEntity<?> forgotPasswordAccepted(@Valid @RequestBody ResetPasswordModel resetPasswordModel) {
         return ResponseEntity.status(501).build();
     }
 }

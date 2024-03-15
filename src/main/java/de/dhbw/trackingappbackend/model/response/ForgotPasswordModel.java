@@ -1,4 +1,4 @@
-package de.dhbw.trackingappbackend.model;
+package de.dhbw.trackingappbackend.model.response;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

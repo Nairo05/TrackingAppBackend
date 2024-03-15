@@ -1,4 +1,4 @@
-package de.dhbw.trackingappbackend.model;
+package de.dhbw.trackingappbackend.model.request;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;

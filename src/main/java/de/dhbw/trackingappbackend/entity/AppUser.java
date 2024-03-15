@@ -1,11 +1,15 @@
 package de.dhbw.trackingappbackend.entity;
 
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.List;
 
 @Document(collection = "users_myapp")
 @Data
@@ -33,6 +37,10 @@ public class AppUser {
     @Size(min=8, max = 120)
     @NonNull
     private String password;
+
+    private String shownName;
+
+    List<String> friendIDs;
 
     @Override
     public String toString() {
