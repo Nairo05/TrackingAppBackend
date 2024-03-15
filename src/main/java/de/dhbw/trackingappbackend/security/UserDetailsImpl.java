@@ -10,7 +10,7 @@ import java.util.Collection;
 public class UserDetailsImpl implements UserDetails {
     private static final long serialVersionUID = 1L;
 
-    private Long id;
+    private String id;
 
     @Getter
     private String email;
@@ -20,7 +20,7 @@ public class UserDetailsImpl implements UserDetails {
     //TODO
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id, String email, String password) {
+    public UserDetailsImpl(String id, String email, String password) {
         this.id = id;
         this.email = email;
         this.password = password;
