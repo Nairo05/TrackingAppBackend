@@ -1,9 +1,16 @@
 package de.dhbw.trackingappbackend.entity;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
-public interface UserRepository extends CrudRepository<AppUser, Long> {
+import java.util.Optional;
+
+public interface UserRepository extends JpaRepository<AppUser, Long> {
 
     AppUser findById(long id);
+
+    Optional<AppUser> findByEmail(String email);
+
+    Boolean existsByEmail(String email);
 
 }

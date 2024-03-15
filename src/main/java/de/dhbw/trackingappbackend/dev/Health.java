@@ -1,11 +1,14 @@
 package de.dhbw.trackingappbackend.dev;
 
+import de.dhbw.trackingappbackend.entity.AppUser;
 import de.dhbw.trackingappbackend.entity.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @Profile("dev")
 @RestController
@@ -21,8 +24,8 @@ public class Health {
     }
 
     @GetMapping("/database")
-    public String database() {
-        return userRepository.findById(2).toString();
+    public List<AppUser> database() {
+        return userRepository.findAll();
     }
 
 }

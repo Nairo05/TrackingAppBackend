@@ -1,6 +1,8 @@
 <html>
     <h1>Dev Page</h1>
 
+    <h2>General</h2>
+
     <button id="sendRequestBtn">Send REST Request to health</button>
     <p id="output1">output</p>
     <br>
@@ -14,7 +16,7 @@
         });
     </script>
 
-    <button id="sendRequestBtn2">Send REST Request to health and get example data from Database</button>
+    <button id="sendRequestBtn2">Dumb all Users from database</button>
     <p id="output2">output</p>
     <br>
     <br>
@@ -23,6 +25,80 @@
             fetch('/dev/database')
                 .then(response => response.text())
                 .then(data => document.getElementById('output2').innerHTML=data)
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+
+    <hr>
+
+    <h2>Auth Flow</h2>
+
+    <input id="input1" type="text" placeholder="email@email.de" value="email@email.de">
+    <input id="input2" type="text" placeholder="password" value="password">
+    <button id="sendRequestBtn3">Register User</button>
+    <p id="output3">output</p>
+    <br>
+    <br>
+    <script>
+        document.getElementById('sendRequestBtn3').addEventListener('click', function() {
+            const payload = {
+                email: document.getElementById('input1').value,
+                password: document.getElementById('input2').value
+            };
+            fetch('/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+                .then(response => response.text())
+                .then(data => document.getElementById('output3').innerHTML=data)
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+
+    <input id="input12" type="text" placeholder="email@email.de" value="email@email.de">
+    <input id="input22" type="text" placeholder="password" value="password">
+    <button id="sendRequestBtn32">Login User</button>
+    <p id="output32">output</p>
+    <br>
+    <br>
+    <script>
+        document.getElementById('sendRequestBtn32').addEventListener('click', function() {
+            const payload = {
+                email: document.getElementById('input12').value,
+                password: document.getElementById('input22').value
+            };
+            fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+                .then(response => response.json())
+                .then(data=> {
+                    document.getElementById('output32').innerHTML=JSON.stringify(data)
+                    document.getElementById('input4').value = data.token
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+
+    <input id="input4" placeholder="jwt">
+    <button id="button4">Test Credentials</button>
+    <p id="output4">false</p>
+    <script>
+        document.getElementById('button4').addEventListener('click', function() {
+            fetch('/authTest', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization':'Bearer ' + document.getElementById('input4').value
+                },
+            })
+                .then(response => response.text())
+                .then(data => document.getElementById('output4').innerHTML=data)
                 .catch(error => console.error('Error:', error));
         });
     </script>
