@@ -42,6 +42,8 @@ public class AppUser {
 
     List<String> friendIDs;
 
+    List<String> locationIDs;
+
     @Override
     public String toString() {
         return "ID: " + this.getId() + " Firstname:" + this.getFirstname() + " Lastname:" + this.getLastname();

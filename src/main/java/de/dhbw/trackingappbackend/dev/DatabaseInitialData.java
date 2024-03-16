@@ -1,6 +1,8 @@
 package de.dhbw.trackingappbackend.dev;
 
 import de.dhbw.trackingappbackend.entity.AppUser;
+import de.dhbw.trackingappbackend.entity.Location;
+import de.dhbw.trackingappbackend.entity.LocationRepository;
 import de.dhbw.trackingappbackend.entity.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -22,10 +24,11 @@ public class DatabaseInitialData {
     private final PasswordEncoder encoder;
 
     @Bean
-    public CommandLineRunner createTestData(UserRepository userRepository){
+    public CommandLineRunner createTestData(UserRepository userRepository, LocationRepository locationRepository) {
         return (args) -> {
 
             userRepository.deleteAll();
+            locationRepository.deleteAll();
 
             String password = encoder.encode("password123.");
 
@@ -36,7 +39,8 @@ public class DatabaseInitialData {
                     "test1@test.de",
                     password,
                     "ShownName1",
-                    Collections.emptyList());
+                    Collections.emptyList(),
+                    List.of("A", "B", "C", "D"));
 
             AppUser appUser2 = new AppUser(
                     UUID.randomUUID().toString(),
@@ -45,6 +49,7 @@ public class DatabaseInitialData {
                     "tes21@test.de",
                     password,
                     "ShownName2",
+                    Collections.emptyList(),
                     Collections.emptyList());
 
             userRepository.save(appUser1);
@@ -57,7 +62,8 @@ public class DatabaseInitialData {
                     "test4@test.de",
                     password,
                     "ShownName3",
-                    List.of(appUser1.getId(), appUser2.getId())));
+                    List.of(appUser1.getId(), appUser2.getId()),
+                    Collections.emptyList()));
 
             userRepository.save(new AppUser(
                     UUID.randomUUID().toString(),
@@ -66,7 +72,15 @@ public class DatabaseInitialData {
                     "test3@test.de",
                     password,
                     "ShownName3",
-                    List.of(appUser2.getId())));
+                    List.of(appUser2.getId()),
+                    Collections.emptyList()));
+
+            locationRepository.saveAll(Arrays.asList(
+                new Location("A", appUser1.getId(), new double[]{0.0001, 0.0001}),
+                new Location("B", appUser1.getId(), new double[]{0.9999, 0.9999}),
+                new Location("C", appUser1.getId(), new double[]{0.5, 0.5}),
+                new Location("D", appUser1.getId(), new double[]{0.75, 0.25})
+            ));
         };
     }
 }
