@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@Document(collection = "users_myapp")
+@Document(collection = "base")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

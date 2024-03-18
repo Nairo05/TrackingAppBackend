@@ -6,7 +6,7 @@ import lombok.NonNull;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "locations_myapp")
+@Document(collection = "base_location")
 @Data
 @AllArgsConstructor
 public class Location {
