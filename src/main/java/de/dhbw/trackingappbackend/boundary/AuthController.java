@@ -1,5 +1,6 @@
 package de.dhbw.trackingappbackend.boundary;
 
+import de.dhbw.trackingappbackend.control.AuthService;
 import de.dhbw.trackingappbackend.entity.AppUser;
 import de.dhbw.trackingappbackend.entity.UserRepository;
 import de.dhbw.trackingappbackend.model.request.LoginRequest;
@@ -31,8 +32,7 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
-    private final PasswordEncoder encoder;
-    private final JwtUtils jwtUtils;
+    private final AuthService authService;
 
     @Operation(summary = "register a new User")
     @PostMapping("/register")
@@ -43,12 +43,19 @@ public class AuthController {
                     .body("Username is already taken");
         }
 
-        AppUser appUser = new AppUser(signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
-
-        userRepository.save(appUser);
+        authService.registerUser(signUpRequest);
 
         return ResponseEntity.ok(("User registered successfully!"));
+    }
+
+    @Operation(summary = "logs out the current user and deletes all Token")
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout() {
+        String currentUser = getUserFromContext().getId();
+
+        authService.logout(currentUser);
+
+        return ResponseEntity.ok("logged out");
     }
 
     @Operation(summary = "login as an existing user")
@@ -59,12 +66,10 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtUtils.generateJwtToken(authentication);
 
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
-        return ResponseEntity.ok(new JwtResponse(jwt,
-                userDetails.getEmail()));
+        return ResponseEntity.ok(authService.generateJWTResponse(userDetails.getId(), userDetails.getEmail()));
     }
 
     @Operation(summary = "get status details about the current user")
@@ -73,9 +78,7 @@ public class AuthController {
     public ResponseEntity<?> status() {
 
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-            return ResponseEntity.ok(userDetails);
+            return ResponseEntity.ok(getUserFromContext());
         } catch (Exception e) {
             return ResponseEntity.ok("Not authenticated");
         }
@@ -92,5 +95,13 @@ public class AuthController {
     @PostMapping("/reset/accepted")
     public ResponseEntity<?> forgotPasswordAccepted(@Valid @RequestBody ResetPasswordModel resetPasswordModel) {
         return ResponseEntity.status(501).build();
+    }
+
+    private UserDetailsImpl getUserFromContext() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        return (UserDetailsImpl) authentication.getPrincipal();
+
     }
 }
