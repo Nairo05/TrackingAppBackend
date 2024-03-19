@@ -1,5 +1,6 @@
 package de.dhbw.trackingappbackend.boundary;
 
+import de.dhbw.trackingappbackend.control.CoordinateService;
 import de.dhbw.trackingappbackend.entity.AppUser;
 import de.dhbw.trackingappbackend.entity.Location;
 import de.dhbw.trackingappbackend.entity.LocationRepository;
@@ -9,9 +10,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
-import org.springframework.data.geo.Box;
-import org.springframework.data.geo.Point;
+import org.springframework.data.mongodb.core.geo.GeoJsonPolygon;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,10 +30,12 @@ public class LocationController {
 
     private final LocationRepository locationRepository;
 
+    private final CoordinateService coordinateService;
+
     @SecurityRequirement(name="oauth2")
     @Operation(summary = "returns a List of Locations within given Box")
     @GetMapping("/locations")
-    public ResponseEntity<?> getLocations(@RequestParam double firstLon, @RequestParam double firstLat, @RequestParam double secondLon, @RequestParam double secondLat) {
+    public ResponseEntity<?> getLocations(@RequestParam double lon1, @RequestParam double lat1, @RequestParam double lon2, @RequestParam double lat2) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
@@ -44,9 +45,9 @@ public class LocationController {
         if (appUserOptional.isPresent()) {
 
             String appUserId = appUserOptional.get().getId();
-            Box b = new Box(new Point(firstLon, firstLat), new Point(secondLon, secondLat));
+            GeoJsonPolygon polygon = coordinateService.getGeoJsonPolygon(lon1, lat1, lon2, lat2);
 
-            List<Location> locations = locationRepository.findByAppUserIdAndPositionWithin(appUserId, b);
+            List<Location> locations = locationRepository.findByAppUserIdAndPositionWithin(appUserId, polygon);
 
             if (locations == null || locations.isEmpty()) {
                 return ResponseEntity.ok("Go outside");
