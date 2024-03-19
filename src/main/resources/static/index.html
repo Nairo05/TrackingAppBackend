@@ -104,6 +104,26 @@
         });
     </script>
 
+    <input id="inputre1" placeholder="jwt">
+    <input id="inputre2" placeholder="refresh-token">
+    <button id="buttonre">Refresh the jtw</button>
+    <p id="outputre">false</p>
+    <script>
+        document.getElementById('buttonre').addEventListener('click', function() {
+            fetch('/api/v1/auth/token/refresh', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + document.getElementById('inputre1').value,
+                },
+                body: document.getElementById('inputre2').value
+            })
+                .then(response => response.text())
+                .then(data => document.getElementById('outputre').innerHTML=data)
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+
     <hr>
     <h2>Friend Controller</h2>
 

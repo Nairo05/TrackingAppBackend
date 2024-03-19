@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 @Data
+@Valid
 public class RegisterRequest {
 
     @NotBlank

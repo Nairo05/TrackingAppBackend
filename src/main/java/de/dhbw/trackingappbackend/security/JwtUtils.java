@@ -1,8 +1,12 @@
 package de.dhbw.trackingappbackend.security;
 
 import java.security.Key;
-import java.util.Date;
+import java.time.Instant;
+import java.util.*;
 
+import de.dhbw.trackingappbackend.entity.TokenEntity;
+import de.dhbw.trackingappbackend.entity.TokenRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -15,7 +19,10 @@ import io.jsonwebtoken.security.Keys;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class JwtUtils {
+
+    private final TokenRepository tokenRepository;
 
     @Value("${app.jwtSecret}")
     private String jwtSecret;
@@ -81,5 +88,27 @@ public class JwtUtils {
             log.error("JWT claims string is empty: {}", e.getMessage());
         }
         return false;
+    }
+
+    public String generateRefreshToken(String userID) {
+        List<TokenEntity> refreshTokenEntities = tokenRepository.findRefreshTokenEntityByUserId(userID);
+
+        Optional<TokenEntity> earliestExpiringToken = refreshTokenEntities.stream()
+                .min(Comparator.comparing(TokenEntity::getExpiryDate));
+
+        if (earliestExpiringToken.isPresent() && refreshTokenEntities.size() >= 3) {
+            TokenEntity token = earliestExpiringToken.get();
+            tokenRepository.delete(token);
+        }
+
+        String refreshToken = UUID.randomUUID().toString();
+
+        TokenEntity tokenEntity = new TokenEntity();
+        tokenEntity.setUserId(userID);
+        tokenEntity.setRefreshToken(refreshToken);
+        tokenEntity.setExpiryDate(Instant.now().plusSeconds(100000));
+        tokenRepository.save(tokenEntity);
+
+        return refreshToken;
     }
 }
