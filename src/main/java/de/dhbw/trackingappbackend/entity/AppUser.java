@@ -13,6 +13,7 @@ import java.util.List;
 
 @Document(collection = "base")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @RequiredArgsConstructor
