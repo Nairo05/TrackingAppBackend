@@ -10,6 +10,11 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CoordinateService {
 
+    /*public GeoJsonPolygon getGeoJsonPolygon(double latitude, double longitude, byte zoomLevel) {
+
+        return null;
+    }*/
+
     public GeoJsonPolygon getGeoJsonPolygon(double lon1, double lat1, double lon2, double lat2) {
 
         GeoJsonPolygon polygon = new GeoJsonPolygon(

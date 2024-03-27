@@ -32,8 +32,39 @@ public class LocationController {
 
     private final CoordinateService coordinateService;
 
+    /*@SecurityRequirement(name="oauth2")
+    @Operation(summary = "Returns a list of locations of a user by given zoomLevel, starting from the given lat/lon coordinates as the west/south anchor point")
+    @GetMapping("/locations")
+    public ResponseEntity<?> getLocations(@RequestParam double latitude, @RequestParam double longitude, @RequestParam byte zoomLevel) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        Optional<AppUser> appUserOptional = userRepository.findById(userDetails.getId());
+
+        if (zoomLevel != 14) return ResponseEntity.badRequest().body("Zoom level must be 14"); // TODO remove zoom restriction
+
+        if (appUserOptional.isPresent()) {
+
+            String appUserId = appUserOptional.get().getId();
+            GeoJsonPolygon polygon = coordinateService.getGeoJsonPolygon(latitude, longitude, zoomLevel);
+
+            List<Location> locations = locationRepository.findByAppUserIdAndPositionWithin(appUserId, polygon);
+
+            if (locations == null || locations.isEmpty()) {
+                return ResponseEntity.ok("Go outside");
+            }
+            else {
+                return ResponseEntity.ok(locations);
+            }
+        }
+        else {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+    }*/
+
     @SecurityRequirement(name="oauth2")
-    @Operation(summary = "returns a List of Locations within given Box")
+    @Operation(summary = "Returns a List of Locations within given Box of the two Lat/Lon Coordinate Pairs")
     @GetMapping("/locations")
     public ResponseEntity<?> getLocations(@RequestParam double lon1, @RequestParam double lat1, @RequestParam double lon2, @RequestParam double lat2) {
 
