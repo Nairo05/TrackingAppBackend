@@ -32,7 +32,7 @@ public class LocationController {
 
     private final CoordinateService coordinateService;
 
-    /*@SecurityRequirement(name="oauth2")
+    @SecurityRequirement(name="oauth2")
     @Operation(summary = "Returns a list of locations of a user by given zoomLevel, starting from the given lat/lon coordinates as the west/south anchor point")
     @GetMapping("/locations")
     public ResponseEntity<?> getLocations(@RequestParam double latitude, @RequestParam double longitude, @RequestParam byte zoomLevel) {
@@ -61,12 +61,13 @@ public class LocationController {
         else {
             return ResponseEntity.badRequest().body("User not found");
         }
-    }*/
+    }
+
 
     @SecurityRequirement(name="oauth2")
     @Operation(summary = "Returns a List of Locations within given Box of the two Lat/Lon Coordinate Pairs")
-    @GetMapping("/locations")
-    public ResponseEntity<?> getLocations(@RequestParam double lon1, @RequestParam double lat1, @RequestParam double lon2, @RequestParam double lat2) {
+    @GetMapping("/locations/all")
+    public ResponseEntity<?> getAllLocations(@RequestParam double lon1, @RequestParam double lat1, @RequestParam double lon2, @RequestParam double lat2) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();

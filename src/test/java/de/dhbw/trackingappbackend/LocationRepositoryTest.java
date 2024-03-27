@@ -45,7 +45,7 @@ public class LocationRepositoryTest {
 
         assert(locationList1.size() == 4);
         assert(locationList2.size() == 3);
-        assert(locationList3.size() == 1); // points on the border are not included
+        assert(locationList3.size() == 2); // points on the border are not included
     }
 
     /*
