@@ -15,7 +15,7 @@ public class Location {
     private String id;
 
     @NonNull
-    private String appUserId;
+    private String appUserId; // TODO feld eigentlich nicht sinnvoll
 
     @NonNull
     private double[] position;
