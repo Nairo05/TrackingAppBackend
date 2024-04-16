@@ -1,5 +1,6 @@
 package de.dhbw.trackingappbackend.control;
 
+import de.dhbw.trackingappbackend.entity.UserRepository;
 import de.dhbw.trackingappbackend.entity.location.Tile;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
