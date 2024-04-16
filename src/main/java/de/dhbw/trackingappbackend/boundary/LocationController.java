@@ -1,11 +1,13 @@
 package de.dhbw.trackingappbackend.boundary;
 
 import de.dhbw.trackingappbackend.control.CoordinateService;
+import de.dhbw.trackingappbackend.control.TileService;
 import de.dhbw.trackingappbackend.entity.AppUser;
 import de.dhbw.trackingappbackend.entity.location.Location;
 import de.dhbw.trackingappbackend.entity.LocationRepository;
 import de.dhbw.trackingappbackend.entity.UserRepository;
 import de.dhbw.trackingappbackend.security.UserDetailsImpl;
+import de.dhbw.trackingappbackend.entity.location.LocationWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Tag(name = "Location Controller")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -31,6 +34,8 @@ public class LocationController {
     private final LocationRepository locationRepository;
 
     private final CoordinateService coordinateService;
+
+    private final TileService tileService;
 
     @SecurityRequirement(name="oauth2")
     @Operation(summary = "Returns a list of locations of a user by given zoomLevel, starting from the given lat/lon coordinates as the west/south anchor point")
@@ -55,7 +60,9 @@ public class LocationController {
                 return ResponseEntity.ok("Go outside");
             }
             else {
-                return ResponseEntity.ok(locations);
+                return ResponseEntity.ok(locations.stream()
+                    .map(LocationWrapper::new)
+                    .collect(Collectors.toList()));
             }
         }
         else {
@@ -84,8 +91,9 @@ public class LocationController {
                 return ResponseEntity.ok("Go outside");
             }
             else {
-                return ResponseEntity.ok(locations);
-            }
+                return ResponseEntity.ok(locations.stream()
+                    .map(LocationWrapper::new)
+                    .collect(Collectors.toList()));            }
         }
         else {
             return ResponseEntity.badRequest().body("User not found");

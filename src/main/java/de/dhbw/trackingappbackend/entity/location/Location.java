@@ -9,18 +9,21 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "base_location")
 @Data
 @AllArgsConstructor
-@IdClass(LocationId.class)
+@IdClass(TileId.class)
 public class Location {
 
+    // unique tile identifier by x, y and zoom level
     @EmbeddedId
-    private LocationId locationId;
+    private TileId tileId;
 
+    // user id of the app user
     private String appUserId;
 
-    private double[] position;
+    // position of the upper-left tile corner
+    private double[] position; // TODO change to lower left corner?
 
     @Override
     public String toString() {
-        return "ID: " + this.locationId + " Position: " + this.getPosition()[0] + "," + this.getPosition()[1];
+        return "ID: " + this.tileId + " Position: " + this.position[0] + "," + this.position[1];
     }
 }

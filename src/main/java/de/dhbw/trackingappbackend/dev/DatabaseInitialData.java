@@ -2,7 +2,7 @@ package de.dhbw.trackingappbackend.dev;
 
 import de.dhbw.trackingappbackend.entity.*;
 import de.dhbw.trackingappbackend.entity.location.Location;
-import de.dhbw.trackingappbackend.entity.location.LocationId;
+import de.dhbw.trackingappbackend.entity.location.TileId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -39,7 +39,7 @@ public class DatabaseInitialData {
                     password,
                     "ShownName1",
                     Collections.emptyList(),
-                    List.of("A", "B", "C", "D"));
+                    Collections.emptyList());
 
             AppUser appUser2 = new AppUser(
                     UUID.randomUUID().toString(),
@@ -74,11 +74,58 @@ public class DatabaseInitialData {
                     List.of(appUser2.getId()),
                     Collections.emptyList()));
 
+            AppUser testUser = new AppUser(
+                UUID.randomUUID().toString(),
+                "Test",
+                "User",
+                "test@test.de",
+                password,
+                "Test Nutzer",
+                Collections.emptyList(),
+                Collections.emptyList());
+
+            AppUser horbUser = new AppUser(
+                UUID.randomUUID().toString(),
+                "Horb",
+                "User",
+                "horb@test.de",
+                password,
+                "Horb Nutzer",
+                Collections.emptyList(),
+                Collections.emptyList()); // TODO remove app user id from location and move to this list
+
+            AppUser datevUser = new AppUser(
+                UUID.randomUUID().toString(),
+                "Datev",
+                "User",
+                "datev@test.de",
+                password,
+                "DATEV Nutzer",
+                Collections.emptyList(),
+                Collections.emptyList());
+
+            AppUser weltUser = new AppUser(
+                UUID.randomUUID().toString(),
+                "Welt",
+                "User",
+                "welt@test.de",
+                password,
+                "Welt Nutzer",
+                Collections.emptyList(),
+                Collections.emptyList());
+
+            userRepository.save(testUser);
+            userRepository.save(horbUser);
+            userRepository.save(datevUser);
+            userRepository.save(weltUser);
+
             locationRepository.saveAll(Arrays.asList(
-                new Location(new LocationId(0, 0), appUser1.getId(), new double[]{0.0, 0.0}),
-                new Location(new LocationId(0, 1), appUser1.getId(), new double[]{0.0, 0.5}),
-                new Location(new LocationId(1, 0), appUser1.getId(), new double[]{0.5, 0.0}),
-                new Location(new LocationId(1, 1), appUser1.getId(), new double[]{0.5, 0.5})
+                new Location(new TileId(0, 0, (byte) 14), testUser.getId(), new double[]{0, 0}),
+                new Location(new TileId(0, 1, (byte) 14), testUser.getId(), new double[]{0, 1}),
+                new Location(new TileId(1, 0, (byte) 14), testUser.getId(), new double[]{1, 0}),
+                new Location(new TileId(1, 1, (byte) 14), testUser.getId(), new double[]{1, 1}),
+                new Location(new TileId(8587, 5664, (byte) 14), horbUser.getId(),
+                    new double[]{48.45835188280866, 8.67919921875})
             ));
         };
     }

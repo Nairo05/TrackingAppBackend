@@ -1,6 +1,7 @@
 package de.dhbw.trackingappbackend;
 
 import de.dhbw.trackingappbackend.control.CoordinateService;
+import de.dhbw.trackingappbackend.control.TileService;
 import de.dhbw.trackingappbackend.entity.AppUser;
 import de.dhbw.trackingappbackend.entity.location.Location;
 import de.dhbw.trackingappbackend.entity.LocationRepository;
@@ -20,26 +21,15 @@ public class LocationRepositoryTest {
 
     @Autowired
     LocationRepository locationRepository;
-
+    @Autowired
+    TileService tileService;
     @Autowired
     CoordinateService coordinateService;
 
     @Test
-    public void testFindLocationsByUser() {
-
-        Optional<AppUser> appUserOptional = userRepository.findByEmail("test1@test.de");
-        assert appUserOptional.isPresent();
-
-        String appUserId = appUserOptional.get().getId();
-        List<Location> locationList = locationRepository.findByAppUserId(appUserId);
-
-        assert(locationList.size() == 4);
-    }
-
-    @Test
     public void testFindAllLocationsByUser() {
 
-        Optional<AppUser> appUserOptional = userRepository.findByEmail("test1@test.de");
+        Optional<AppUser> appUserOptional = userRepository.findByEmail("test@test.de");
         assert appUserOptional.isPresent();
 
         String appUserId = appUserOptional.get().getId();

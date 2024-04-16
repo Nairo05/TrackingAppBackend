@@ -4,7 +4,6 @@ import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
@@ -14,13 +13,15 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
-public class LocationId implements Serializable {
+public class TileId implements Serializable {
 
     private int xTile;
 
     private int yTile;
 
+    private byte zoomLevel;
+
     public String toString() {
-        return "X: " + this.xTile + " Y: " + this.yTile;
+        return "x" + this.xTile + " y" + this.yTile + " z" + this.zoomLevel;
     }
 }
