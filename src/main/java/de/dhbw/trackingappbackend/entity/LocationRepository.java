@@ -1,5 +1,6 @@
 package de.dhbw.trackingappbackend.entity;
 
+import de.dhbw.trackingappbackend.entity.location.Location;
 import org.springframework.data.mongodb.core.geo.GeoJsonPolygon;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;

@@ -54,14 +54,14 @@ public class CoordinateService {
     }
 
     /**
-     * @deprecated Use getGeoJsonPolygon(latitude, longitude, zoomlevel) instead.
+     * Deprecated!!! Use getGeoJsonPolygon(latitude, longitude, zoomlevel) instead.
      * Returns a GeoJsonPolygon object with the given coordinates.
      * @param lon1
      * @param lat1
      * @param lon2
      * @param lat2
      * @return
-     */
+     *
     public GeoJsonPolygon getGeoJsonPolygon(double lon1, double lat1, double lon2, double lat2) {
 
         GeoJsonPolygon polygon = new GeoJsonPolygon(
@@ -73,4 +73,5 @@ public class CoordinateService {
 
         return polygon;
     }
+     */
 }

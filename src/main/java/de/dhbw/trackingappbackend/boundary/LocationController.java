@@ -65,9 +65,9 @@ public class LocationController {
 
 
     @SecurityRequirement(name="oauth2")
-    @Operation(summary = "Returns a List of Locations within given Box of the two Lat/Lon Coordinate Pairs")
+    @Operation(summary = "Returns a List of all Locations of a User")
     @GetMapping("/locations/all")
-    public ResponseEntity<?> getAllLocations(@RequestParam double lon1, @RequestParam double lat1, @RequestParam double lon2, @RequestParam double lat2) {
+    public ResponseEntity<?> getAllLocations() {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
@@ -77,9 +77,8 @@ public class LocationController {
         if (appUserOptional.isPresent()) {
 
             String appUserId = appUserOptional.get().getId();
-            GeoJsonPolygon polygon = coordinateService.getGeoJsonPolygon(lon1, lat1, lon2, lat2);
 
-            List<Location> locations = locationRepository.findByAppUserIdAndPositionWithin(appUserId, polygon);
+            List<Location> locations = locationRepository.findByAppUserId(appUserId);
 
             if (locations == null || locations.isEmpty()) {
                 return ResponseEntity.ok("Go outside");
