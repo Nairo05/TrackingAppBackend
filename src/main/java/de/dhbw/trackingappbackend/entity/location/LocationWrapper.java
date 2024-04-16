@@ -20,13 +20,13 @@ public class LocationWrapper {
 
     public LocationWrapper(Location location) {
 
-        this.xTile = location.getTileId().getXTile();
-        this.yTile = location.getTileId().getYTile();
-        this.zoomLevel = location.getTileId().getZoomLevel();
+        this.xTile = location.getTile().getXTile();
+        this.yTile = location.getTile().getYTile();
+        this.zoomLevel = location.getTile().getZoomLevel();
 
         this.posUpperLeft = location.getPosition();
-        this.posUpperRight = TileService.getCoordinatesByTileId(new TileId(this.xTile + 1, this.yTile, this.zoomLevel));
-        this.posLowerRight = TileService.getCoordinatesByTileId(new TileId(this.xTile + 1, this.yTile + 1, this.zoomLevel));
-        this.posLowerLeft = TileService.getCoordinatesByTileId(new TileId(this.xTile, this.yTile + 1, this.zoomLevel));
+        this.posUpperRight = TileService.getCoordinatesByTile(new Tile(this.xTile + 1, this.yTile, this.zoomLevel));
+        this.posLowerRight = TileService.getCoordinatesByTile(new Tile(this.xTile + 1, this.yTile + 1, this.zoomLevel));
+        this.posLowerLeft = TileService.getCoordinatesByTile(new Tile(this.xTile, this.yTile + 1, this.zoomLevel));
     }
 }

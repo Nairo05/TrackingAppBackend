@@ -1,8 +1,10 @@
 package de.dhbw.trackingappbackend.dev;
 
-import de.dhbw.trackingappbackend.entity.*;
+import de.dhbw.trackingappbackend.entity.AppUser;
+import de.dhbw.trackingappbackend.entity.LocationRepository;
+import de.dhbw.trackingappbackend.entity.UserRepository;
 import de.dhbw.trackingappbackend.entity.location.Location;
-import de.dhbw.trackingappbackend.entity.location.TileId;
+import de.dhbw.trackingappbackend.entity.location.Tile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -114,16 +116,16 @@ public class DatabaseInitialData {
                 Collections.emptyList(),
                 Collections.emptyList());
 
-            Location loc1 = new Location(new TileId(0, 0, (byte) 14), testUser.getId(), new double[]{0, 0});
-            Location loc2 = new Location(new TileId(0, 1, (byte) 14), testUser.getId(), new double[]{0, 1});
-            Location loc3 = new Location(new TileId(1, 0, (byte) 14), testUser.getId(), new double[]{1, 0});
-            Location loc4 = new Location(new TileId(1, 1, (byte) 14), testUser.getId(), new double[]{1, 1});
-            Location locHorb = new Location(new TileId(8587, 5664, (byte) 14), horbUser.getId(), new double[]{48.45835188280866, 8.67919921875});
+            Location loc1 = new Location(UUID.randomUUID().toString(), new Tile(0, 0, (byte) 14), testUser.getId(), new double[]{0, 0});
+            Location loc2 = new Location(UUID.randomUUID().toString(), new Tile(0, 1, (byte) 14), testUser.getId(), new double[]{0, 1});
+            Location loc3 = new Location(UUID.randomUUID().toString(), new Tile(1, 0, (byte) 14), testUser.getId(), new double[]{1, 0});
+            Location loc4 = new Location(UUID.randomUUID().toString(), new Tile(1, 1, (byte) 14), testUser.getId(), new double[]{1, 1});
+            Location locHorb = new Location(UUID.randomUUID().toString(), new Tile(8587, 5664, (byte) 14), horbUser.getId(), new double[]{48.45835188280866, 8.67919921875});
 
             locationRepository.saveAll(Arrays.asList(loc1, loc2, loc3, loc4, locHorb));
 
-            testUser.setLocations(Arrays.asList(loc1, loc2, loc3, loc4));
-            horbUser.setLocations(Collections.singletonList(locHorb));
+            testUser.setLocationIds(Arrays.asList(loc1.getId(), loc2.getId(), loc3.getId(), loc4.getId()));
+            horbUser.setLocationIds(Collections.singletonList(locHorb.getId()));
 
             userRepository.save(testUser);
             userRepository.save(horbUser);

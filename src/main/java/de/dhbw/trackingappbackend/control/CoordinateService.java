@@ -1,7 +1,5 @@
 package de.dhbw.trackingappbackend.control;
 
-import de.dhbw.trackingappbackend.entity.location.Location;
-import de.dhbw.trackingappbackend.entity.location.TileId;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.geo.Point;
@@ -30,14 +28,12 @@ public class CoordinateService {
         // TODO messy, refactor! Es steht noch nicht fest, wie viele Tiles vom FE bei welchem Zoomlevel benötigt werden
         //  daher wird vorerst nur ein fest definierter Bereich zurückgegeben (grob 8 Tiles horizontal, 16 Tiles vertikal)
         //  Außerdem wird die variierende Distanz zwischen Längengraden noch nicht berücksichtigt!
-        GeoJsonPolygon polygon = new GeoJsonPolygon(
+        return new GeoJsonPolygon(
             new Point(latitude, longitude),
             new Point(latitude, longitude + tileOffset * 8),
             new Point(latitude + tileOffset * 16, longitude + tileOffset * 8),
             new Point(latitude + tileOffset * 16, longitude),
             new Point(latitude, longitude)); // first and last point have to be the same
-
-        return polygon;
     }
 
     /**
@@ -54,26 +50,4 @@ public class CoordinateService {
     public double calculateDistance(double latitude, byte zoomLevel) {
         return EARTH_CIRCUMFERENCE * Math.cos(Math.toRadians(latitude)) / Math.pow(2, zoomLevel + 8); // TODO test this
     }
-
-    /**
-     * Deprecated!!! Use getGeoJsonPolygon(latitude, longitude, zoomlevel) instead.
-     * Returns a GeoJsonPolygon object with the given coordinates.
-     * @param lon1
-     * @param lat1
-     * @param lon2
-     * @param lat2
-     * @return
-     *
-    public GeoJsonPolygon getGeoJsonPolygon(double lon1, double lat1, double lon2, double lat2) {
-
-        GeoJsonPolygon polygon = new GeoJsonPolygon(
-            new Point(lon1, lat1),
-            new Point(lon1, lat2),
-            new Point(lon2, lat2),
-            new Point(lon2, lat1),
-            new Point(lon1, lat1)); // first and last point have to be the same
-
-        return polygon;
-    }
-     */
 }

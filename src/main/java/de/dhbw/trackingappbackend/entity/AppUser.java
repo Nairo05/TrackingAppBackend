@@ -1,13 +1,9 @@
 package de.dhbw.trackingappbackend.entity;
 
-import de.dhbw.trackingappbackend.entity.location.Location;
-import de.dhbw.trackingappbackend.entity.location.TileId;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
-import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -45,7 +41,7 @@ public class AppUser {
 
     List<String> friendIDs;
 
-    List<Location> locations; // TODO change to location ids
+    List<String> locationIds;
 
     @Override
     public String toString() {
