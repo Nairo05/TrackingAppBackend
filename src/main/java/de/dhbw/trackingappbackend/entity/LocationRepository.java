@@ -13,7 +13,7 @@ public interface LocationRepository extends MongoRepository<Location, String> {
 
     List<Location> findByAppUserIdAndPositionWithin(String appUserId, GeoJsonPolygon p);
 
-    List<Location> findByAppUserId(String appUserId);
+    Location findByAppUserIdAndTileId(String appUserId, TileId tileId);
 
-    // List<Location> findByAppUserIdAndPositionWithin(String appUserId, Box b);
+    List<Location> findByAppUserId(String appUserId);
 }

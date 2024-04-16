@@ -92,7 +92,7 @@ public class DatabaseInitialData {
                 password,
                 "Horb Nutzer",
                 Collections.emptyList(),
-                Collections.emptyList()); // TODO remove app user id from location and move to this list
+                Collections.emptyList());
 
             AppUser datevUser = new AppUser(
                 UUID.randomUUID().toString(),
@@ -114,19 +114,21 @@ public class DatabaseInitialData {
                 Collections.emptyList(),
                 Collections.emptyList());
 
+            Location loc1 = new Location(new TileId(0, 0, (byte) 14), testUser.getId(), new double[]{0, 0});
+            Location loc2 = new Location(new TileId(0, 1, (byte) 14), testUser.getId(), new double[]{0, 1});
+            Location loc3 = new Location(new TileId(1, 0, (byte) 14), testUser.getId(), new double[]{1, 0});
+            Location loc4 = new Location(new TileId(1, 1, (byte) 14), testUser.getId(), new double[]{1, 1});
+            Location locHorb = new Location(new TileId(8587, 5664, (byte) 14), horbUser.getId(), new double[]{48.45835188280866, 8.67919921875});
+
+            locationRepository.saveAll(Arrays.asList(loc1, loc2, loc3, loc4, locHorb));
+
+            testUser.setLocations(Arrays.asList(loc1, loc2, loc3, loc4));
+            horbUser.setLocations(Collections.singletonList(locHorb));
+
             userRepository.save(testUser);
             userRepository.save(horbUser);
             userRepository.save(datevUser);
             userRepository.save(weltUser);
-
-            locationRepository.saveAll(Arrays.asList(
-                new Location(new TileId(0, 0, (byte) 14), testUser.getId(), new double[]{0, 0}),
-                new Location(new TileId(0, 1, (byte) 14), testUser.getId(), new double[]{0, 1}),
-                new Location(new TileId(1, 0, (byte) 14), testUser.getId(), new double[]{1, 0}),
-                new Location(new TileId(1, 1, (byte) 14), testUser.getId(), new double[]{1, 1}),
-                new Location(new TileId(8587, 5664, (byte) 14), horbUser.getId(),
-                    new double[]{48.45835188280866, 8.67919921875})
-            ));
         };
     }
 }

@@ -14,15 +14,6 @@ import java.util.Arrays;
 public class TileService {
 
     /**
-     * Returns the location of a tile based on the given tile id.
-     * @param tileId given tile id
-     * @return location
-     */
-    public Location getLocationByTileId(TileId tileId, String appUserId) {
-        return new Location(tileId, appUserId, getCoordinatesByTileId(tileId)); // TODO scheint mir nicht die sinnvollste implementierung xD
-    }
-
-    /**
      * Returns the tile id of a tile based on the given coordinates and zoom level.
      *
      * @link <a href="https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames">Calculation Method</a>

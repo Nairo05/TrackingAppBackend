@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 
-@Document(collection = "base_location_id")
+@Document(collection = "base_tile_ids")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -22,6 +22,6 @@ public class TileId implements Serializable {
     private byte zoomLevel;
 
     public String toString() {
-        return "x" + this.xTile + " y" + this.yTile + " z" + this.zoomLevel;
+        return "x" + this.xTile + ",y" + this.yTile + ",z" + this.zoomLevel;
     }
 }

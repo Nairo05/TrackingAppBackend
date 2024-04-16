@@ -1,5 +1,7 @@
 package de.dhbw.trackingappbackend.entity;
 
+import de.dhbw.trackingappbackend.entity.location.Location;
+import de.dhbw.trackingappbackend.entity.location.TileId;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotBlank;
@@ -43,7 +45,7 @@ public class AppUser {
 
     List<String> friendIDs;
 
-    List<String> locationIDs;
+    List<Location> locations; // TODO change to location ids
 
     @Override
     public String toString() {
