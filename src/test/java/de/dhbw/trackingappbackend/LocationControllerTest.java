@@ -3,31 +3,14 @@ package de.dhbw.trackingappbackend;
 import de.dhbw.trackingappbackend.boundary.LocationController;
 import de.dhbw.trackingappbackend.control.AuthService;
 import de.dhbw.trackingappbackend.control.CoordinateService;
-import de.dhbw.trackingappbackend.entity.AppUser;
 import de.dhbw.trackingappbackend.entity.LocationRepository;
 import de.dhbw.trackingappbackend.entity.UserRepository;
-import de.dhbw.trackingappbackend.security.UserDetailsImpl;
-import org.junit.Before;
-import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
-import java.util.Optional;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @WebMvcTest
 @AutoConfigureMockMvc

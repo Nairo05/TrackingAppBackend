@@ -2,7 +2,7 @@ package de.dhbw.trackingappbackend.boundary;
 
 import de.dhbw.trackingappbackend.control.CoordinateService;
 import de.dhbw.trackingappbackend.entity.AppUser;
-import de.dhbw.trackingappbackend.entity.Location;
+import de.dhbw.trackingappbackend.entity.location.Location;
 import de.dhbw.trackingappbackend.entity.LocationRepository;
 import de.dhbw.trackingappbackend.entity.UserRepository;
 import de.dhbw.trackingappbackend.security.UserDetailsImpl;

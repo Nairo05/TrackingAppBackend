@@ -1,9 +1,8 @@
 package de.dhbw.trackingappbackend.dev;
 
-import de.dhbw.trackingappbackend.entity.AppUser;
-import de.dhbw.trackingappbackend.entity.Location;
-import de.dhbw.trackingappbackend.entity.LocationRepository;
-import de.dhbw.trackingappbackend.entity.UserRepository;
+import de.dhbw.trackingappbackend.entity.*;
+import de.dhbw.trackingappbackend.entity.location.Location;
+import de.dhbw.trackingappbackend.entity.location.LocationId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -76,10 +75,10 @@ public class DatabaseInitialData {
                     Collections.emptyList()));
 
             locationRepository.saveAll(Arrays.asList(
-                new Location("A", appUser1.getId(), new double[]{0.0001, 0.0001}),
-                new Location("B", appUser1.getId(), new double[]{0.9999, 0.9999}),
-                new Location("C", appUser1.getId(), new double[]{0.5, 0.5}),
-                new Location("D", appUser1.getId(), new double[]{0.75, 0.25})
+                new Location(new LocationId(0, 0), appUser1.getId(), new double[]{0.0, 0.0}),
+                new Location(new LocationId(0, 1), appUser1.getId(), new double[]{0.0, 0.5}),
+                new Location(new LocationId(1, 0), appUser1.getId(), new double[]{0.5, 0.0}),
+                new Location(new LocationId(1, 1), appUser1.getId(), new double[]{0.5, 0.5})
             ));
         };
     }
