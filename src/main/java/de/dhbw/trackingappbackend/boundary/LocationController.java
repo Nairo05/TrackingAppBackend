@@ -1,13 +1,12 @@
 package de.dhbw.trackingappbackend.boundary;
 
 import de.dhbw.trackingappbackend.control.CoordinateService;
-import de.dhbw.trackingappbackend.control.TileService;
 import de.dhbw.trackingappbackend.entity.AppUser;
-import de.dhbw.trackingappbackend.entity.location.Location;
 import de.dhbw.trackingappbackend.entity.LocationRepository;
 import de.dhbw.trackingappbackend.entity.UserRepository;
-import de.dhbw.trackingappbackend.security.UserDetailsImpl;
+import de.dhbw.trackingappbackend.entity.location.Location;
 import de.dhbw.trackingappbackend.entity.location.LocationWrapper;
+import de.dhbw.trackingappbackend.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -55,7 +54,7 @@ public class LocationController {
             List<Location> locations = locationRepository.findByAppUserIdAndTilePositionWithin(appUserId, polygon);
 
             if (locations == null || locations.isEmpty()) {
-                return ResponseEntity.ok("Go outside");
+                return ResponseEntity.ok("No locations visited. Go outside!");
             }
             else {
                 return ResponseEntity.ok(locations.stream()
@@ -86,7 +85,7 @@ public class LocationController {
             List<Location> locations = locationRepository.findByAppUserId(appUserId);
 
             if (locations == null || locations.isEmpty()) {
-                return ResponseEntity.ok("Go outside");
+                return ResponseEntity.ok("No locations visited. Go outside!");
             }
             else {
                 return ResponseEntity.ok(locations.stream()

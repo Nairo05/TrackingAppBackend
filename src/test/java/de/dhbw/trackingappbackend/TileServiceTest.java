@@ -1,6 +1,7 @@
 package de.dhbw.trackingappbackend;
 
 import de.dhbw.trackingappbackend.control.TileService;
+import de.dhbw.trackingappbackend.entity.location.Tile;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -13,7 +14,7 @@ public class TileServiceTest {
     public void testGetTileByCoordinates() {
 
         byte zoomLevel = 14;
-        int[] horbTile = new int[] {8587, 5664, (byte) 14};
+        Tile horbTile = new Tile(8587, 5664, (byte) 14);
 
         double[][] posInsideTile = {{48.4454875733775, 8.69686010925506},
             {48.457797024488215, 8.67954349514507}, {48.45811427856263, 8.700582872351122},
@@ -23,11 +24,11 @@ public class TileServiceTest {
             {48.44274746413431, 8.69067663628975}, {48.45218888715979, 8.675443054698661}};
 
         for (double[] pos : posInsideTile) {
-            assert(Arrays.equals(TileService.getTileByCoordinates(pos[0], pos[1], zoomLevel), horbTile));
+            assert(TileService.getTileByCoordinates(pos[0], pos[1], zoomLevel).equals(horbTile));
         }
 
         for (double[] pos : posOutsideTile) {
-            assert(!Arrays.equals(TileService.getTileByCoordinates(pos[0], pos[1], zoomLevel), horbTile));
+            assert(!TileService.getTileByCoordinates(pos[0], pos[1], zoomLevel).equals(horbTile));
         }
     }
 

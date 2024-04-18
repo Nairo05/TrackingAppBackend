@@ -1,5 +1,6 @@
 package de.dhbw.trackingappbackend.control;
 
+import de.dhbw.trackingappbackend.entity.location.Tile;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,15 +18,15 @@ public class TileService {
      * @param latitude given latitude
      * @param longitude given longitude
      * @param zoomLevel given zoom level
-     * @return int array with xTile, yTile, zoomLevel
+     * @return tile
      */
-    public static int[] getTileByCoordinates(double latitude, double longitude, byte zoomLevel) {
+    public static Tile getTileByCoordinates(double latitude, double longitude, byte zoomLevel) {
 
         int n = (int) Math.pow(2, zoomLevel);
         int xTile = (int) Math.floor((longitude + 180) / 360 * n);
         int yTile = (int) Math.floor((1 - Math.log(Math.tan(Math.toRadians(latitude)) + 1 / Math.cos(Math.toRadians(latitude))) / Math.PI) / 2 * n);
 
-        return new int[] {xTile, yTile, zoomLevel};
+        return new Tile(xTile, yTile, zoomLevel);
     }
 
     /**
