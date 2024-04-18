@@ -96,31 +96,11 @@ public class DatabaseInitialData {
                 Collections.emptyList(),
                 Collections.emptyList());
 
-            AppUser datevUser = new AppUser(
-                UUID.randomUUID().toString(),
-                "Datev",
-                "User",
-                "datev@test.de",
-                password,
-                "DATEV Nutzer",
-                Collections.emptyList(),
-                Collections.emptyList());
-
-            AppUser weltUser = new AppUser(
-                UUID.randomUUID().toString(),
-                "Welt",
-                "User",
-                "welt@test.de",
-                password,
-                "Welt Nutzer",
-                Collections.emptyList(),
-                Collections.emptyList());
-
-            Location loc1 = new Location(UUID.randomUUID().toString(), new Tile(0, 0, (byte) 14), testUser.getId(), new double[]{0, 0});
-            Location loc2 = new Location(UUID.randomUUID().toString(), new Tile(0, 1, (byte) 14), testUser.getId(), new double[]{0, 1});
-            Location loc3 = new Location(UUID.randomUUID().toString(), new Tile(1, 0, (byte) 14), testUser.getId(), new double[]{1, 0});
-            Location loc4 = new Location(UUID.randomUUID().toString(), new Tile(1, 1, (byte) 14), testUser.getId(), new double[]{1, 1});
-            Location locHorb = new Location(UUID.randomUUID().toString(), new Tile(8587, 5664, (byte) 14), horbUser.getId(), new double[]{48.45835188280866, 8.67919921875});
+            Location loc1 = new Location(UUID.randomUUID().toString(), new Tile(0, 0, (byte) 14), testUser.getId());
+            Location loc2 = new Location(UUID.randomUUID().toString(), new Tile(0, 1, (byte) 14), testUser.getId());
+            Location loc3 = new Location(UUID.randomUUID().toString(), new Tile(1, 0, (byte) 14), testUser.getId());
+            Location loc4 = new Location(UUID.randomUUID().toString(), new Tile(1, 1, (byte) 14), testUser.getId());
+            Location locHorb = new Location(UUID.randomUUID().toString(), new Tile(8587, 5664, (byte) 14), horbUser.getId());
 
             locationRepository.saveAll(Arrays.asList(loc1, loc2, loc3, loc4, locHorb));
 
@@ -129,8 +109,6 @@ public class DatabaseInitialData {
 
             userRepository.save(testUser);
             userRepository.save(horbUser);
-            userRepository.save(datevUser);
-            userRepository.save(weltUser);
         };
     }
 }
