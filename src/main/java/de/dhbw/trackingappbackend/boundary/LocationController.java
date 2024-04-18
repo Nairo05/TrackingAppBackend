@@ -1,6 +1,7 @@
 package de.dhbw.trackingappbackend.boundary;
 
 import de.dhbw.trackingappbackend.control.CoordinateService;
+import de.dhbw.trackingappbackend.control.LocationService;
 import de.dhbw.trackingappbackend.entity.AppUser;
 import de.dhbw.trackingappbackend.entity.LocationRepository;
 import de.dhbw.trackingappbackend.entity.UserRepository;
@@ -30,9 +31,7 @@ public class LocationController {
 
     private final UserRepository userRepository;
 
-    private final LocationRepository locationRepository;
-
-    private final CoordinateService coordinateService;
+    private final LocationService locationService;
 
     @SecurityRequirement(name="oauth2")
     @Operation(summary = "Returns a list of locations of a user by given zoomLevel, starting from the given lat/lon coordinates as the west/south anchor point")
@@ -49,48 +48,15 @@ public class LocationController {
         if (appUserOptional.isPresent()) {
 
             String appUserId = appUserOptional.get().getId();
-            GeoJsonPolygon polygon = coordinateService.getGeoJsonPolygon(latitude, longitude, zoomLevel);
 
-            List<Location> locations = locationRepository.findByAppUserIdAndTilePositionWithin(appUserId, polygon);
-
-            if (locations == null || locations.isEmpty()) {
-                return ResponseEntity.ok("No locations visited. Go outside!");
-            }
-            else {
-                return ResponseEntity.ok(locations.stream()
-                    .map(LocationWrapper::new)
-                    .collect(Collectors.toList()));
-            }
-        }
-        else {
-            return ResponseEntity.badRequest().body("User not found");
-        }
-    }
-
-
-    @SecurityRequirement(name="oauth2")
-    @Operation(summary = "Returns a List of all Locations of a User")
-    @GetMapping("/locations/all")
-    public ResponseEntity<?> getAllLocations() {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
-        Optional<AppUser> appUserOptional = userRepository.findById(userDetails.getId());
-
-        if (appUserOptional.isPresent()) {
-
-            String appUserId = appUserOptional.get().getId();
-
-            List<Location> locations = locationRepository.findByAppUserId(appUserId);
+            List<LocationWrapper> locations = locationService.getLocations(appUserId, latitude, longitude, zoomLevel);
 
             if (locations == null || locations.isEmpty()) {
                 return ResponseEntity.ok("No locations visited. Go outside!");
             }
             else {
-                return ResponseEntity.ok(locations.stream()
-                    .map(LocationWrapper::new)
-                    .collect(Collectors.toList()));            }
+                return ResponseEntity.ok(locations);
+            }
         }
         else {
             return ResponseEntity.badRequest().body("User not found");

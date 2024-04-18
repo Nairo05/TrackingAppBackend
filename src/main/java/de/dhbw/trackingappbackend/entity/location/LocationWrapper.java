@@ -7,10 +7,9 @@ import lombok.Data;
 public class LocationWrapper {
 
     private int xTile;
-
     private int yTile;
-
     private byte zoomLevel;
+    private byte oppacity;
 
     private double[] posUpperLeft;
     private double[] posUpperRight;
@@ -23,8 +22,22 @@ public class LocationWrapper {
         this.xTile = location.getTile().getXTile();
         this.yTile = location.getTile().getYTile();
         this.zoomLevel = location.getTile().getZoomLevel();
+        this.oppacity = 0; // TODO not necessarily 0, different zoomLevels will change the oppacity
 
         this.posUpperLeft = location.getTile().getPosition();
+        this.posUpperRight = TileService.getCoordinatesByTile(xTile + 1, yTile, zoomLevel);
+        this.posLowerRight = TileService.getCoordinatesByTile(xTile + 1, yTile + 1, zoomLevel);
+        this.posLowerLeft = TileService.getCoordinatesByTile(xTile, yTile + 1, zoomLevel);
+    }
+
+    public LocationWrapper(Tile tile) {
+
+        this.xTile = tile.getXTile();
+        this.yTile = tile.getYTile();
+        this.zoomLevel = tile.getZoomLevel();
+        this.oppacity = 127;
+
+        this.posUpperLeft = tile.getPosition();
         this.posUpperRight = TileService.getCoordinatesByTile(xTile + 1, yTile, zoomLevel);
         this.posLowerRight = TileService.getCoordinatesByTile(xTile + 1, yTile + 1, zoomLevel);
         this.posLowerLeft = TileService.getCoordinatesByTile(xTile, yTile + 1, zoomLevel);

@@ -23,8 +23,8 @@ public class CoordinateService {
     public GeoJsonPolygon getGeoJsonPolygon(double latitude, double longitude, byte zoomLevel) {
 
         double tileOffset = calculateDistance(latitude, longitude, zoomLevel);
-        int latLength = 10;
-        int lonLength = 20;
+        int latLength = 6;
+        int lonLength = 12;
 
         // TODO messy, refactor! Es steht noch nicht fest, wie viele Tiles vom FE bei welchem Zoomlevel benötigt werden
         //  daher wird vorerst nur ein fest definierter Bereich zurückgegeben (grob 6 Tiles horizontal, 12 Tiles vertikal)
