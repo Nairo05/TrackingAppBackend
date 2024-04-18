@@ -86,29 +86,16 @@ public class DatabaseInitialData {
                 Collections.emptyList(),
                 Collections.emptyList());
 
-            AppUser horbUser = new AppUser(
-                UUID.randomUUID().toString(),
-                "Horb",
-                "User",
-                "horb@test.de",
-                password,
-                "Horb Nutzer",
-                Collections.emptyList(),
-                Collections.emptyList());
-
             Location loc1 = new Location(UUID.randomUUID().toString(), new Tile(0, 0, (byte) 14), testUser.getId());
             Location loc2 = new Location(UUID.randomUUID().toString(), new Tile(0, 1, (byte) 14), testUser.getId());
             Location loc3 = new Location(UUID.randomUUID().toString(), new Tile(1, 0, (byte) 14), testUser.getId());
             Location loc4 = new Location(UUID.randomUUID().toString(), new Tile(1, 1, (byte) 14), testUser.getId());
-            Location locHorb = new Location(UUID.randomUUID().toString(), new Tile(8587, 5664, (byte) 14), horbUser.getId());
 
-            locationRepository.saveAll(Arrays.asList(loc1, loc2, loc3, loc4, locHorb));
+            locationRepository.saveAll(Arrays.asList(loc1, loc2, loc3, loc4));
 
             testUser.setLocationIds(Arrays.asList(loc1.getId(), loc2.getId(), loc3.getId(), loc4.getId()));
-            horbUser.setLocationIds(Collections.singletonList(locHorb.getId()));
 
             userRepository.save(testUser);
-            userRepository.save(horbUser);
         };
     }
 }

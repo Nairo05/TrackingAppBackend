@@ -24,9 +24,9 @@ public class LocationWrapper {
         this.yTile = location.getTile().getYTile();
         this.zoomLevel = location.getTile().getZoomLevel();
 
-        this.posUpperLeft = location.getPosition();
-        this.posUpperRight = TileService.getCoordinatesByTile(new Tile(this.xTile + 1, this.yTile, this.zoomLevel));
-        this.posLowerRight = TileService.getCoordinatesByTile(new Tile(this.xTile + 1, this.yTile + 1, this.zoomLevel));
-        this.posLowerLeft = TileService.getCoordinatesByTile(new Tile(this.xTile, this.yTile + 1, this.zoomLevel));
+        this.posUpperLeft = location.getTile().getPosition();
+        this.posUpperRight = TileService.getCoordinatesByTile(xTile + 1, yTile, zoomLevel);
+        this.posLowerRight = TileService.getCoordinatesByTile(xTile + 1, yTile + 1, zoomLevel);
+        this.posLowerLeft = TileService.getCoordinatesByTile(xTile, yTile + 1, zoomLevel);
     }
 }

@@ -20,7 +20,7 @@ public class UserServiceTest {
     @Test
     public void testHasUserVisitedLocation() {
 
-        Optional<AppUser> appUserOptional = userRepository.findByEmail("horb@test.de");
+        Optional<AppUser> appUserOptional = userRepository.findByEmail("test@test.de");
         assert appUserOptional.isPresent();
 
         AppUser appUser = appUserOptional.get();

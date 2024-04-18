@@ -35,8 +35,6 @@ public class LocationController {
 
     private final CoordinateService coordinateService;
 
-    private final TileService tileService;
-
     @SecurityRequirement(name="oauth2")
     @Operation(summary = "Returns a list of locations of a user by given zoomLevel, starting from the given lat/lon coordinates as the west/south anchor point")
     @GetMapping("/locations")
@@ -54,7 +52,7 @@ public class LocationController {
             String appUserId = appUserOptional.get().getId();
             GeoJsonPolygon polygon = coordinateService.getGeoJsonPolygon(latitude, longitude, zoomLevel);
 
-            List<Location> locations = locationRepository.findByAppUserIdAndPositionWithin(appUserId, polygon);
+            List<Location> locations = locationRepository.findByAppUserIdAndTilePositionWithin(appUserId, polygon);
 
             if (locations == null || locations.isEmpty()) {
                 return ResponseEntity.ok("Go outside");

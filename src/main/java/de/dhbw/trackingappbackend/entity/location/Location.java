@@ -13,17 +13,13 @@ public class Location {
     @Id
     private String id;
 
-    // tile identifier by x, y and zoom level
     private Tile tile;
 
     // user id of the app user
     private String appUserId;
 
-    // position of the upper-left tile corner
-    private double[] position; // TODO change to lower left corner?
-
     @Override
     public String toString() {
-        return "ID: " + this.id + " Position: " + this.position[0] + "," + this.position[1];
+        return "ID: " + this.id + " Tile: " + this.tile;
     }
 }

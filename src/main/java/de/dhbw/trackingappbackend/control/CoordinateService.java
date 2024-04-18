@@ -24,15 +24,17 @@ public class CoordinateService {
     public GeoJsonPolygon getGeoJsonPolygon(double latitude, double longitude, byte zoomLevel) {
 
         double tileOffset = calculateDistance(latitude, zoomLevel);
+        int xOffset = 6;
+        int yOffset = 12;
 
         // TODO messy, refactor! Es steht noch nicht fest, wie viele Tiles vom FE bei welchem Zoomlevel benötigt werden
         //  daher wird vorerst nur ein fest definierter Bereich zurückgegeben (grob 8 Tiles horizontal, 16 Tiles vertikal)
         //  Außerdem wird die variierende Distanz zwischen Längengraden noch nicht berücksichtigt!
         return new GeoJsonPolygon(
             new Point(latitude, longitude),
-            new Point(latitude, longitude + tileOffset * 8),
-            new Point(latitude + tileOffset * 16, longitude + tileOffset * 8),
-            new Point(latitude + tileOffset * 16, longitude),
+            new Point(latitude, longitude + tileOffset * yOffset),
+            new Point(latitude + tileOffset * xOffset, longitude + tileOffset * yOffset),
+            new Point(latitude + tileOffset * xOffset, longitude),
             new Point(latitude, longitude)); // first and last point have to be the same
     }
 

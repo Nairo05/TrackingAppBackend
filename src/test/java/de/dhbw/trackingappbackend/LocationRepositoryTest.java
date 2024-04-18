@@ -37,24 +37,4 @@ public class LocationRepositoryTest {
 
         assert(allLocations.size() == 4);
     }
-
-    /*
-     * Legacy queries with box/polygon not supported by Azure Cosmos
-     *
-    @Test
-    public void testFindLocationsWithinBox() {
-
-        String appUserId = userRepository.findByEmail("test1@test.de").get().getId();
-
-        List<Location> locationList1 = locationRepository.findByAppUserIdAndPositionWithin(appUserId,
-            new Box(new Point(0, 0), new Point(1, 1)));
-        List<Location> locationList2 = locationRepository.findByAppUserIdAndPositionWithin(appUserId,
-            new Box(new Point(0, 0), new Point(1, 0.5)));
-        List<Location> locationList3 = locationRepository.findByAppUserIdAndPositionWithin(appUserId,
-            new Box(new Point(0, 0), new Point(0.5, 0.5)));
-
-        assert(locationList1.size() == 4);
-        assert(locationList2.size() == 3);
-        assert(locationList3.size() == 2);
-    }*/
 }

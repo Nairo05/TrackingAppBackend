@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface LocationRepository extends MongoRepository<Location, String> {
 
-    List<Location> findByAppUserIdAndPositionWithin(String appUserId, GeoJsonPolygon p);
+    List<Location> findByAppUserIdAndTilePositionWithin(String appUserId, GeoJsonPolygon p);
 
     Location findByAppUserIdAndTile(String appUserId, Tile tile);
 
