@@ -64,6 +64,9 @@ public class AuthService {
         AppUser appUser = new AppUser(signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()));
 
+        appUser.setFirstname(signUpRequest.getFirstname());
+        appUser.setLastname(signUpRequest.getLastname());
+
         userRepository.save(appUser);
     }
 
