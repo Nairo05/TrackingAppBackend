@@ -26,15 +26,17 @@ public class CoordinateService {
         int latLength = 6;
         int lonLength = 12;
 
-        // TODO messy, refactor! Es steht noch nicht fest, wie viele Tiles vom FE bei welchem Zoomlevel benötigt werden
-        //  daher wird vorerst nur ein fest definierter Bereich zurückgegeben (grob 6 Tiles horizontal, 12 Tiles vertikal)
+        double latOffset = tileOffset * latLength / 2;
+        double lonOffset = tileOffset * lonLength / 2;
+
+        // TODO je nach Vorgaben des Frontends Parameter des Abfragebereichs anpassen (grob 6 Tiles horizontal, 12 Tiles vertikal)
         //  Außerdem wird die variierende Distanz zwischen Längengraden noch nicht berücksichtigt!
         GeoJsonPolygon polygon = new GeoJsonPolygon(
-            new Point(latitude, longitude),
-            new Point(latitude, longitude + tileOffset * lonLength),
-            new Point(latitude + tileOffset * latLength, longitude + tileOffset * lonLength),
-            new Point(latitude + tileOffset * latLength, longitude),
-            new Point(latitude, longitude)); // first and last point have to be the same
+            new Point(latitude - latOffset, longitude - lonOffset),
+            new Point(latitude - latOffset, longitude + lonOffset),
+            new Point(latitude + latOffset, longitude + lonOffset),
+            new Point(latitude + latOffset, longitude - lonOffset),
+            new Point(latitude - latOffset, longitude - lonOffset)); // first and last point have to be the same
 
         return polygon;
     }
