@@ -16,7 +16,9 @@ public class Location {
     private Tile tile;
 
     // user id of the app user
-    private String appUserId;
+    private String appUserId; // TODO remove, obsolete (bc we want static set of locations)
+
+    private int countVisited;
 
     @Override
     public String toString() {
