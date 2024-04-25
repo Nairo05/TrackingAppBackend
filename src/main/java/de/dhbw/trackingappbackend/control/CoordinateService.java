@@ -23,13 +23,13 @@ public class CoordinateService {
     public GeoJsonPolygon getGeoJsonPolygon(double latitude, double longitude, byte zoomLevel) {
 
         double tileOffset = calculateDistance(latitude, longitude, zoomLevel);
-        int latLength = 6;
-        int lonLength = 12;
+        int latLength = 10;
+        int lonLength = 20;
 
         double latOffset = tileOffset * latLength / 2;
         double lonOffset = tileOffset * lonLength / 2;
 
-        // TODO je nach Vorgaben des Frontends Parameter des Abfragebereichs anpassen (grob 6 Tiles horizontal, 12 Tiles vertikal)
+        // TODO je nach Vorgaben des Frontends Parameter des Abfragebereichs anpassen
         //  Außerdem wird die variierende Distanz zwischen Längengraden noch nicht berücksichtigt!
         GeoJsonPolygon polygon = new GeoJsonPolygon(
             new Point(latitude - latOffset, longitude - lonOffset),

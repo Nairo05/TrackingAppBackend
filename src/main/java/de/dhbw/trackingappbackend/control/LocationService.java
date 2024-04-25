@@ -46,9 +46,9 @@ public class LocationService {
         // TODO refactor: change to db query instead of calculation
         //      method changes when different zoom levels are used
         List<Tile> unvisitedTiles = IntStream
-            .range(initialTile.getXTile(), initialTile.getXTile() + 6 + 1)
+            .range(initialTile.getXTile() - 5, initialTile.getXTile() + 5 + 1)
             .mapToObj(x ->
-                    IntStream.range(initialTile.getYTile(), initialTile.getYTile() + 12 + 1)
+                    IntStream.range(initialTile.getYTile() - 10, initialTile.getYTile() + 10 + 1)
                         .filter(y -> !visitedTiles.contains(new Tile(x, y, zoomLevel)))
                         .mapToObj(y -> new Tile(x, y, zoomLevel)))
             .flatMap(Function.identity())
@@ -62,10 +62,8 @@ public class LocationService {
             .map(LocationWrapper::new)
             .toList();
 
-        List<LocationWrapper> locationWrappersCombined = Stream
+        return Stream
             .concat(visitedLocationWrappers.stream(), unvisitedLocationWrappers.stream())
             .toList();
-
-        return locationWrappersCombined;
     }
 }
