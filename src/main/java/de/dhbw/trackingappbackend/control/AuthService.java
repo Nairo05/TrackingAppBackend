@@ -66,6 +66,7 @@ public class AuthService {
 
         appUser.setFirstname(signUpRequest.getFirstname());
         appUser.setLastname(signUpRequest.getLastname());
+        appUser.setId(UUID.randomUUID().toString());
 
         userRepository.save(appUser);
     }
