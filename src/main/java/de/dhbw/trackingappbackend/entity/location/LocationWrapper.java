@@ -9,7 +9,7 @@ public class LocationWrapper {
     private int xTile;
     private int yTile;
     private byte zoomLevel;
-    private byte oppacity;
+    private byte opacity;
 
     private double[] posUpperLeft;
     private double[] posUpperRight;
@@ -21,7 +21,7 @@ public class LocationWrapper {
         this.xTile = location.getTile().getXTile();
         this.yTile = location.getTile().getYTile();
         this.zoomLevel = location.getTile().getZoomLevel();
-        this.oppacity = 0; // TODO not necessarily 0, different zoomLevels will change the oppacity
+        this.opacity = 0; // TODO not necessarily 0, different zoomLevels will change the oppacity
 
         this.posUpperLeft = location.getTile().getPosition();
         this.posUpperRight = TileService.getCoordinatesByTile(xTile + 1, yTile, zoomLevel);
