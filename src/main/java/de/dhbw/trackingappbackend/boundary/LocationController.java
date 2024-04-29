@@ -1,15 +1,20 @@
 package de.dhbw.trackingappbackend.boundary;
 
+import de.dhbw.trackingappbackend.control.CoordinateService;
 import de.dhbw.trackingappbackend.control.LocationService;
+import de.dhbw.trackingappbackend.control.TileService;
 import de.dhbw.trackingappbackend.entity.AppUser;
+import de.dhbw.trackingappbackend.entity.LocationRepository;
 import de.dhbw.trackingappbackend.entity.UserRepository;
 import de.dhbw.trackingappbackend.entity.location.Location;
 import de.dhbw.trackingappbackend.entity.location.LocationWrapper;
+import de.dhbw.trackingappbackend.entity.location.Tile;
 import de.dhbw.trackingappbackend.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.mongodb.core.geo.GeoJsonPolygon;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,7 +32,8 @@ public class LocationController {
 
     private final UserRepository userRepository;
 
-    private final LocationService locationService;
+    private final LocationRepository locationRepository;
+    private final CoordinateService coordinateService;
 
     @SecurityRequirement(name="oauth2")
     @Operation(summary = "Returns a list of locations of a user by given zoomLevel, starting from the given lat/lon coordinates as the west/south anchor point")
@@ -43,12 +49,17 @@ public class LocationController {
 
         if (appUserOptional.isPresent()) {
 
-            String appUserId = appUserOptional.get().getId();
+            AppUser appUser = appUserOptional.get();
+            List<String> locationIds = appUser.getLocationIds();
 
-            List<Location> locations = locationService.getLocations(appUserId, latitude, longitude, zoomLevel);
+            // create request area polygon from given coordinates
+            GeoJsonPolygon polygon = coordinateService.getGeoJsonPolygon(latitude, longitude, zoomLevel);
+
+            // get locations within the polygon and the user's location ids
+            List<Location> locations = locationRepository.findByTilePositionWithinAndIdIn(polygon, locationIds);
 
             if (locations == null || locations.isEmpty()) {
-                return ResponseEntity.ok("No locations visited. Go outside!");
+                return ResponseEntity.ok("No locations in area visited. Go outside!");
             }
             else {
                 return ResponseEntity.ok(locations.stream()
@@ -57,7 +68,7 @@ public class LocationController {
             }
         }
         else {
-            return ResponseEntity.badRequest().body("User not found");
+            return ResponseEntity.badRequest().body("User not found!");
         }
     }
 
@@ -73,19 +84,35 @@ public class LocationController {
 
         if (appUserOptional.isPresent()) {
 
-            String appUserId = appUserOptional.get().getId();
+            AppUser appUser = appUserOptional.get();
+            String appUserId = appUser.getId();
 
-            Location newLocation = locationService.addLocation(appUserId, latitude, longitude);
+            Tile newTile = TileService.getTileByCoordinates(latitude, longitude, (byte) 14);
 
-            if (newLocation == null) {
-                return ResponseEntity.ok("Location already visited.");
+            Optional<Location> locationOptional = locationRepository.findByTile(newTile);
+
+            if (locationOptional.isEmpty()) { // tile not in db > location outside germany
+                return ResponseEntity.badRequest().body("Coordinates are not within Germany!");
+            }
+
+            Location newLocation = locationOptional.get();
+
+            if (userRepository.existsByIdAndLocationIdsContains(appUserId, newLocation.getId())) {
+                return ResponseEntity.badRequest().body("Location already visited!");
             }
             else {
+                // add new location id to user
+                // TODO easier way? directly in mongo?
+                List<String> locationIds = appUser.getLocationIds();
+                locationIds.add(newLocation.getId());
+                appUser.setLocationIds(locationIds);
+                userRepository.save(appUser);
+
                 return ResponseEntity.ok(new LocationWrapper(newLocation)); // return newly visited location
             }
         }
         else {
-            return ResponseEntity.badRequest().body("User not found");
+            return ResponseEntity.badRequest().body("User not found!");
         }
     }
 }

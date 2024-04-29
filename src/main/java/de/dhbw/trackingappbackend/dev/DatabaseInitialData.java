@@ -86,10 +86,10 @@ public class DatabaseInitialData {
                 Collections.emptyList(),
                 Collections.emptyList());
 
-            Location loc1 = new Location(UUID.randomUUID().toString(), new Tile(0, 0, (byte) 14), testUser.getId());
-            Location loc2 = new Location(UUID.randomUUID().toString(), new Tile(0, 1, (byte) 14), testUser.getId());
-            Location loc3 = new Location(UUID.randomUUID().toString(), new Tile(1, 0, (byte) 14), testUser.getId());
-            Location loc4 = new Location(UUID.randomUUID().toString(), new Tile(1, 1, (byte) 14), testUser.getId());
+            Location loc1 = new Location(UUID.randomUUID().toString(), new Tile(0, 0, (byte) 14));
+            Location loc2 = new Location(UUID.randomUUID().toString(), new Tile(0, 1, (byte) 14));
+            Location loc3 = new Location(UUID.randomUUID().toString(), new Tile(1, 0, (byte) 14));
+            Location loc4 = new Location(UUID.randomUUID().toString(), new Tile(1, 1, (byte) 14));
 
             locationRepository.saveAll(Arrays.asList(loc1, loc2, loc3, loc4));
 
