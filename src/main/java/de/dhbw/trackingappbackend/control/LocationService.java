@@ -20,8 +20,6 @@ public class LocationService {
 
     private final LocationRepository locationRepository;
 
-
-
     /**
      * Returns a list of visited location of a user by given zoomLevel, with given lat/lon coordinates as the center anchor point.
      *
@@ -34,9 +32,7 @@ public class LocationService {
     public List<Location> getLocations(String appUserId, double latitude, double longitude, byte zoomLevel) {
 
         GeoJsonPolygon polygon = coordinateService.getGeoJsonPolygon(latitude, longitude, zoomLevel);
-        List<Location> visitedLocations = locationRepository.findByAppUserIdAndTilePositionWithin(appUserId, polygon);
-
-        return visitedLocations;
+        return locationRepository.findByAppUserIdAndTilePositionWithin(appUserId, polygon);
     }
 
     public Location addLocation(String appUserId, double latitude, double longitude) {

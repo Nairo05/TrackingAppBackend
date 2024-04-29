@@ -23,8 +23,8 @@ public class CoordinateService {
     public GeoJsonPolygon getGeoJsonPolygon(double latitude, double longitude, byte zoomLevel) {
 
         double tileOffset = calculateDistance(latitude, longitude, zoomLevel);
-        int latLength = 10;
-        int lonLength = 20;
+        int latLength = 16;
+        int lonLength = 32;
 
         double latOffset = tileOffset * latLength / 2;
         double lonOffset = tileOffset * lonLength / 2;
