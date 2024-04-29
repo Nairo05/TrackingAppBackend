@@ -3,6 +3,7 @@ package de.dhbw.trackingappbackend.boundary;
 import de.dhbw.trackingappbackend.control.LocationService;
 import de.dhbw.trackingappbackend.entity.AppUser;
 import de.dhbw.trackingappbackend.entity.UserRepository;
+import de.dhbw.trackingappbackend.entity.location.Location;
 import de.dhbw.trackingappbackend.entity.location.LocationWrapper;
 import de.dhbw.trackingappbackend.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,13 +45,15 @@ public class LocationController {
 
             String appUserId = appUserOptional.get().getId();
 
-            List<LocationWrapper> locations = locationService.getLocations(appUserId, latitude, longitude, zoomLevel);
+            List<Location> locations = locationService.getLocations(appUserId, latitude, longitude, zoomLevel);
 
             if (locations == null || locations.isEmpty()) {
                 return ResponseEntity.ok("No locations visited. Go outside!");
             }
             else {
-                return ResponseEntity.ok(locations);
+                return ResponseEntity.ok(locations.stream()
+                    .map(LocationWrapper::new)
+                    .toList());
             }
         }
         else {
