@@ -17,5 +17,7 @@ public interface LocationRepository extends MongoRepository<Location, String> {
 
     Location findByAppUserIdAndTile(String appUserId, Tile tile);
 
+    boolean existsByAppUserIdAndTile(String appUserId, Tile tile);
+
     List<Location> findByAppUserId(String appUserId);
 }

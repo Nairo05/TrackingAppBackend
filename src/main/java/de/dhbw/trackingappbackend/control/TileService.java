@@ -31,6 +31,7 @@ public class TileService {
 
     /**
      * Returns the upper-left coordinates of a tile based on the given tile.
+     *
      * @param xTile x coordinate of the tile
      * @param yTile y coordinate of the tile
      * @param zoomLevel zoom level of the tile

@@ -60,4 +60,32 @@ public class LocationController {
             return ResponseEntity.badRequest().body("User not found");
         }
     }
+
+    @SecurityRequirement(name="oauth2")
+    @Operation(summary = "Adds the given lat/lon coordinates to the visited locations of a user.")
+    @PostMapping("/location")
+    public ResponseEntity<?> addLocation(@RequestParam double latitude, @RequestParam double longitude) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        Optional<AppUser> appUserOptional = userRepository.findById(userDetails.getId());
+
+        if (appUserOptional.isPresent()) {
+
+            String appUserId = appUserOptional.get().getId();
+
+            Location newLocation = locationService.addLocation(appUserId, latitude, longitude);
+
+            if (newLocation == null) {
+                return ResponseEntity.ok("Location already visited.");
+            }
+            else {
+                return ResponseEntity.ok(new LocationWrapper(newLocation)); // return newly visited location
+            }
+        }
+        else {
+            return ResponseEntity.badRequest().body("User not found");
+        }
+    }
 }
