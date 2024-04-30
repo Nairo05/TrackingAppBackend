@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 @Document(collection = "base_location")
 @Data
 @AllArgsConstructor
@@ -15,13 +17,10 @@ public class Location {
 
     private Tile tile;
 
-    // user id of the app user
-    // private String appUserId;
-
-    // private int countVisited;
+    // private List<String> laenderKuerzel;
 
     @Override
     public String toString() {
-        return "ID: " + this.id + " Tile: " + this.tile;
+        return "ID: " + this.id + " Tile: " + this.tile; // + " Land: " + this.laenderKuerzel;
     }
 }
