@@ -4,10 +4,7 @@ import de.dhbw.trackingappbackend.control.UserService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -19,7 +16,7 @@ public class UserControllerImpl implements UserController {
 
     @Override
     @PostMapping("/password/set")
-    public Boolean changePassword(@Valid @Size(min = 8, max = 50) String password) {
+    public Boolean changePassword(@RequestBody String password) {
         return userService.setPassword(password);
     }
 }

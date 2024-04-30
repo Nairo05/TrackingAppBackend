@@ -80,7 +80,8 @@ public class AuthService {
                 signUpRequest.getUsername(),
                 encoder.encode(signUpRequest.getPassword()),
                 Collections.emptyList(),
-                Collections.emptyList()
+                Collections.emptyList(),
+                null
         );
 
         userRepository.save(appUser);

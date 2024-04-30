@@ -46,6 +46,8 @@ public class AppUser {
 
     List<String> locationIds;
 
+    String profilePictureId;
+
     @Override
     public String toString() {
         return "ID: " + this.getId() + " Firstname:" + this.getFirstname() + " Lastname:" + this.getLastname();
