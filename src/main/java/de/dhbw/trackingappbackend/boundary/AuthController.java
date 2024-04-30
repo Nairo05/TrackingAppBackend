@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 public interface AuthController {
 
 
-    @Operation(summary = "register a new User")
+    @Operation(summary = "register a new User with an email. If username field ist not filled, username=email")
     ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest);
 
     @Operation(summary = "login as an existing user")

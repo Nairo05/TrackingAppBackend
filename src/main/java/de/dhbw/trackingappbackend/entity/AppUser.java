@@ -33,15 +33,20 @@ public class AppUser {
     private String email;
 
     @NotBlank
+    @NonNull
+    @Size(min = 4, max = 120)
+    private String username;
+
+    @NotBlank
     @Size(min=8, max = 120)
     @NonNull
     private String password;
 
-    private String shownName;
-
     List<String> friendIDs;
 
     List<String> locationIds;
+
+    String profilePictureId;
 
     @Override
     public String toString() {

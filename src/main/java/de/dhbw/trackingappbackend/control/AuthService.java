@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -33,15 +34,22 @@ public class AuthService {
 
         UserDetailsImpl userDetails = getUserFromContext();
 
-        String jwt = jwtUtils.generateJwtToken(userDetails.getEmail());
+        String jwt = jwtUtils.generateJwtToken(userDetails.getUsername());
         String refreshToken = jwtUtils.generateRefreshToken(userDetails.getId());
 
-        return new JwtResponse(jwt, refreshToken, userDetails.getEmail());
+        return new JwtResponse(jwt, refreshToken, userDetails.getUsername());
     }
 
-    public UserDetailsImpl login(String email, String password) {
+    public UserDetailsImpl emailLogin(String email, String password) {
+
+        Optional<AppUser> appUser = userRepository.findFirstByEmail(email);
+
+        if (appUser.isEmpty()) {
+            return null;
+        }
+
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(email, password));
+                new UsernamePasswordAuthenticationToken(appUser.get().getUsername(), password));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
@@ -54,18 +62,27 @@ public class AuthService {
 
         tokenRepository.deleteAllByUserId(currentUser);
 
-        //TODO ?
         SecurityContextHolder.clearContext();
 
     }
 
     public void registerUser(RegisterRequest signUpRequest) {
 
-        AppUser appUser = new AppUser(signUpRequest.getEmail(),
-                encoder.encode(signUpRequest.getPassword()));
+        if (signUpRequest.getUsername() == null) {
+            signUpRequest.setUsername(signUpRequest.getEmail());
+        }
 
-        appUser.setFirstname(signUpRequest.getFirstname());
-        appUser.setLastname(signUpRequest.getLastname());
+        AppUser appUser = new AppUser(
+                UUID.randomUUID().toString(),
+                signUpRequest.getFirstname(),
+                signUpRequest.getLastname(),
+                signUpRequest.getEmail(),
+                signUpRequest.getUsername(),
+                encoder.encode(signUpRequest.getPassword()),
+                Collections.emptyList(),
+                Collections.emptyList(),
+                null
+        );
 
         userRepository.save(appUser);
     }
@@ -97,10 +114,24 @@ public class AuthService {
 
             AppUser currentUser = appUser.get();
 
-            String jwt = jwtUtils.generateJwtToken(currentUser.getEmail());
+            String jwt = jwtUtils.generateJwtToken(currentUser.getUsername());
             String refreshToken = jwtUtils.generateRefreshToken(currentUser.getId());
 
-            return new JwtResponse(jwt, refreshToken, currentUser.getEmail());
+            return new JwtResponse(jwt, refreshToken, currentUser.getUsername());
         }
+    }
+
+    public boolean isUserNameTaken(String username) {
+        return userRepository.existsByUsername(username);
+    }
+
+    public UserDetailsImpl userNameLogin(String username, String password) {
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(username, password));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return (UserDetailsImpl) authentication.getPrincipal();
     }
 }

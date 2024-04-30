@@ -4,20 +4,9 @@ import de.dhbw.trackingappbackend.control.AuthService;
 import de.dhbw.trackingappbackend.model.request.LoginRequest;
 import de.dhbw.trackingappbackend.model.request.RegisterRequest;
 import de.dhbw.trackingappbackend.model.response.ForgotPasswordModel;
-import de.dhbw.trackingappbackend.model.response.JwtResponse;
 import de.dhbw.trackingappbackend.model.response.ResetPasswordModel;
-import de.dhbw.trackingappbackend.security.UserDetailsImpl;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,10 +23,30 @@ public class AuthControllerImpl implements AuthController {
     @Override
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterRequest registerRequest) {
-        if (authService.isEmailTaken(registerRequest.getEmail())) {
+
+        if (registerRequest.getEmail() != null) {
+
+            if (authService.isEmailTaken(registerRequest.getEmail())) {
+                return ResponseEntity
+                        .badRequest()
+                        .body("Email is already taken");
+            }
+
+        } else {
+
             return ResponseEntity
                     .badRequest()
-                    .body("Username is already taken");
+                    .body("Email must be filled");
+
+        }
+
+        if (registerRequest.getUsername() != null) {
+
+            if (authService.isUserNameTaken(registerRequest.getUsername())) {
+                return ResponseEntity
+                        .badRequest()
+                        .body("UserName is already taken");
+            }
         }
 
         authService.registerUser(registerRequest);
@@ -49,7 +58,15 @@ public class AuthControllerImpl implements AuthController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
 
-        authService.login(loginRequest.getEmail(), loginRequest.getPassword());
+        if (loginRequest.getEmail() != null) {
+
+            authService.emailLogin(loginRequest.getEmail(), loginRequest.getPassword());
+
+        } else if (loginRequest.getUsername() != null) {
+
+            authService.userNameLogin(loginRequest.getUsername(), loginRequest.getPassword());
+
+        }
 
         return ResponseEntity.ok(authService.generateJWTResponse());
     }
@@ -106,5 +123,4 @@ public class AuthControllerImpl implements AuthController {
     public ResponseEntity<?> forgotPasswordAccepted(@Valid @RequestBody ResetPasswordModel resetPasswordModel) {
         return ResponseEntity.status(501).build();
     }
-
 }
