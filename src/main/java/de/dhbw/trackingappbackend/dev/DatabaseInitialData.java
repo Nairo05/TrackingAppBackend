@@ -1,6 +1,7 @@
 package de.dhbw.trackingappbackend.dev;
 
 import de.dhbw.trackingappbackend.entity.AppUser;
+import de.dhbw.trackingappbackend.entity.FileRepository;
 import de.dhbw.trackingappbackend.entity.LocationRepository;
 import de.dhbw.trackingappbackend.entity.UserRepository;
 import de.dhbw.trackingappbackend.entity.location.Location;
@@ -25,11 +26,12 @@ public class DatabaseInitialData {
     private final PasswordEncoder encoder;
 
     @Bean
-    public CommandLineRunner createTestData(UserRepository userRepository, LocationRepository locationRepository) {
+    public CommandLineRunner createTestData(UserRepository userRepository, LocationRepository locationRepository, FileRepository fileRepository) {
         return (args) -> {
 
             userRepository.deleteAll();
             locationRepository.deleteAll();
+            fileRepository.deleteAll();
 
             String password = encoder.encode("35dsf2dcf3");
 
@@ -41,7 +43,8 @@ public class DatabaseInitialData {
                     "username1",
                     password,
                     Collections.emptyList(),
-                    Collections.emptyList());
+                    Collections.emptyList(),
+                    null);
 
             AppUser appUser2 = new AppUser(
                     UUID.randomUUID().toString(),
@@ -51,7 +54,8 @@ public class DatabaseInitialData {
                     "username2",
                     password,
                     Collections.emptyList(),
-                    Collections.emptyList());
+                    Collections.emptyList(),
+                    null);
 
             userRepository.save(appUser1);
             userRepository.save(appUser2);
