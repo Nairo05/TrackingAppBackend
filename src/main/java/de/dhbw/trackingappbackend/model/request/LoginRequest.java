@@ -9,11 +9,14 @@ import lombok.Data;
 @Data
 public class LoginRequest {
 
-    @NotBlank
+    @Size(min = 4, max = 120)
+    private String username;
+
     @Email
+    @Size(min = 4, max = 120)
     private String email;
 
-    @Size(min=8, max = 120)
+    @Size(min=8, max = 50)
     @NotBlank
     private String password;
 }

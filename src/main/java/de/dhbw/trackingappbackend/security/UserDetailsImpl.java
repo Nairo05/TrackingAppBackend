@@ -16,15 +16,19 @@ public class UserDetailsImpl implements UserDetails {
     @Getter
     private String email;
 
+    @Getter
+    private String username;
+
     private String password;
 
     //TODO
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(String id, String email, String password) {
+    public UserDetailsImpl(String id, String email, String password, String username) {
         this.id = id;
         this.email = email;
         this.password = password;
+        this.username = username;
     }
 
     public static UserDetailsImpl build(AppUser user) {
@@ -32,7 +36,8 @@ public class UserDetailsImpl implements UserDetails {
         return new UserDetailsImpl(
                 user.getId(),
                 user.getEmail(),
-                user.getPassword());
+                user.getPassword(),
+                user.getUsername());
     }
 
     @Override
@@ -46,9 +51,8 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     @Override
-    @Deprecated
     public String getUsername() {
-        return email;
+        return username;
     }
 
     @Override

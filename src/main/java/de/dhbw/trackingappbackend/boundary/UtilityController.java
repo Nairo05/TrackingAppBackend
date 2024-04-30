@@ -35,12 +35,12 @@ public class UtilityController {
 
             String shownName;
 
-            if (appUser.getShownName() != null && !appUser.getShownName().isEmpty()) {
-                shownName = appUser.getShownName();
-            } else if (appUser.getFirstname() != null && !appUser.getFirstname().isEmpty()){
+            if (!appUser.getUsername().isEmpty()) {
+                shownName = appUser.getUsername();
+            } else if (!appUser.getEmail().isEmpty()){
                 shownName = appUser.getFirstname();
             } else {
-                shownName = appUser.getEmail();
+                shownName = appUser.getId();
             }
 
             shownUserModels.add(new ShownUserModel(appUser.getId(), shownName));

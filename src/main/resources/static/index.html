@@ -36,7 +36,7 @@
     <h2>Auth Flow</h2>
 
     <input id="input1" type="text" placeholder="email@email.de" value="email@email.de">
-    <input id="input2" type="text" placeholder="password" value="password123">
+    <input id="input2" type="text" placeholder="password" value="password123.">
     <button id="sendRequestBtn3">Register User</button>
     <p id="output3">output</p>
     <script>
@@ -60,9 +60,38 @@
         });
     </script>
 
+
+    <input id="input15555" type="text" placeholder="email@email.de" value="email@email.de">
+    <input id="input15554" type="text" placeholder="myusername" value="myusername">
+    <input id="input155552" type="text" placeholder="password" value="password123.">
+    <button id="sendRequestBtn35555">Register User</button>
+    <p id="output35555">output</p>
+    <script>
+        document.getElementById('sendRequestBtn35555').addEventListener('click', function() {
+            const payload = {
+                email: document.getElementById('input15555').value,
+                username: document.getElementById('input15554').value,
+                password: document.getElementById('input155552').value,
+                firstname:"firstname",
+                lastname:"lastname"
+            };
+            fetch('/api/v1/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+                .then(response => response.text())
+                .then(data => document.getElementById('output35555').innerHTML=data)
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+
+
     <input id="input12" type="text" placeholder="mail" value="datev@test.de">
     <input id="input22" type="text" placeholder="password" value="password123.">
-    <button id="sendRequestBtn32">Login User</button>
+    <button id="sendRequestBtn32">Login UserEMAIL</button>
     <p id="output32">output</p>
     <script>
         document.getElementById('sendRequestBtn32').addEventListener('click', function() {
@@ -80,6 +109,32 @@
                 .then(response => response.json())
                 .then(data=> {
                     document.getElementById('output32').innerHTML=JSON.stringify(data)
+                    document.getElementById('input5').value = data.token
+                })
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+
+    <input id="input1222" type="text" placeholder="myusername" value="myusername">
+    <input id="input2222" type="text" placeholder="password" value="password123.">
+    <button id="sendRequestBtn3222">Login UserNAME</button>
+    <p id="output3222">output</p>
+    <script>
+        document.getElementById('sendRequestBtn3222').addEventListener('click', function() {
+            const payload = {
+                username: document.getElementById('input1222').value,
+                password: document.getElementById('input2222').value
+            };
+            fetch('/api/v1/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+                .then(response => response.json())
+                .then(data=> {
+                    document.getElementById('output3222').innerHTML=JSON.stringify(data)
                     document.getElementById('input5').value = data.token
                 })
                 .catch(error => console.error('Error:', error));
