@@ -1,7 +1,6 @@
 package de.dhbw.trackingappbackend.boundary;
 
 import de.dhbw.trackingappbackend.control.CoordinateService;
-import de.dhbw.trackingappbackend.control.LocationService;
 import de.dhbw.trackingappbackend.control.TileService;
 import de.dhbw.trackingappbackend.entity.AppUser;
 import de.dhbw.trackingappbackend.entity.LocationRepository;
@@ -20,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,7 +59,7 @@ public class LocationController {
             List<Location> locations = locationRepository.findByTilePositionWithinAndIdIn(polygon, locationIds);
 
             if (locations == null || locations.isEmpty()) {
-                return ResponseEntity.ok("No locations in area visited. Go outside!");
+                return ResponseEntity.ok(Collections.emptyList());
             }
             else {
                 return ResponseEntity.ok(locations.stream()
