@@ -16,4 +16,8 @@ public interface FriendController {
     @SecurityRequirement(name="oauth2")
     @Operation(summary = "removes the firendID, returns a List of the remaining UUIDs")
     ResponseEntity<?> deleteFriend(@PathVariable String friendID);
+
+    @SecurityRequirement(name="oauth2")
+    @Operation(summary = "adds the firendID, returns a List of the remaining UUIDs")
+    ResponseEntity<?> addFriend(@PathVariable String friendID);
 }

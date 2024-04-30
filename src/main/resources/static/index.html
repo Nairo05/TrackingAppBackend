@@ -218,6 +218,25 @@
         });
     </script>
 
+    <input id="aa1" placeholder="jwt">
+    <input id="aa2" placeholder="friendID">
+    <button id="aa3">Add Friend</button>
+    <p id="aa4">null</p>
+    <script>
+        document.getElementById('aa3').addEventListener('click', function() {
+            fetch('/api/v1/friend/'+document.getElementById('aa2').value, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization':'Bearer ' + document.getElementById('aa1').value
+                },
+            })
+                .then(response => response.text())
+                .then(data => document.getElementById('aa4').innerHTML=data)
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+
     <hr>
     <h2>Utility Controller</h2>
 

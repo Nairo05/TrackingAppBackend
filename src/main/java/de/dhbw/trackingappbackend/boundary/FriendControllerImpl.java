@@ -1,5 +1,6 @@
 package de.dhbw.trackingappbackend.boundary;
 
+import de.dhbw.trackingappbackend.control.FriendService;
 import de.dhbw.trackingappbackend.entity.AppUser;
 import de.dhbw.trackingappbackend.entity.UserRepository;
 import de.dhbw.trackingappbackend.security.UserDetailsImpl;
@@ -12,9 +13,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Tag(name = "Friend Controller")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -24,6 +28,7 @@ import java.util.stream.Collectors;
 public class FriendControllerImpl implements FriendController {
 
     private final UserRepository userRepository;
+    private final FriendService friendService;
 
     @Override
     @GetMapping("/friends")
@@ -83,6 +88,40 @@ public class FriendControllerImpl implements FriendController {
 
         } else {
             return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @Override
+    @PostMapping("/friend/{friendID}")
+    public ResponseEntity<?> addFriend(String friendID) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        Optional<AppUser> appUserOptional = userRepository.findById(userDetails.getId());
+
+        if (appUserOptional.isPresent()) {
+
+            AppUser appUser = appUserOptional.get();
+
+            if (!friendService.isValidFriendID(friendID)) {
+
+                return ResponseEntity
+                        .badRequest()
+                        .body("cant find FriendID");
+            }
+
+            appUser.setFriendIDs(Stream.concat(appUser.getFriendIDs().stream(), Stream.of(friendID))
+                    .collect(Collectors.toList()));
+
+            userRepository.save(appUser);
+
+            return ResponseEntity.ok(appUser.getFriendIDs());
+
+        } else {
+
+            return ResponseEntity.badRequest().build();
+
         }
     }
 
