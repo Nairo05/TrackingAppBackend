@@ -32,8 +32,8 @@ public class LocationRepositoryTest {
         Optional<AppUser> appUserOptional = userRepository.findByEmail("test@test.de");
         assert appUserOptional.isPresent();
 
-        String appUserId = appUserOptional.get().getId();
-        List<Location> allLocations = locationRepository.findByAppUserId(appUserId);
+        List<String> locationIds = appUserOptional.get().getLocationIds();
+        List<Location> allLocations = locationRepository.findByIdIn(locationIds);
 
         assert(allLocations.size() == 4);
     }

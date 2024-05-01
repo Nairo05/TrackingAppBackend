@@ -7,17 +7,16 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface LocationRepository extends MongoRepository<Location, String> {
 
-    List<Location> findByAppUserIdAndTilePositionWithin(String appUserId, GeoJsonPolygon p);
+    // List<Location> findByTilePositionWithin(GeoJsonPolygon p);
 
-    List<Location> findByTilePositionWithin(GeoJsonPolygon p);
+    List<Location> findByTilePositionWithinAndIdIn(GeoJsonPolygon p, List<String> locationIds);
 
-    Location findByAppUserIdAndTile(String appUserId, Tile tile);
+    List<Location> findByIdIn(List<String> locationIds);
 
-    boolean existsByAppUserIdAndTile(String appUserId, Tile tile);
-
-    List<Location> findByAppUserId(String appUserId);
+    Optional<Location> findByTile(Tile tile);
 }
