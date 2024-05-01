@@ -6,6 +6,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 
+//TODO Example Data
+
 @Tag(name = "Friend Controller")
 public interface FriendController {
 

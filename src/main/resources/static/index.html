@@ -1,4 +1,4 @@
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
     <h1>Dev Page</h1>
 
     <h2>Endpoint documentation</h2>
@@ -34,6 +34,18 @@
     <hr>
 
     <h2>Auth Flow</h2>
+
+    <h3>Oauth provider</h3>
+
+    <button onclick="loginWithGitHub()">Login with GitHub</button>
+
+    <script>
+        function loginWithGitHub() {
+            window.location.href = "/oauth2/authorization/github";
+        }
+    </script>
+
+    <h3>Manual Auth</h3>
 
     <input id="input1" type="text" placeholder="email@email.de" value="email@email.de">
     <input id="input2" type="text" placeholder="password" value="password123.">

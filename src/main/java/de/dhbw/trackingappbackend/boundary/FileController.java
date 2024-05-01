@@ -25,7 +25,7 @@ public interface FileController {
             @RequestParam(defaultValue = "false") boolean isProfilePicture) throws Exception;
 
 
-    @Operation(summary = "produces a Multipart stream containing the profile picture")
+    @Operation(summary = "produces image/jpeg containing the profile picture")
     @SecurityRequirement(name="oauth2")
     ResponseEntity<?> getProfilePicture() throws Exception;
 }

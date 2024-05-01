@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -52,22 +53,23 @@ public class WebSecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
+        return http.csrf(AbstractHttpConfigurer::disable)
+
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/v1/auth/**").permitAll()
-                                .requestMatchers("/devpage/**").permitAll()
-                                .requestMatchers("/dev/**").permitAll()
-                                .requestMatchers("/swagger-ui").permitAll()
-                                .anyRequest().permitAll()
-                );
-
-        http.authenticationProvider(authenticationProvider());
-
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-
-        return http.build();
+                .authorizeHttpRequests(auth -> {
+                            auth.requestMatchers("/api/v1/auth/**").permitAll()
+                                    .requestMatchers("/devpage/**").permitAll()
+                                    .requestMatchers("/dev/**").permitAll()
+                                    .requestMatchers("/swagger-ui").permitAll()
+                                    .requestMatchers("/logout/**").permitAll()
+                                    .requestMatchers("/login/**").permitAll()
+                                    .requestMatchers("/login").permitAll()
+                                    .requestMatchers("/logout").permitAll();
+                        }
+                )
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
-
 }
