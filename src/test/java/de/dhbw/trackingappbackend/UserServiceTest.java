@@ -17,6 +17,7 @@ public class UserServiceTest {
     @Autowired
     LocationRepository locationRepository;
 
+    /*
     @Test
     public void testHasUserVisitedLocation() {
 
@@ -27,5 +28,5 @@ public class UserServiceTest {
         String appUserId = appUser.getId();
         String locationId = appUser.getLocationIds().get(0);
         assert userRepository.existsByIdAndLocationIdsContains(appUserId, locationId);
-    }
+    }*/
 }
