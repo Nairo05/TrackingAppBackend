@@ -54,7 +54,6 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
-
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> {
@@ -65,7 +64,8 @@ public class WebSecurityConfig {
                                     .requestMatchers("/logout/**").permitAll()
                                     .requestMatchers("/login/**").permitAll()
                                     .requestMatchers("/login").permitAll()
-                                    .requestMatchers("/logout").permitAll();
+                                    .requestMatchers("/logout").permitAll()
+                                    .anyRequest().authenticated();
                         }
                 )
                 .authenticationProvider(authenticationProvider())
