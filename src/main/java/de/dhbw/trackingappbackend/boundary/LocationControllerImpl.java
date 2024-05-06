@@ -9,9 +9,6 @@ import de.dhbw.trackingappbackend.entity.location.Location;
 import de.dhbw.trackingappbackend.entity.location.LocationWrapper;
 import de.dhbw.trackingappbackend.entity.location.Tile;
 import de.dhbw.trackingappbackend.security.UserDetailsImpl;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.geo.GeoJsonPolygon;
 import org.springframework.http.ResponseEntity;
@@ -23,20 +20,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-@Tag(name = "Location Controller")
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/v1")
-public class LocationController {
+public class LocationControllerImpl implements LocationController {
 
     private final UserRepository userRepository;
 
     private final LocationRepository locationRepository;
     private final CoordinateService coordinateService;
 
-    @SecurityRequirement(name="oauth2")
-    @Operation(summary = "Returns a list of locations of a user by given zoomLevel, starting from the given lat/lon coordinates as the west/south anchor point")
     @GetMapping("/locations")
     public ResponseEntity<?> getLocations(@RequestParam double latitude, @RequestParam double longitude, @RequestParam byte zoomLevel) {
 
@@ -72,8 +66,6 @@ public class LocationController {
         }
     }
 
-    @SecurityRequirement(name="oauth2")
-    @Operation(summary = "Adds the given lat/lon coordinates to the visited locations of a user.")
     @PostMapping("/location")
     public ResponseEntity<?> addLocation(@RequestParam double latitude, @RequestParam double longitude) {
 
@@ -109,6 +101,36 @@ public class LocationController {
                 userRepository.save(appUser);
 
                 return ResponseEntity.ok(new LocationWrapper(newLocation)); // return newly visited location
+            }
+        }
+        else {
+            return ResponseEntity.badRequest().body("User not found!");
+        }
+    }
+
+    @GetMapping("/locations/all")
+    public ResponseEntity<?> getAllLocations() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        Optional<AppUser> appUserOptional = userRepository.findById(userDetails.getId());
+
+        if (appUserOptional.isPresent()) {
+
+            AppUser appUser = appUserOptional.get();
+            List<String> locationIds = appUser.getLocationIds();
+
+            // get locations within the polygon and the user's location ids
+            List<Location> locations = locationRepository.findByIdIn(locationIds);
+
+            if (locations == null || locations.isEmpty()) {
+                return ResponseEntity.ok(Collections.emptyList());
+            }
+            else {
+                return ResponseEntity.ok(locations.stream()
+                    .map(LocationWrapper::new)
+                    .toList());
             }
         }
         else {
