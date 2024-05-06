@@ -1,6 +1,6 @@
 package de.dhbw.trackingappbackend;
 
-import de.dhbw.trackingappbackend.boundary.LocationController;
+import de.dhbw.trackingappbackend.boundary.LocationControllerImpl;
 import de.dhbw.trackingappbackend.control.AuthService;
 import de.dhbw.trackingappbackend.control.CoordinateService;
 import de.dhbw.trackingappbackend.entity.LocationRepository;
@@ -29,7 +29,7 @@ public class LocationControllerTest {
     protected LocationRepository locationRepository;
 
     @InjectMocks
-    protected LocationController sut;
+    protected LocationControllerImpl sut;
 
     /*  TODO fuck auth testing
     @Test
