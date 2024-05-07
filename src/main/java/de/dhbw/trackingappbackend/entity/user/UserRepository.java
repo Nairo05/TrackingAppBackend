@@ -1,6 +1,7 @@
-package de.dhbw.trackingappbackend.entity;
+package de.dhbw.trackingappbackend.entity.user;
 
 
+import de.dhbw.trackingappbackend.entity.user.AppUser;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

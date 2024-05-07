@@ -1,7 +1,7 @@
 package de.dhbw.trackingappbackend.boundary;
 
-import de.dhbw.trackingappbackend.entity.AppUser;
-import de.dhbw.trackingappbackend.entity.UserRepository;
+import de.dhbw.trackingappbackend.entity.user.AppUser;
+import de.dhbw.trackingappbackend.entity.user.UserRepository;
 import de.dhbw.trackingappbackend.model.response.ShownUserModel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

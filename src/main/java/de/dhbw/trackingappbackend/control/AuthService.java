@@ -1,9 +1,9 @@
 package de.dhbw.trackingappbackend.control;
 
-import de.dhbw.trackingappbackend.entity.AppUser;
+import de.dhbw.trackingappbackend.entity.user.AppUser;
 import de.dhbw.trackingappbackend.entity.TokenEntity;
 import de.dhbw.trackingappbackend.entity.TokenRepository;
-import de.dhbw.trackingappbackend.entity.UserRepository;
+import de.dhbw.trackingappbackend.entity.user.UserRepository;
 import de.dhbw.trackingappbackend.model.request.RegisterRequest;
 import de.dhbw.trackingappbackend.model.response.JwtResponse;
 import de.dhbw.trackingappbackend.security.JwtUtils;

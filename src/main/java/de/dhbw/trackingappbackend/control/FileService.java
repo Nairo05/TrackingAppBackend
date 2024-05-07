@@ -1,9 +1,9 @@
 package de.dhbw.trackingappbackend.control;
 
-import de.dhbw.trackingappbackend.entity.AppUser;
+import de.dhbw.trackingappbackend.entity.user.AppUser;
 import de.dhbw.trackingappbackend.entity.FileEntity;
 import de.dhbw.trackingappbackend.entity.FileRepository;
-import de.dhbw.trackingappbackend.entity.UserRepository;
+import de.dhbw.trackingappbackend.entity.user.UserRepository;
 import de.dhbw.trackingappbackend.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;

@@ -1,5 +1,6 @@
-package de.dhbw.trackingappbackend.entity;
+package de.dhbw.trackingappbackend.entity.user;
 
+import de.dhbw.trackingappbackend.entity.user.Friend;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -7,6 +8,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Document(collection = "base")
@@ -42,7 +44,7 @@ public class AppUser {
     @NonNull
     private String password;
 
-    List<String> friendIDs;
+    List<Friend> friends;
 
     List<String> locationIds;
 

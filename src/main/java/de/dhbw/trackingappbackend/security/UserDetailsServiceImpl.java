@@ -1,7 +1,7 @@
 package de.dhbw.trackingappbackend.security;
 
-import de.dhbw.trackingappbackend.entity.AppUser;
-import de.dhbw.trackingappbackend.entity.UserRepository;
+import de.dhbw.trackingappbackend.entity.user.AppUser;
+import de.dhbw.trackingappbackend.entity.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

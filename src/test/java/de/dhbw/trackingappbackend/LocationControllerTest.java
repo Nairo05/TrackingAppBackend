@@ -4,7 +4,7 @@ import de.dhbw.trackingappbackend.boundary.LocationControllerImpl;
 import de.dhbw.trackingappbackend.control.AuthService;
 import de.dhbw.trackingappbackend.control.CoordinateService;
 import de.dhbw.trackingappbackend.entity.LocationRepository;
-import de.dhbw.trackingappbackend.entity.UserRepository;
+import de.dhbw.trackingappbackend.entity.user.UserRepository;
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

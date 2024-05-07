@@ -211,6 +211,50 @@
         });
     </script>
 
+
+    <input id="input5221" placeholder="jwt">
+    <button id="button5221">get Friend invites</button>
+    <p id="output5221">null</p>
+    <script>
+        document.getElementById('button5221').addEventListener('click', function() {
+            fetch('/api/v1/invites', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization':'Bearer ' + document.getElementById('input5221').value
+                },
+            })
+                .then(response => response.text())
+                .then(data => document.getElementById('output5221').innerHTML=data)
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+
+
+    <input id="input522133" placeholder="jwt">
+    <input id="input522133id" placeholder="id">
+    <input id="input522133boolean" placeholder="boolean accept">
+    <button id="button522133">acceptInvite</button>
+    <p id="output522133">null</p>
+    <script>
+        document.getElementById('button522133').addEventListener('click', function() {
+
+            var acceptValue = document.getElementById('input522133boolean').checked;
+            var uuidValue = document.getElementById('input522133id').value;
+
+            fetch('/api/v1/friend/update?accept='+ acceptValue + '&uuid=' + uuidValue, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization':'Bearer ' + document.getElementById('input522133').value
+                },
+            })
+                .then(response => response.text())
+                .then(data => document.getElementById('output522133').innerHTML=data)
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+
+
     <input id="input5222" placeholder="jwt">
     <input id="input52222" placeholder="friendID">
     <button id="button5222">Delete Friend</button>

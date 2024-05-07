@@ -1,6 +1,6 @@
 package de.dhbw.trackingappbackend.security;
 
-import de.dhbw.trackingappbackend.entity.AppUser;
+import de.dhbw.trackingappbackend.entity.user.AppUser;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

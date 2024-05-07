@@ -1,7 +1,7 @@
 package de.dhbw.trackingappbackend.dev;
 
-import de.dhbw.trackingappbackend.entity.AppUser;
-import de.dhbw.trackingappbackend.entity.UserRepository;
+import de.dhbw.trackingappbackend.entity.user.AppUser;
+import de.dhbw.trackingappbackend.entity.user.UserRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
