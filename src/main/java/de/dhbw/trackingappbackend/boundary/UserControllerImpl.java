@@ -2,6 +2,7 @@ package de.dhbw.trackingappbackend.boundary;
 
 import de.dhbw.trackingappbackend.control.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -16,5 +17,10 @@ public class UserControllerImpl implements UserController {
     @PostMapping("/password/set")
     public Boolean changePassword(@RequestBody String password) {
         return userService.setPassword(password);
+    }
+
+    @Override
+    public ResponseEntity<?> addAuthFingerprint() {
+        return null;
     }
 }

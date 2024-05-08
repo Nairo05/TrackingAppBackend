@@ -113,6 +113,15 @@ public class AuthControllerImpl implements AuthController {
     }
 
     @Override
+    @PostMapping("/fingerprint/{email}")
+    public ResponseEntity<?> authMe(@PathVariable String email, @RequestBody String fingerprint) {
+
+        authService.fingerPrintLogin(email, fingerprint);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @Override
     @PostMapping("/reset")
     public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordModel forgotPasswordModel) {
         return ResponseEntity.status(501).build();

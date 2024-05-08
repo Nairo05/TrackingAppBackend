@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
@@ -49,4 +50,7 @@ public interface AuthController {
 
     @Operation(summary = "exchange the refresh token for a new JWT")
     ResponseEntity<?> refreshToken(@RequestHeader String token, String bearer);
+
+    @Operation(summary = "use biometric fingerprint information to login")
+    ResponseEntity<?> authMe(@PathVariable String email, @RequestBody String fingerprint);
 }

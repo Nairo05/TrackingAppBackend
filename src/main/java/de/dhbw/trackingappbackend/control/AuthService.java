@@ -56,6 +56,23 @@ public class AuthService {
         return (UserDetailsImpl) authentication.getPrincipal();
     }
 
+    public UserDetailsImpl fingerPrintLogin(String email, String fingerprint) {
+
+        Optional<AppUser> appUser = userRepository.findFirstByEmail(email);
+
+        if (appUser.isEmpty()) {
+            return null;
+        }
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(appUser.get().getUsername(), fingerprint));
+
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        return (UserDetailsImpl) authentication.getPrincipal();
+
+    }
+
     public void logout(){
 
         String currentUser = getUserFromContext().getId();
