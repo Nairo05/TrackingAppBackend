@@ -20,6 +20,7 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
+    @PostMapping("/fingerprint/set")
     public ResponseEntity<?> addAuthFingerprint() {
         return null;
     }
