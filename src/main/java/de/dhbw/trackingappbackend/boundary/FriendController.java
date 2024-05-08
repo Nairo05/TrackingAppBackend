@@ -2,7 +2,6 @@ package de.dhbw.trackingappbackend.boundary;
 
 import de.dhbw.trackingappbackend.boundary.dto.FriendDTO;
 import de.dhbw.trackingappbackend.boundary.dto.InviteDTO;
-import de.dhbw.trackingappbackend.model.response.JwtResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
