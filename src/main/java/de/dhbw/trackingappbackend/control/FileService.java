@@ -74,12 +74,23 @@ public class FileService {
 
     }
 
-    public Resource getPorfilePicture() throws Exception {
+    public Resource getProfilePicture() throws Exception {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
         Optional<FileEntity> fileEntity = fileRepository.findFirstByOwnerId(userDetails.getId());
+
+        if (fileEntity.isEmpty()) {
+            throw new Exception();
+        }
+
+        return new ByteArrayResource(fileEntity.get().getData());
+    }
+
+    public Resource getProfilePictureByUUID(String uuid) throws Exception {
+
+        Optional<FileEntity> fileEntity = fileRepository.findFirstByOwnerId(uuid);
 
         if (fileEntity.isEmpty()) {
             throw new Exception();

@@ -63,7 +63,18 @@ public class FileControllerImpl implements FileController {
     @GetMapping("/profile/picture")
     public ResponseEntity<?> getProfilePicture() throws Exception {
 
-        Resource res = fileService.getPorfilePicture();
+        Resource res = fileService.getProfilePicture();
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .body(res);
+    }
+
+    @Override
+    @GetMapping("/profile/{uuid}/picture")
+    public ResponseEntity<?> getProfilePictureForSpecificUser(String uuid) throws Exception {
+
+        Resource res = fileService.getProfilePictureByUUID(uuid);
 
         return ResponseEntity.ok()
                 .contentType(MediaType.IMAGE_JPEG)

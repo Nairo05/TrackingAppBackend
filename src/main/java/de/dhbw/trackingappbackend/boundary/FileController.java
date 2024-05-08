@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,7 +21,11 @@ public interface FileController {
             @RequestParam(defaultValue = "false") boolean isProfilePicture) throws Exception;
 
 
-    @Operation(summary = "produces image/jpeg containing the profile picture")
     @SecurityRequirement(name="oauth2")
+    @Operation(summary = "produces image/jpeg containing the profile picture. Use this endpoint to get the own profile picture")
     ResponseEntity<?> getProfilePicture() throws Exception;
+
+    @SecurityRequirement(name="oauth2")
+    @Operation(summary = "produces image/jpeg containing the profile picture. Use this endpoint to get profile picture of Friends")
+    ResponseEntity<?> getProfilePictureForSpecificUser(@PathVariable String uuid) throws Exception;
 }
