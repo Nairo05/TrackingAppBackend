@@ -8,16 +8,15 @@ import de.dhbw.trackingappbackend.entity.user.Friend;
 import de.dhbw.trackingappbackend.entity.user.UserRepository;
 import de.dhbw.trackingappbackend.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jdk.jfr.Frequency;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.time.Instant;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Tag(name = "Friend Controller")
@@ -196,43 +195,9 @@ public class FriendControllerImpl implements FriendController {
     }
 
 
-
-    @Override
-    @PostMapping("/friend/id/{friendID}")
-    public ResponseEntity<?> addFriend(String friendID) {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
-
-        Optional<AppUser> appUserOptional = userRepository.findById(userDetails.getId());
-
-        if (appUserOptional.isPresent()) {
-
-            AppUser appUser = appUserOptional.get();
-
-            if (!friendService.isValidFriendID(friendID)) {
-
-                return ResponseEntity
-                        .badRequest()
-                        .body("cant find FriendID");
-            }
-
-
-
-            userRepository.save(appUser);
-
-            return null;
-
-        } else {
-
-            return ResponseEntity.badRequest().build();
-
-        }
-    }
-
     @Override
     @PostMapping("/friend/email/{email}")
-    public ResponseEntity<?> addFriendWithEmail(String email) {
+    public ResponseEntity<?> addFriendWithEmail(@PathVariable String email) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
@@ -243,9 +208,29 @@ public class FriendControllerImpl implements FriendController {
 
             AppUser appUser = appUserOptional.get();
 
+            Optional<AppUser> addUserOptional = userRepository.findByEmail(email);
+
+            if (addUserOptional.isPresent()) {
+
+                AppUser addUser = addUserOptional.get();
+
+                Friend friend = new Friend(addUser.getId(), Friend.open, addUser.getEmail(), Instant.now(), null);
+
+                appUser.getFriends().add(friend);
+
+                userRepository.save(appUser);
+
+                return ResponseEntity.ok().body("Request from " + addUser.getEmail() + " send to user " + appUser.getEmail());
+
+            } else {
+
+                return ResponseEntity.badRequest().body("Cant find any user with " + email);
+
+            }
+
         }
 
-        return null;
+        return ResponseEntity.badRequest().body("There was a Problem resolving the jwt, cant extract user from context");
     }
 
 }
