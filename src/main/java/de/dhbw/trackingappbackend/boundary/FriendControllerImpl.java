@@ -8,6 +8,7 @@ import de.dhbw.trackingappbackend.entity.user.Friend;
 import de.dhbw.trackingappbackend.entity.user.UserRepository;
 import de.dhbw.trackingappbackend.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jdk.jfr.Frequency;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -135,6 +136,15 @@ public class FriendControllerImpl implements FriendController {
                 if (accept) {
                     friend.setStatus(Friend.accepted);
                     appUser.getFriends().add(friend);
+
+                    AppUser requester = userRepository.findById(friend.getUuid()).get();
+
+                    Friend friend1 = new Friend(appUser.getId(), Friend.accepted, appUser.getEmail(), Instant.now(), Instant.now());
+
+                    requester.getFriends().add(friend1);
+
+                    userRepository.save(requester);
+
                 }
 
                 userRepository.save(appUser);
@@ -214,13 +224,11 @@ public class FriendControllerImpl implements FriendController {
 
                 AppUser addUser = addUserOptional.get();
 
-                Friend friend = new Friend(addUser.getId(), Friend.open, addUser.getEmail(), Instant.now(), null);
+                Friend requestfriend = new Friend(appUser.getId(), Friend.open, appUser.getEmail(), Instant.now(), Instant.now());
+                addUser.getFriends().add(requestfriend);
+                userRepository.save(addUser);
 
-                appUser.getFriends().add(friend);
-
-                userRepository.save(appUser);
-
-                return ResponseEntity.ok().body("Request from " + addUser.getEmail() + " send to user " + appUser.getEmail());
+                return ResponseEntity.ok().body("Request from " + appUser.getEmail() + " send to user " + addUser.getEmail());
 
             } else {
 

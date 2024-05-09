@@ -8,7 +8,15 @@ import lombok.Data;
 public class FriendDTO {
 
     private String uuid;
+
     private String email;
+
+    //TODO
+    private String username;
+
     private String acceptedAt;
+
+    //TODO in %
+    private float stats;
 
 }
