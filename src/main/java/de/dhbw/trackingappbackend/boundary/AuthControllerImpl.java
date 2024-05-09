@@ -7,6 +7,7 @@ import de.dhbw.trackingappbackend.model.response.ForgotPasswordModel;
 import de.dhbw.trackingappbackend.model.response.ResetPasswordModel;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,7 +57,15 @@ public class AuthControllerImpl implements AuthController {
 
     @Override
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(
+            @Valid @RequestBody LoginRequest loginRequest,
+            @RequestHeader("X-Login-Type") String type) {
+
+        if (type == null) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("Cant parse Login-Method by Filter. Wrong endpoint. Missing the corresponding Header");
+        }
 
         if (loginRequest.getEmail() != null) {
 
@@ -117,6 +126,8 @@ public class AuthControllerImpl implements AuthController {
     public ResponseEntity<?> authMe(@PathVariable String email, @RequestBody String fingerprint) {
 
         authService.fingerPrintLogin(email, fingerprint);
+
+        //TODO add new Authentification extends AbstractAuthentification
 
         return ResponseEntity.ok().build();
     }

@@ -31,7 +31,7 @@ public interface AuthController {
                     content = @Content(schema = @Schema(implementation = JwtResponse.class))),
             @ApiResponse(responseCode = "401", description = "Invalid credentials provided")
     })
-    ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest);
+    ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest, @RequestHeader("X-Login-Type") String type);
 
 
     @Operation(summary = "log out the current user and delete all (User-)Token")
