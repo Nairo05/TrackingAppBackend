@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -44,7 +45,7 @@ public class FileService {
         FileEntity fileEntity = FileEntity
                 .builder()
                 .id(UUID.randomUUID().toString())
-                .created(LocalDateTime.now())
+                .created(Instant.now())
                 .ownerId(userDetails.getId())
                 .fileName(fileName)
                 .fileType(fileType)

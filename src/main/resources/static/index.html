@@ -101,7 +101,7 @@
     </script>
 
 
-    <input id="input12" type="text" placeholder="mail" value="datev@test.de">
+    <input id="input12" type="text" placeholder="mail" value="test1@test.de">
     <input id="input22" type="text" placeholder="password" value="password123.">
     <button id="sendRequestBtn32">Login UserEMAIL</button>
     <p id="output32">output</p>
@@ -123,12 +123,18 @@
                 .then(data=> {
                     document.getElementById('output32').innerHTML=JSON.stringify(data)
                     document.getElementById('input5').value = data.token
+                    document.getElementById('inputre1').value = data.token
+                    document.getElementById('input5221').value = data.token
+                    document.getElementById('input522133').value = data.token
+                    document.getElementById('aa1').value = data.token
+                    document.getElementById('input5222').value = data.token
+                    document.getElementById('input522').value = data.token
                 })
                 .catch(error => console.error('Error:', error));
         });
     </script>
 
-    <input id="input1222" type="text" placeholder="myusername" value="myusername">
+    <input id="input1222" type="text" placeholder="myusername" value="test1Username">
     <input id="input2222" type="text" placeholder="password" value="password123.">
     <button id="sendRequestBtn3222">Login UserNAME</button>
     <p id="output3222">output</p>

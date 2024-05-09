@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Document(collection = "files")
@@ -25,7 +26,7 @@ public class FileEntity {
 
     private byte[] data;
 
-    private LocalDateTime created;
+    private Instant created;
 
     private String ownerId;
 }

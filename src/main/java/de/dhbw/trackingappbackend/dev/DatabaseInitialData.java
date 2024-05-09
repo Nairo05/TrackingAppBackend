@@ -1,5 +1,7 @@
 package de.dhbw.trackingappbackend.dev;
 
+import ch.qos.logback.classic.pattern.ClassOfCallerConverter;
+import de.dhbw.trackingappbackend.entity.FileEntity;
 import de.dhbw.trackingappbackend.entity.user.AppUser;
 import de.dhbw.trackingappbackend.entity.FileRepository;
 import de.dhbw.trackingappbackend.entity.LocationRepository;
@@ -13,6 +15,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
@@ -29,15 +34,38 @@ public class DatabaseInitialData {
     public CommandLineRunner createTestData(UserRepository userRepository, LocationRepository locationRepository, FileRepository fileRepository) {
         return (args) -> {
 
+            String filePath = "src/main/resources/images/neuronalesNetz.png";
+            byte[] byteArray;
+
+            try {
+                byteArray = Files.readAllBytes(Paths.get(filePath));
+            } catch (IOException e) {
+                e.printStackTrace();
+                return;
+            }
+
             userRepository.deleteAll();
             fileRepository.deleteAll();
 
             String password = encoder.encode("password123.");
+
             String uuid1 = UUID.randomUUID().toString();
             String uuid2 = UUID.randomUUID().toString();
             String uuid3 = UUID.randomUUID().toString();
             String uuid4 = UUID.randomUUID().toString();
+            String uuidPicture1 = UUID.randomUUID().toString();
 
+
+            FileEntity fileEntity = new FileEntity(
+                    uuidPicture1,
+                    "Unbenannt.png",
+                    "image/png",
+                    byteArray,
+                    Instant.now(),
+                    uuid1
+            );
+
+            fileRepository.save(fileEntity);
 
             AppUser appUser = AppUser.builder()
                     .email("test1@test.de")
@@ -52,7 +80,7 @@ public class DatabaseInitialData {
                             new Friend(uuid4, Friend.open, "test4@test.de", Instant.now(), Instant.now())
                             ))
                     .locationIds(Collections.emptyList())
-                    .profilePictureId(null)
+                    .profilePictureId(uuidPicture1)
                     .build();
 
             AppUser appUser1 = AppUser.builder()
