@@ -30,7 +30,7 @@ public class AuthService {
     private final PasswordEncoder encoder;
     private final JwtUtils jwtUtils;
 
-    public JwtResponse generateJWTResponse() {
+    public JwtResponse generateJWTResponseFromContext() {
 
         UserDetailsImpl userDetails = getUserFromContext();
 
@@ -150,5 +150,12 @@ public class AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         return (UserDetailsImpl) authentication.getPrincipal();
+    }
+
+    public boolean resetPasswordRequest(String email) {
+
+
+
+        return false;
     }
 }

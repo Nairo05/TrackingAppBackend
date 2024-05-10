@@ -11,12 +11,8 @@ public class FriendDTO {
 
     private String email;
 
-    //TODO
-    private String username;
-
     private String acceptedAt;
 
-    //TODO in %
     private float stats;
 
 }

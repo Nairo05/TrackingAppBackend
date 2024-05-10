@@ -7,7 +7,6 @@ import de.dhbw.trackingappbackend.model.response.ForgotPasswordModel;
 import de.dhbw.trackingappbackend.model.response.ResetPasswordModel;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -61,10 +60,10 @@ public class AuthControllerImpl implements AuthController {
             @Valid @RequestBody LoginRequest loginRequest,
             @RequestHeader("X-Login-Type") String type) {
 
-        if (type == null) {
+        if (type == null || !type.equals("UserPasswordAuth")) {
             return ResponseEntity
                     .badRequest()
-                    .body("Cant parse Login-Method by Filter. Wrong endpoint. Missing the corresponding Header");
+                    .body("Cant parse Login-Method by Filter. Wrong endpoint. Missing the corresponding Header-Type");
         }
 
         if (loginRequest.getEmail() != null) {
@@ -77,7 +76,7 @@ public class AuthControllerImpl implements AuthController {
 
         }
 
-        return ResponseEntity.ok(authService.generateJWTResponse());
+        return ResponseEntity.ok(authService.generateJWTResponseFromContext());
     }
 
     @Override
@@ -132,10 +131,16 @@ public class AuthControllerImpl implements AuthController {
         return ResponseEntity.ok().build();
     }
 
+
     @Override
     @PostMapping("/reset")
     public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordModel forgotPasswordModel) {
-        return ResponseEntity.status(501).build();
+
+        if (authService.resetPasswordRequest(forgotPasswordModel.getEmail())) {
+            return ResponseEntity.ok().body("email sent");
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 
     @Override

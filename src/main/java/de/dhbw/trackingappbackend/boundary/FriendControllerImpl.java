@@ -60,6 +60,7 @@ public class FriendControllerImpl implements FriendController {
                                         .uuid(friend.getUuid())
                                         .email(friend.getEmail())
                                         .acceptedAt(friend.getAcceptedAt().toString())
+                                        .stats(new Random().nextFloat())
                                         .build())
                 );
             }
