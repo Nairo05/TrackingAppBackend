@@ -1,4 +1,4 @@
-package de.dhbw.trackingappbackend.boundary.dto;
+package de.dhbw.trackingappbackend.model.response;
 
 import lombok.Builder;
 import lombok.Data;

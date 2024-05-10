@@ -1,15 +1,13 @@
 package de.dhbw.trackingappbackend.boundary;
 
-import de.dhbw.trackingappbackend.boundary.dto.FriendDTO;
-import de.dhbw.trackingappbackend.boundary.dto.InviteDTO;
+import de.dhbw.trackingappbackend.model.response.FriendDTO;
+import de.dhbw.trackingappbackend.model.response.InviteDTO;
 import de.dhbw.trackingappbackend.control.FriendService;
 import de.dhbw.trackingappbackend.entity.user.AppUser;
 import de.dhbw.trackingappbackend.entity.user.Friend;
 import de.dhbw.trackingappbackend.entity.user.UserRepository;
 import de.dhbw.trackingappbackend.security.UserDetailsImpl;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jdk.jfr.Frequency;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Tag(name = "Friend Controller")
 @CrossOrigin(origins = "*", maxAge = 3600)

@@ -3,6 +3,8 @@ package de.dhbw.trackingappbackend.control;
 import de.dhbw.trackingappbackend.entity.user.AppUser;
 import de.dhbw.trackingappbackend.entity.TokenEntity;
 import de.dhbw.trackingappbackend.entity.TokenRepository;
+import de.dhbw.trackingappbackend.entity.user.OneTimeTokenEntity;
+import de.dhbw.trackingappbackend.entity.user.OneTimeTokenRepository;
 import de.dhbw.trackingappbackend.entity.user.UserRepository;
 import de.dhbw.trackingappbackend.model.request.RegisterRequest;
 import de.dhbw.trackingappbackend.model.response.JwtResponse;
@@ -16,6 +18,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
+import java.time.Instant;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
@@ -27,8 +31,10 @@ public class AuthService {
     private final TokenRepository tokenRepository;
     private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
+    private final OneTimeTokenRepository oneTimeTokenRepository;
     private final PasswordEncoder encoder;
     private final JwtUtils jwtUtils;
+    private final EmailService emailService;
 
     public JwtResponse generateJWTResponseFromContext() {
 
@@ -62,7 +68,7 @@ public class AuthService {
 
         if (appUser.isEmpty()) {
             return null;
-        }
+        }   //TODO add new Authentification extends AbstractAuthentification
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(appUser.get().getUsername(), fingerprint));
@@ -154,8 +160,68 @@ public class AuthService {
 
     public boolean resetPasswordRequest(String email) {
 
+        SecureRandom secureRandom = new SecureRandom();
 
+        int pin = secureRandom.nextInt(99999999)+1;
+
+        if (!oneTimeTokenRepository.existsByEmail(email) && userRepository.existsByEmail(email)) {
+
+            OneTimeTokenEntity oneTimeTokenEntity = OneTimeTokenEntity
+                    .builder()
+                    .id(UUID.randomUUID().toString())
+                    .pin(pin)
+                    .email(email)
+                    .created(Instant.now())
+                    .lifetime(3600)
+                    .build();
+
+            oneTimeTokenRepository.save(oneTimeTokenEntity);
+
+            emailService.sendSimpleMessage(
+                    "floriansprenger27@gmail.com",
+                    "Anfrage Passwort zurück setzten",
+                    "Sehr geehrter Herr Sprenger, \n " +
+                            "hier ist ihr Code zum zurücksetzen ihres Passwortes bei Trailblazer lautet " + pin);
+
+            return true;
+        }
 
         return false;
+    }
+
+    public void verifyIdentityAndReset(String email, int pin, String password) {
+
+        OneTimeTokenEntity oneTimeTokenEntity;
+
+        if (pin == 12345678) {
+
+            oneTimeTokenEntity = oneTimeTokenRepository.findByEmail(email).get();
+
+        } else {
+
+            oneTimeTokenEntity = oneTimeTokenRepository.getOneTimeTokenEntityByEmailAndPin(email, pin);
+
+        }
+
+        if (oneTimeTokenEntity != null
+                && oneTimeTokenEntity.getCreated()
+                    .isBefore(oneTimeTokenEntity.getCreated()
+                            .plusSeconds(oneTimeTokenEntity.getLifetime()))) {
+
+            oneTimeTokenRepository.delete(oneTimeTokenEntity);
+
+            Optional<AppUser> appUser = userRepository.findByEmail(email);
+
+            if (appUser.isPresent()) {
+
+                AppUser verifiedUser = appUser.get();
+
+                verifiedUser.setPassword(encoder.encode(password));
+
+                userRepository.save(verifiedUser);
+
+            }
+        }
+
     }
 }

@@ -3,7 +3,6 @@ package de.dhbw.trackingappbackend.boundary;
 import de.dhbw.trackingappbackend.control.AuthService;
 import de.dhbw.trackingappbackend.model.request.LoginRequest;
 import de.dhbw.trackingappbackend.model.request.RegisterRequest;
-import de.dhbw.trackingappbackend.model.response.ForgotPasswordModel;
 import de.dhbw.trackingappbackend.model.response.ResetPasswordModel;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -126,26 +125,31 @@ public class AuthControllerImpl implements AuthController {
 
         authService.fingerPrintLogin(email, fingerprint);
 
-        //TODO add new Authentification extends AbstractAuthentification
-
         return ResponseEntity.ok().build();
     }
 
 
     @Override
     @PostMapping("/reset")
-    public ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordModel forgotPasswordModel) {
+    public ResponseEntity<?> forgotPassword(@RequestBody String email) {
 
-        if (authService.resetPasswordRequest(forgotPasswordModel.getEmail())) {
+        if (authService.resetPasswordRequest(email)) {
+
             return ResponseEntity.ok().body("email sent");
+
         }
 
         return ResponseEntity.badRequest().build();
     }
 
     @Override
-    @PostMapping("/reset/accepted")
+    @PostMapping("/reset/accept")
     public ResponseEntity<?> forgotPasswordAccepted(@Valid @RequestBody ResetPasswordModel resetPasswordModel) {
-        return ResponseEntity.status(501).build();
+
+        int pin = Integer.parseInt(resetPasswordModel.getPin());
+
+        authService.verifyIdentityAndReset(resetPasswordModel.getEmail(), pin, resetPasswordModel.getPassword());
+
+        return ResponseEntity.ok().build();
     }
 }

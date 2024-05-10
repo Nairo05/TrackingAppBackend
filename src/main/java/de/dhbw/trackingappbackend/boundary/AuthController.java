@@ -2,7 +2,6 @@ package de.dhbw.trackingappbackend.boundary;
 
 import de.dhbw.trackingappbackend.model.request.LoginRequest;
 import de.dhbw.trackingappbackend.model.request.RegisterRequest;
-import de.dhbw.trackingappbackend.model.response.ForgotPasswordModel;
 import de.dhbw.trackingappbackend.model.response.JwtResponse;
 import de.dhbw.trackingappbackend.model.response.ResetPasswordModel;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,7 +42,7 @@ public interface AuthController {
     ResponseEntity<?> status();
 
     @Operation(summary = "sends an email to reset the password")
-    ResponseEntity<?> forgotPassword(@Valid @RequestBody ForgotPasswordModel forgotPasswordModel);
+    ResponseEntity<?> forgotPassword(@RequestBody String email);
 
     @Operation(summary = "needs the token from the email, resets the password")
     ResponseEntity<?> forgotPasswordAccepted(@Valid @RequestBody ResetPasswordModel resetPasswordModel);

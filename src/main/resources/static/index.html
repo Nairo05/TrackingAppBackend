@@ -199,6 +199,49 @@
         });
     </script>
 
+    <input id="inputre2aa" placeholder="email">
+    <button id="buttonreaa">Forgot password</button>
+    <p id="outputreaa">false</p>
+    <script>
+        document.getElementById('buttonreaa').addEventListener('click', function() {
+            fetch('/api/v1/auth/reset', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: document.getElementById('inputre2aa').value
+            })
+                .then(response => response.text())
+                .then(data => document.getElementById('outputreaa').innerHTML=data)
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+
+    <input id="input_acceptReset_email" placeholder="email">
+    <input id="input_acceptReset_pin" placeholder="pin">
+    <input id="input_acceptReset_password" placeholder="newPassword">
+    <button id="reset_password">Accept Forgot password</button>
+    <p id="reset_password_response">false</p>
+    <script>
+        document.getElementById('reset_password').addEventListener('click', function() {
+            const obj = {
+                email: document.getElementById("input_acceptReset_email").value,
+                pin: document.getElementById("input_acceptReset_pin").value,
+                password: document.getElementById("input_acceptReset_password").value
+            };
+            fetch('/api/v1/auth/reset/accept', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(obj)
+            })
+                .then(response => response.text())
+                .then(data => document.getElementById('reset_password_response').innerHTML=data)
+                .catch(error => console.error('Error:', error));
+        });
+    </script>
+
     <hr>
     <h2>Friend Controller</h2>
 
