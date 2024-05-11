@@ -41,7 +41,7 @@ public class LocationControllerImpl implements LocationController {
 
         Optional<AppUser> appUserOptional = userRepository.findById(userDetails.getId());
 
-        if (14 < zoomLevel) return ResponseEntity.badRequest().body("Zoom level must be smaller than 15!");
+        if (14 < zoomLevel) return ResponseEntity.badRequest().body("Invalid zoomLevel provided");
 
         if (appUserOptional.isPresent()) {
 
@@ -54,8 +54,8 @@ public class LocationControllerImpl implements LocationController {
             // get single locations within the polygon and the user's location ids
             List<Location> locations = locationRepository.findByTilePositionWithinAndIdIn(polygon, locationIds);
 
-            if (locations.isEmpty()) {
-                return ResponseEntity.ok(Collections.emptyList());
+            if (locations.isEmpty()) { // no locations visited
+                return ResponseEntity.noContent().build();
             }
             else {
                 // adjust to zoom level
@@ -67,19 +67,19 @@ public class LocationControllerImpl implements LocationController {
             }
         }
         else {
-            return ResponseEntity.badRequest().body("User not found!");
+            return ResponseEntity.badRequest().body("Invalid credentials provided");
         }
     }
 
     @GetMapping("/locations/merged")
-    public ResponseEntity<?> getLocationsMerged(@RequestParam double latitude, @RequestParam double longitude, @RequestParam byte zoomLevel) {
+    public ResponseEntity<?> getMergedLocations(@RequestParam double latitude, @RequestParam double longitude, @RequestParam byte zoomLevel) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
 
         Optional<AppUser> appUserOptional = userRepository.findById(userDetails.getId());
 
-        if (14 < zoomLevel) return ResponseEntity.badRequest().body("Zoom level must be smaller than 15!");
+        if (14 < zoomLevel) return ResponseEntity.badRequest().body("Invalid zoomLevel provided");
 
         if (appUserOptional.isPresent()) {
 
@@ -92,8 +92,8 @@ public class LocationControllerImpl implements LocationController {
             // get single locations within the polygon and the user's location ids
             List<Location> locations = locationRepository.findByTilePositionWithinAndIdIn(polygon, locationIds);
 
-            if (locations.isEmpty()) {
-                return ResponseEntity.ok(Collections.emptyList());
+            if (locations.isEmpty()) { // no locations visited
+                return ResponseEntity.noContent().build();
             }
             else {
                 // adjust to zoom level
@@ -106,7 +106,7 @@ public class LocationControllerImpl implements LocationController {
             }
         }
         else {
-            return ResponseEntity.badRequest().body("User not found!");
+            return ResponseEntity.badRequest().body("Invalid credentials provided");
         }
     }
 
@@ -128,13 +128,13 @@ public class LocationControllerImpl implements LocationController {
             Optional<Location> locationOptional = locationRepository.findByTile(newTile);
 
             if (locationOptional.isEmpty()) { // tile not in db > location outside germany
-                return ResponseEntity.badRequest().body("Coordinates are not within Germany!");
+                return ResponseEntity.noContent().build();
             }
 
             Location newLocation = locationOptional.get();
 
             if (userRepository.existsByIdAndLocationIdsContains(appUserId, newLocation.getId())) {
-                return ResponseEntity.badRequest().body("Location already visited!");
+                return ResponseEntity.noContent().build(); // location already visited
             }
             else {
                 // add new location id to user
@@ -147,7 +147,7 @@ public class LocationControllerImpl implements LocationController {
             }
         }
         else {
-            return ResponseEntity.badRequest().body("User not found!");
+            return ResponseEntity.badRequest().body("Invalid credentials provided");
         }
     }
 
@@ -168,7 +168,7 @@ public class LocationControllerImpl implements LocationController {
             List<Location> locations = locationRepository.findByIdIn(locationIds);
 
             if (locations == null || locations.isEmpty()) {
-                return ResponseEntity.ok(Collections.emptyList());
+                return ResponseEntity.noContent().build();
             }
             else {
                 return ResponseEntity.ok(locations.stream()
@@ -177,7 +177,7 @@ public class LocationControllerImpl implements LocationController {
             }
         }
         else {
-            return ResponseEntity.badRequest().body("User not found!");
+            return ResponseEntity.badRequest().body("Invalid credentials provided");
         }
     }
 }

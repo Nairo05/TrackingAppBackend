@@ -58,7 +58,7 @@ public interface FriendController {
     ResponseEntity<?> updateInviteStatusForUser(@RequestParam("accept") boolean accept, @RequestParam("uuid") String uuid);
 
     @SecurityRequirement(name="oauth2")
-    @Operation(summary = "removes the firendID, returns a List of the remaining UUIDs")
+    @Operation(summary = "removes the friendID, returns a List of the remaining UUIDs")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "returns an updated List with all remaining friends",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = FriendDTO.class)))),
