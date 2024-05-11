@@ -11,6 +11,18 @@ import org.springframework.stereotype.Service;
 public class TileService {
 
     /**
+     * Returns the parent tile of a tile corresponding to the zoomLevel.
+     *
+     * @param tile original tile
+     * @param zoomLevel zoom level of the parent tile
+     * @return parent tile
+     */
+    public static Tile getParentTile(Tile tile, byte zoomLevel) {
+        int div = (int) Math.pow(2, 14 - zoomLevel);
+        return new Tile(tile.getXTile() / div, tile.getYTile() / div, zoomLevel);
+    }
+
+    /**
      * Returns the tile based on the given coordinates and zoom level.
      *
      * @link <a href="https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames">Calculation Method</a>

@@ -1,31 +1,43 @@
 package de.dhbw.trackingappbackend.entity.location;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.dhbw.trackingappbackend.control.TileService;
 import lombok.Data;
 
 @Data
 public class LocationWrapper {
 
+    @JsonIgnore
     private int xTile;
+    @JsonIgnore
     private int yTile;
     private byte zoomLevel;
-    private byte opacity;
+
+    //@JsonIgnore
+    private boolean mergedVertically;
+    //@JsonIgnore
+    private boolean mergedHorizontally;
 
     private double[] posUpperLeft;
     private double[] posUpperRight;
     private double[] posLowerRight;
     private double[] posLowerLeft;
 
-    public LocationWrapper(Location location) {
+    public LocationWrapper(Tile tile) {
 
-        this.xTile = location.getTile().getXTile();
-        this.yTile = location.getTile().getYTile();
-        this.zoomLevel = location.getTile().getZoomLevel();
-        this.opacity = 0; // TODO not necessarily 0, different zoomLevels will change the oppacity
+        this.xTile = tile.getXTile();
+        this.yTile = tile.getYTile();
+        this.zoomLevel = tile.getZoomLevel();
+        this.mergedVertically = false;
+        this.mergedHorizontally = false;
 
-        this.posUpperLeft = location.getTile().getPosition();
+        this.posUpperLeft = tile.getPosition();
         this.posUpperRight = TileService.getCoordinatesByTile(xTile + 1, yTile, zoomLevel);
         this.posLowerRight = TileService.getCoordinatesByTile(xTile + 1, yTile + 1, zoomLevel);
         this.posLowerLeft = TileService.getCoordinatesByTile(xTile, yTile + 1, zoomLevel);
+    }
+
+    public LocationWrapper(Location location) {
+        this(location.getTile());
     }
 }

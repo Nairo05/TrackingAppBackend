@@ -20,7 +20,7 @@ public class Tile {
     private byte zoomLevel;
 
     // position of the upper-left tile corner
-    private double[] position; // TODO change to lower left corner?
+    private double[] position;
 
     public Tile(int xTile, int yTile, byte zoomLevel) {
         this.xTile = xTile;

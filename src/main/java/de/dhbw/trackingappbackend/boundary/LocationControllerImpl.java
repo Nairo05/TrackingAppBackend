@@ -1,6 +1,7 @@
 package de.dhbw.trackingappbackend.boundary;
 
 import de.dhbw.trackingappbackend.control.CoordinateService;
+import de.dhbw.trackingappbackend.control.LocationService;
 import de.dhbw.trackingappbackend.control.TileService;
 import de.dhbw.trackingappbackend.entity.user.AppUser;
 import de.dhbw.trackingappbackend.entity.LocationRepository;
@@ -29,6 +30,7 @@ public class LocationControllerImpl implements LocationController {
     private final UserRepository userRepository;
 
     private final LocationRepository locationRepository;
+    private final LocationService locationService;
     private final CoordinateService coordinateService;
 
     @GetMapping("/locations")
@@ -39,7 +41,7 @@ public class LocationControllerImpl implements LocationController {
 
         Optional<AppUser> appUserOptional = userRepository.findById(userDetails.getId());
 
-        if (zoomLevel != 14) return ResponseEntity.badRequest().body("Zoom level must be 14"); // TODO remove zoom restriction
+        if (14 < zoomLevel) return ResponseEntity.badRequest().body("Zoom level must be smaller than 15!");
 
         if (appUserOptional.isPresent()) {
 
@@ -49,16 +51,58 @@ public class LocationControllerImpl implements LocationController {
             // create request area polygon from given coordinates
             GeoJsonPolygon polygon = coordinateService.getGeoJsonPolygon(latitude, longitude, zoomLevel);
 
-            // get locations within the polygon and the user's location ids
+            // get single locations within the polygon and the user's location ids
             List<Location> locations = locationRepository.findByTilePositionWithinAndIdIn(polygon, locationIds);
 
-            if (locations == null || locations.isEmpty()) {
+            if (locations.isEmpty()) {
                 return ResponseEntity.ok(Collections.emptyList());
             }
             else {
+                // adjust to zoom level
+                List<LocationWrapper> zoomedLocations = locationService.zoomLocations(locations, zoomLevel);
+
                 return ResponseEntity.ok(locations.stream()
                     .map(LocationWrapper::new)
                     .toList());
+            }
+        }
+        else {
+            return ResponseEntity.badRequest().body("User not found!");
+        }
+    }
+
+    @GetMapping("/locations/merged")
+    public ResponseEntity<?> getLocationsMerged(@RequestParam double latitude, @RequestParam double longitude, @RequestParam byte zoomLevel) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+
+        Optional<AppUser> appUserOptional = userRepository.findById(userDetails.getId());
+
+        if (14 < zoomLevel) return ResponseEntity.badRequest().body("Zoom level must be smaller than 15!");
+
+        if (appUserOptional.isPresent()) {
+
+            AppUser appUser = appUserOptional.get();
+            List<String> locationIds = appUser.getLocationIds();
+
+            // create request area polygon from given coordinates
+            GeoJsonPolygon polygon = coordinateService.getGeoJsonPolygon(latitude, longitude, zoomLevel);
+
+            // get single locations within the polygon and the user's location ids
+            List<Location> locations = locationRepository.findByTilePositionWithinAndIdIn(polygon, locationIds);
+
+            if (locations.isEmpty()) {
+                return ResponseEntity.ok(Collections.emptyList());
+            }
+            else {
+                // adjust to zoom level
+                List<LocationWrapper> zoomedLocations = locationService.zoomLocations(locations, zoomLevel);
+
+                // merge locations to bigger polygons
+                List<LocationWrapper> mergedLocations = locationService.mergeLocations(zoomedLocations);
+
+                return ResponseEntity.ok(mergedLocations);
             }
         }
         else {
@@ -94,7 +138,6 @@ public class LocationControllerImpl implements LocationController {
             }
             else {
                 // add new location id to user
-                // TODO easier way? directly in mongo?
                 List<String> locationIds = appUser.getLocationIds();
                 locationIds.add(newLocation.getId());
                 appUser.setLocationIds(locationIds);

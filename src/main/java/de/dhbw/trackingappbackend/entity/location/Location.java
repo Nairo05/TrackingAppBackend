@@ -3,6 +3,8 @@ package de.dhbw.trackingappbackend.entity.location;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -10,6 +12,7 @@ import java.util.List;
 @Document(collection = "base_location")
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class Location {
 
     @Id
@@ -18,6 +21,10 @@ public class Location {
     private Tile tile;
 
     // private List<String> laenderKuerzel;
+
+    public Location(Tile tile) {
+        this.tile = tile;
+    }
 
     @Override
     public String toString() {

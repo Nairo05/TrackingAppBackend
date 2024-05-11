@@ -23,20 +23,25 @@ public class CoordinateService {
     public GeoJsonPolygon getGeoJsonPolygon(double latitude, double longitude, byte zoomLevel) {
 
         double tileOffset = calculateDistance(latitude, longitude, zoomLevel);
-        int latLength = 16;
-        int lonLength = 32;
+        int zoomFactor = 15 - zoomLevel;
+        int latLength = 12;
+        int lonLength = 24;
 
-        double latOffset = tileOffset * latLength / 2;
-        double lonOffset = tileOffset * lonLength / 2;
+        double minLat = 45.08903556483102;
+        double maxLat = 55.7765730186677;
+        double minLong = 5.625;
+        double maxLong = 16.875;
 
-        // TODO je nach Vorgaben des Frontends Parameter des Abfragebereichs anpassen
-        //  Außerdem wird die variierende Distanz zwischen Längengraden noch nicht berücksichtigt!
+        // TODO adjust to what frontend sees, idk how this behaves with lower zoom levels
+        double latOffset = tileOffset * (latLength / 2.0) * zoomFactor;
+        double lonOffset = tileOffset * (lonLength / 2.0) * zoomFactor;
+
         GeoJsonPolygon polygon = new GeoJsonPolygon(
-            new Point(latitude - latOffset, longitude - lonOffset),
-            new Point(latitude - latOffset, longitude + lonOffset),
-            new Point(latitude + latOffset, longitude + lonOffset),
-            new Point(latitude + latOffset, longitude - lonOffset),
-            new Point(latitude - latOffset, longitude - lonOffset)); // first and last point have to be the same
+            new Point(Math.max(latitude - latOffset, minLat), Math.max(longitude - lonOffset, minLong)), // upper left
+            new Point(Math.max(latitude - latOffset, minLat), Math.min(longitude + lonOffset, maxLong)), // upper right
+            new Point(Math.min(latitude + latOffset, maxLat), Math.min(longitude + lonOffset, maxLong)), // lower right
+            new Point(Math.min(latitude + latOffset, maxLat), Math.max(longitude - lonOffset, minLong)), // lower left
+            new Point(Math.max(latitude - latOffset, minLat), Math.max(longitude - lonOffset, minLong))); // first and last point have to be the same
 
         return polygon;
     }
