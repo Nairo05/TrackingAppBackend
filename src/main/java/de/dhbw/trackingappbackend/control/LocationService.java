@@ -1,6 +1,5 @@
 package de.dhbw.trackingappbackend.control;
 
-import de.dhbw.trackingappbackend.entity.LocationRepository;
 import de.dhbw.trackingappbackend.entity.location.Location;
 import de.dhbw.trackingappbackend.entity.location.LocationWrapper;
 import de.dhbw.trackingappbackend.entity.location.Tile;
@@ -15,15 +14,14 @@ import java.util.*;
 @RequiredArgsConstructor
 public class LocationService {
 
-    private final CoordinateService coordinateService;
-    private final LocationRepository locationRepository;
-
     public List<LocationWrapper> mergeLocations(List<LocationWrapper> locations) {
 
         List<LocationWrapper> locationsPolygons = new ArrayList<>();
 
-        locations.forEach(single -> {
-            locationsPolygons.forEach(polygon -> {
+        for (LocationWrapper single : locations) {
+            LocationWrapper lastMergedPoly = null;
+            LocationWrapper toRemove = null;
+            for (LocationWrapper polygon : locationsPolygons) {
 
                 // check if single location can be merged vertically
                 if (Arrays.equals(single.getPosUpperLeft(), polygon.getPosLowerLeft()) &&
@@ -35,11 +33,22 @@ public class LocationService {
 
                     single.setMergedVertically(true);
                     polygon.setMergedVertically(true);
+                    lastMergedPoly = polygon;
                 }
                 if (Arrays.equals(single.getPosLowerLeft(), polygon.getPosUpperLeft()) &&
                         Arrays.equals(single.getPosLowerRight(), polygon.getPosUpperRight()) &&
                         !polygon.isMergedHorizontally() && !single.isMergedHorizontally()) {
                     // single location is above polygon
+                    if (single.isMergedVertically()) {
+                        // single location is between two polygons
+                        lastMergedPoly.setPosLowerLeft(polygon.getPosLowerLeft());
+                        lastMergedPoly.setPosLowerRight(polygon.getPosLowerRight());
+                        toRemove = polygon;
+                        continue;
+                    } else {
+                        polygon.setPosUpperLeft(single.getPosUpperLeft());
+                        polygon.setPosUpperRight(single.getPosUpperRight());
+                    }
                     polygon.setPosUpperLeft(single.getPosUpperLeft());
                     polygon.setPosUpperRight(single.getPosUpperRight());
 
@@ -57,24 +66,34 @@ public class LocationService {
 
                     single.setMergedHorizontally(true);
                     polygon.setMergedHorizontally(true);
+                    lastMergedPoly = polygon;
                 }
                 if (Arrays.equals(single.getPosUpperRight(), polygon.getPosUpperLeft()) &&
                         Arrays.equals(single.getPosLowerRight(), polygon.getPosLowerLeft()) &&
                         !polygon.isMergedVertically() && !single.isMergedVertically()) {
                     // single location is on the left of polygon
-                    polygon.setPosUpperLeft(single.getPosUpperLeft());
-                    polygon.setPosLowerLeft(single.getPosLowerLeft());
+                    if (single.isMergedHorizontally()) {
+                        // single location is between two polygons
+                        lastMergedPoly.setPosUpperRight(polygon.getPosUpperRight());
+                        lastMergedPoly.setPosLowerRight(polygon.getPosLowerRight());
+                        toRemove = polygon;
+                        continue; // TODO fix horizontal merge
+                    }
+                    else {
+                        polygon.setPosUpperLeft(single.getPosUpperLeft());
+                        polygon.setPosLowerLeft(single.getPosLowerLeft());
+                    }
 
                     single.setMergedHorizontally(true);
                     polygon.setMergedHorizontally(true);
                 }
-            });
-
+            }
             // single location is in no polygon, add separately
             if (!single.isMergedVertically() && !single.isMergedHorizontally()) {
                 locationsPolygons.add(single);
             }
-        });
+            if (toRemove != null) locationsPolygons.remove(toRemove);
+        }
 
         return locationsPolygons;
     }

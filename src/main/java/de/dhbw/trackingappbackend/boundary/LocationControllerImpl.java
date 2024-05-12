@@ -41,7 +41,7 @@ public class LocationControllerImpl implements LocationController {
 
         Optional<AppUser> appUserOptional = userRepository.findById(userDetails.getId());
 
-        if (14 < zoomLevel) return ResponseEntity.badRequest().body("Invalid zoomLevel provided"); // TODO
+        if (14 < zoomLevel) return ResponseEntity.badRequest().body("Invalid zoomLevel provided"); // TODO add lower limit, dont return bad request but adjust manually
 
         if (appUserOptional.isPresent()) {
 
@@ -55,7 +55,7 @@ public class LocationControllerImpl implements LocationController {
             List<Location> locations = locationRepository.findByTilePositionWithinAndIdIn(polygon, locationIds);
 
             if (locations.isEmpty()) { // no locations visited
-                return ResponseEntity.noContent().build();
+                return ResponseEntity.ok(Collections.emptyList());
             }
             else {
                 // adjust to zoom level
@@ -77,7 +77,7 @@ public class LocationControllerImpl implements LocationController {
 
         Optional<AppUser> appUserOptional = userRepository.findById(userDetails.getId());
 
-        if (14 < zoomLevel) return ResponseEntity.badRequest().body("Invalid zoomLevel provided");
+        if (14 < zoomLevel) return ResponseEntity.badRequest().body("Invalid zoomLevel provided"); // TODO add lower limit, dont return bad request but adjust manually
 
         if (appUserOptional.isPresent()) {
 
@@ -91,7 +91,7 @@ public class LocationControllerImpl implements LocationController {
             List<Location> locations = locationRepository.findByTilePositionWithinAndIdIn(polygon, locationIds);
 
             if (locations.isEmpty()) { // no locations visited
-                return ResponseEntity.noContent().build();
+                return ResponseEntity.ok(Collections.emptyList());
             }
             else {
                 // adjust to zoom level
@@ -126,7 +126,7 @@ public class LocationControllerImpl implements LocationController {
             Optional<Location> locationOptional = locationRepository.findByTile(newTile);
 
             if (locationOptional.isEmpty()) { // tile not in db > location outside germany
-                return ResponseEntity.noContent().build();
+                return ResponseEntity.ok().build(); // TODO not yet implemented
             }
 
             Location newLocation = locationOptional.get();
@@ -141,7 +141,7 @@ public class LocationControllerImpl implements LocationController {
                 appUser.setLocationIds(locationIds);
                 userRepository.save(appUser);
 
-                return ResponseEntity.ok(new LocationWrapper(newLocation)); // return newly visited location
+                return ResponseEntity.ok().build();
             }
         }
         else {
@@ -166,7 +166,7 @@ public class LocationControllerImpl implements LocationController {
             List<Location> locations = locationRepository.findByIdIn(locationIds);
 
             if (locations == null || locations.isEmpty()) {
-                return ResponseEntity.noContent().build();
+                return ResponseEntity.ok(Collections.emptyList());
             }
             else {
                 return ResponseEntity.ok(locations.stream()

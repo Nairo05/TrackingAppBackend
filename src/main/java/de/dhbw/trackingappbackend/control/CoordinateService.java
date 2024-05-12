@@ -26,6 +26,7 @@ public class CoordinateService {
         int zoomFactor = 15 - zoomLevel;
         int latLength = 12;
         int lonLength = 24;
+        double ownPercentage = 0.5;
 
         double minLat = 45.08903556483102;
         double maxLat = 55.7765730186677;
@@ -33,8 +34,8 @@ public class CoordinateService {
         double maxLong = 16.875;
 
         // TODO adjust to what frontend sees, idk how this behaves with lower zoom levels
-        double latOffset = tileOffset * (latLength / 2.0) * zoomFactor;
-        double lonOffset = tileOffset * (lonLength / 2.0) * zoomFactor;
+        double latOffset = tileOffset * (latLength / 2.0) * zoomFactor * ownPercentage;
+        double lonOffset = tileOffset * (lonLength / 2.0) * zoomFactor * ownPercentage;
 
         GeoJsonPolygon polygon = new GeoJsonPolygon(
             new Point(Math.max(latitude - latOffset, minLat), Math.max(longitude - lonOffset, minLong)), // upper left

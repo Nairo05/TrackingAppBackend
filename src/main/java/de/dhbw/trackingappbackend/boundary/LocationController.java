@@ -22,16 +22,9 @@ public interface LocationController {
             @ApiResponse(responseCode = "200", description = "Successfully returned locations.",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = LocationWrapper.class)))
             ),
-            @ApiResponse(responseCode = "204", description = "No locations visited.",
-                    content = @Content(schema = @Schema(implementation = Void.class))
-            ),
             @ApiResponse(responseCode = "401", description = "Invalid credentials provided.",
                     content = @Content(schema = @Schema(implementation = String.class),
                             examples = @ExampleObject(value = "Invalid credentials provided"))
-            ),
-            @ApiResponse(responseCode = "401", description = "Invalid zoomLevel provided, must be smaller than 15.",
-                    content = @Content(schema = @Schema(implementation = String.class),
-                            examples = @ExampleObject(value = "Invalid zoomLevel provided"))
             )
     })
     ResponseEntity<?> getLocations(@RequestParam double latitude, @RequestParam double longitude, @RequestParam byte zoomLevel);
@@ -42,16 +35,9 @@ public interface LocationController {
             @ApiResponse(responseCode = "200", description = "Successfully returned merged locations.",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = LocationWrapper.class)))
             ),
-            @ApiResponse(responseCode = "204", description = "No locations visited.",
-                    content = @Content(schema = @Schema(implementation = Void.class))
-            ),
             @ApiResponse(responseCode = "401", description = "Invalid credentials provided.",
                     content = @Content(schema = @Schema(implementation = String.class),
                             examples = @ExampleObject(value = "Invalid credentials provided"))
-            ),
-            @ApiResponse(responseCode = "401", description = "Invalid zoomLevel provided, must be smaller than 15.",
-                    content = @Content(schema = @Schema(implementation = String.class),
-                            examples = @ExampleObject(value = "Invalid zoom level provided"))
             )
     })
     ResponseEntity<?> getMergedLocations(@RequestParam double latitude, @RequestParam double longitude, @RequestParam byte zoomLevel);
@@ -62,12 +48,6 @@ public interface LocationController {
             @ApiResponse(responseCode = "200", description = "Successfully added new location.",
                     content = @Content(schema = @Schema(implementation = LocationWrapper.class))
             ),
-            @ApiResponse(responseCode = "204", description = "Location already visited.",
-                    content = @Content(schema = @Schema(implementation = Void.class))
-            ),
-            @ApiResponse(responseCode = "204", description = "Location outside germany.",
-                    content = @Content(schema = @Schema(implementation = Void.class))
-            ),
             @ApiResponse(responseCode = "401", description = "Invalid credentials provided.",
                     content = @Content(schema = @Schema(implementation = String.class),
                             examples = @ExampleObject(value = "Invalid credentials provided"))
@@ -77,9 +57,6 @@ public interface LocationController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully returned all locations.",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = LocationWrapper.class)))
-            ),
-            @ApiResponse(responseCode = "204", description = "No locations visited.",
-                    content = @Content(schema = @Schema(implementation = Void.class))
             ),
             @ApiResponse(responseCode = "401", description = "Invalid credentials provided.",
                     content = @Content(schema = @Schema(implementation = String.class),
