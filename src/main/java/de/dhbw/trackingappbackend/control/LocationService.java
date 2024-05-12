@@ -52,8 +52,8 @@ public class LocationService {
                         Arrays.equals(single.getPosLowerLeft(), polygon.getPosLowerRight()) &&
                         !polygon.isMergedVertically() && !single.isMergedVertically()) {
                     // single location is on the right of polygon
-                    polygon.setPosUpperLeft(single.getPosUpperLeft());
-                    polygon.setPosLowerLeft(single.getPosLowerLeft());
+                    polygon.setPosUpperRight(single.getPosUpperRight());
+                    polygon.setPosLowerRight(single.getPosLowerRight());
 
                     single.setMergedHorizontally(true);
                     polygon.setMergedHorizontally(true);
@@ -62,8 +62,8 @@ public class LocationService {
                         Arrays.equals(single.getPosLowerRight(), polygon.getPosLowerLeft()) &&
                         !polygon.isMergedVertically() && !single.isMergedVertically()) {
                     // single location is on the left of polygon
-                    polygon.setPosUpperRight(single.getPosUpperRight());
-                    polygon.setPosLowerRight(single.getPosLowerRight());
+                    polygon.setPosUpperLeft(single.getPosUpperLeft());
+                    polygon.setPosLowerLeft(single.getPosLowerLeft());
 
                     single.setMergedHorizontally(true);
                     polygon.setMergedHorizontally(true);

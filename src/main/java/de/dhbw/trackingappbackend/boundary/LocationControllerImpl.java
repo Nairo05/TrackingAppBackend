@@ -41,7 +41,7 @@ public class LocationControllerImpl implements LocationController {
 
         Optional<AppUser> appUserOptional = userRepository.findById(userDetails.getId());
 
-        if (14 < zoomLevel) return ResponseEntity.badRequest().body("Invalid zoomLevel provided");
+        if (14 < zoomLevel) return ResponseEntity.badRequest().body("Invalid zoomLevel provided"); // TODO
 
         if (appUserOptional.isPresent()) {
 
@@ -61,9 +61,7 @@ public class LocationControllerImpl implements LocationController {
                 // adjust to zoom level
                 List<LocationWrapper> zoomedLocations = locationService.zoomLocations(locations, zoomLevel);
 
-                return ResponseEntity.ok(locations.stream()
-                    .map(LocationWrapper::new)
-                    .toList());
+                return ResponseEntity.ok(zoomedLocations);
             }
         }
         else {
