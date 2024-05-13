@@ -125,12 +125,34 @@ public class LocationControllerImpl implements LocationController {
 
             Optional<Location> locationOptional = locationRepository.findByTile(newTile);
 
+            /*
             if (locationOptional.isEmpty()) { // tile not in db > location outside germany
-                return ResponseEntity.ok().build(); // TODO not yet implemented
+                //return ResponseEntity.ok().build(); // TODO not yet implemented
+            }*/
+
+            if (locationOptional.isEmpty()) {
+                Location newLocation = new Location(newTile);
+                List<String> locationIds = appUser.getLocationIds();
+                locationIds.add(newLocation.getId());
+                appUser.setLocationIds(locationIds);
+                locationRepository.save(newLocation);
+                userRepository.save(appUser);
+                return ResponseEntity.ok(new LocationWrapper(newLocation));
             }
-
-            Location newLocation = locationOptional.get();
-
+            else {
+                Location newLocation = locationOptional.get();
+                if (userRepository.existsByIdAndLocationIdsContains(appUserId, newLocation.getId())) {
+                    return ResponseEntity.ok().build(); // location already visited
+                } else {
+                    // add new location id to user
+                    List<String> locationIds = appUser.getLocationIds();
+                    locationIds.add(newLocation.getId());
+                    appUser.setLocationIds(locationIds);
+                    userRepository.save(appUser);
+                    return ResponseEntity.ok(new LocationWrapper(newLocation));
+                }
+            }
+            /*
             if (userRepository.existsByIdAndLocationIdsContains(appUserId, newLocation.getId())) {
                 return ResponseEntity.noContent().build(); // location already visited
             }
@@ -142,7 +164,7 @@ public class LocationControllerImpl implements LocationController {
                 userRepository.save(appUser);
 
                 return ResponseEntity.ok().build();
-            }
+            }*/
         }
         else {
             return ResponseEntity.badRequest().body("Invalid credentials provided");
