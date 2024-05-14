@@ -2,9 +2,13 @@ package de.dhbw.trackingappbackend.entity.location;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import de.dhbw.trackingappbackend.control.TileService;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
+@AllArgsConstructor
 public class LocationWrapper {
 
     @JsonIgnore

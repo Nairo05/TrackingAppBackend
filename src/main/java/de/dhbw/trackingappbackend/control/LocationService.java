@@ -77,7 +77,6 @@ public class LocationService {
                         lastMergedPoly.setPosUpperRight(polygon.getPosUpperRight());
                         lastMergedPoly.setPosLowerRight(polygon.getPosLowerRight());
                         toRemove = polygon;
-                        continue; // TODO fix horizontal merge
                     }
                     else {
                         polygon.setPosUpperLeft(single.getPosUpperLeft());
