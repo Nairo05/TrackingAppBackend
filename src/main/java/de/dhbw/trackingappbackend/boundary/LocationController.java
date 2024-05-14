@@ -1,6 +1,7 @@
 package de.dhbw.trackingappbackend.boundary;
 
 import de.dhbw.trackingappbackend.entity.location.LocationWrapper;
+import de.dhbw.trackingappbackend.entity.Achievement;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -66,4 +67,12 @@ public interface LocationController {
     @SecurityRequirement(name="oauth2")
     @Operation(summary = "Returns a list of all locations of a user.")
     ResponseEntity<?> getAllLocations();
+
+    @Operation(summary = "Returns all available achievements.")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully returned achievements.",
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = Achievement.class)))
+        )
+    })
+    ResponseEntity<?> getAllAchievements();
 }

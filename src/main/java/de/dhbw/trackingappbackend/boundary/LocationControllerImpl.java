@@ -3,6 +3,8 @@ package de.dhbw.trackingappbackend.boundary;
 import de.dhbw.trackingappbackend.control.CoordinateService;
 import de.dhbw.trackingappbackend.control.LocationService;
 import de.dhbw.trackingappbackend.control.TileService;
+import de.dhbw.trackingappbackend.entity.AchievementRepository;
+import de.dhbw.trackingappbackend.entity.Achievement;
 import de.dhbw.trackingappbackend.entity.user.AppUser;
 import de.dhbw.trackingappbackend.entity.LocationRepository;
 import de.dhbw.trackingappbackend.entity.user.UserRepository;
@@ -28,10 +30,11 @@ import java.util.Optional;
 public class LocationControllerImpl implements LocationController {
 
     private final UserRepository userRepository;
-
-    private final LocationRepository locationRepository;
     private final LocationService locationService;
     private final CoordinateService coordinateService;
+
+    private final LocationRepository locationRepository;
+    private final AchievementRepository achievementRepository;
 
     @GetMapping("/locations")
     public ResponseEntity<?> getLocations(@RequestParam double latitude, @RequestParam double longitude, @RequestParam byte zoomLevel) {
@@ -176,5 +179,11 @@ public class LocationControllerImpl implements LocationController {
         else {
             return ResponseEntity.badRequest().body("Invalid credentials provided");
         }
+    }
+
+    @GetMapping("/achievements")
+    public ResponseEntity<?> getAllAchievements() {
+        List<Achievement> achievements = achievementRepository.findAll();
+        return ResponseEntity.ok(achievements);
     }
 }

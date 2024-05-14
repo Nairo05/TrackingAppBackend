@@ -2,11 +2,9 @@ package de.dhbw.trackingappbackend.boundary;
 
 import de.dhbw.trackingappbackend.control.ProgressService;
 import de.dhbw.trackingappbackend.entity.AchievementRepository;
-import de.dhbw.trackingappbackend.entity.StatRepository;
-import de.dhbw.trackingappbackend.entity.user.Achievement;
-import de.dhbw.trackingappbackend.entity.user.Stat;
 import de.dhbw.trackingappbackend.entity.user.AppUser;
 import de.dhbw.trackingappbackend.entity.user.UserRepository;
+import de.dhbw.trackingappbackend.model.response.AchievementDTO;
 import de.dhbw.trackingappbackend.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +27,6 @@ public class ProgressControllerImpl implements ProgressController {
 
     private final ProgressService progressService;
     private final UserRepository userRepository;
-    private final StatRepository statRepository;
     private final AchievementRepository achievementRepository;
 
     @GetMapping("/stats")
@@ -46,16 +43,13 @@ public class ProgressControllerImpl implements ProgressController {
             Map<String, Float> stats = appUser.getStats();
 
             if (stats.isEmpty()) { // create new stats if don't exist
-
-                Map<String, Float> stats = progressService.createNewUserStats();
-                appUser.setStats(statIds);
-                userRepository.save(appUser);
-
-                // update stats
-                progressService.updateStats(appUser.getId(), appUser.getLocationIds());
+                stats = progressService.createNewUserStats();
             }
 
-            List<Stat> stats = statRepository.findStatsByIdIn(statIds);
+            // update stats
+            progressService.updateStats(stats, appUser.getLocationIds());
+            appUser.setStats(stats);
+            userRepository.save(appUser);
 
             return ResponseEntity.ok(stats);
         }
@@ -77,17 +71,23 @@ public class ProgressControllerImpl implements ProgressController {
             AppUser appUser = appUserOptional.get();
             List<String> achievementIds = appUser.getAchievementIds();
 
-            if (achievementIds.isEmpty()) { // create new achievements if don't exist
+            // update achievements
+            progressService.updateAchievements(achievementIds, appUser.getLocationIds());
+            appUser.setAchievementIds(achievementIds);
+            userRepository.save(appUser);
 
-                achievementIds = progressService.createNewUserAchievements();
-                appUser.setAchievementIds(achievementIds);
-                userRepository.save(appUser);
-                progressService.updateAchievements();
-            }
+            // collect achieved and not achieved achievements
+            List<AchievementDTO> achievementsDto = new java.util.ArrayList<>(achievementRepository.findAchievementsByIdIn(achievementIds)
+                .stream()
+                .map(AchievementDTO::new)
+                .peek(AchievementDTO::setAchieved)
+                .toList());
+            achievementsDto.addAll(achievementRepository.findAchievementsByIdNotIn(achievementIds)
+                .stream()
+                .map(AchievementDTO::new)
+                .toList());
 
-            List<Achievement> achievements = achievementRepository.findAchievementsByIdIn(achievementIds);
-
-            return ResponseEntity.ok(achievements);        }
+            return ResponseEntity.ok(achievementsDto);        }
         else {
             return ResponseEntity.badRequest().body("Invalid credentials provided");
         }

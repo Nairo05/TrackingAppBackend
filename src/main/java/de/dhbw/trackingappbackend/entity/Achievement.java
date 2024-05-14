@@ -1,4 +1,4 @@
-package de.dhbw.trackingappbackend.entity.user;
+package de.dhbw.trackingappbackend.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,18 +6,18 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "base_stats")
+@Document(collection = "base_achievements")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Stat {
+public class Achievement {
 
     @Id
-    private String id;
-
-    private String kuerzel;
+    public String id;
 
     private String title;
 
-    private float percentage;
+    private String description;
+
+    // TODO add field for kuerzel or specific tile
 }

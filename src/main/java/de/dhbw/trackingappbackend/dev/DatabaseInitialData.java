@@ -1,8 +1,10 @@
 package de.dhbw.trackingappbackend.dev;
 
+import de.dhbw.trackingappbackend.entity.AchievementRepository;
 import de.dhbw.trackingappbackend.entity.FileEntity;
 import de.dhbw.trackingappbackend.entity.FileRepository;
 import de.dhbw.trackingappbackend.entity.LocationRepository;
+import de.dhbw.trackingappbackend.entity.Achievement;
 import de.dhbw.trackingappbackend.entity.user.AppUser;
 import de.dhbw.trackingappbackend.entity.user.Friend;
 import de.dhbw.trackingappbackend.entity.user.UserRepository;
@@ -17,9 +19,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.Instant;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Configuration
 @Profile("dev")
@@ -29,7 +29,7 @@ public class DatabaseInitialData {
     private final PasswordEncoder encoder;
 
     @Bean
-    public CommandLineRunner createTestData(UserRepository userRepository, LocationRepository locationRepository, FileRepository fileRepository) {
+    public CommandLineRunner createTestData(UserRepository userRepository, LocationRepository locationRepository, FileRepository fileRepository, AchievementRepository achievementRepository) {
         return (args) -> {
 
             String filePath = "src/main/resources/images/neuronalesNetz.png";
@@ -77,7 +77,7 @@ public class DatabaseInitialData {
                             new Friend(uuid3, Friend.accepted, "test3@test.de", Instant.now(), Instant.now()),
                             new Friend(uuid4, Friend.open, "test4@test.de", Instant.now(), Instant.now())
                             ))
-                    .statIds(Collections.emptyList())
+                    .stats(new HashMap<>())
                     .achievementIds(Collections.emptyList())
                     .locationIds(Collections.emptyList())
                     .profilePictureId(uuidPicture1)
@@ -91,7 +91,7 @@ public class DatabaseInitialData {
                     .firstname("Test2FirstName")
                     .lastname("Test2LastName")
                     .friends(Collections.emptyList())
-                    .statIds(Collections.emptyList())
+                    .stats(new HashMap<>())
                     .achievementIds(Collections.emptyList())
                     .locationIds(Collections.emptyList())
                     .profilePictureId(null)
@@ -105,7 +105,7 @@ public class DatabaseInitialData {
                     .firstname("Test3FirstName")
                     .lastname("Test3LastName")
                     .friends(Collections.emptyList())
-                    .statIds(Collections.emptyList())
+                    .stats(new HashMap<>())
                     .achievementIds(Collections.emptyList())
                     .locationIds(Collections.emptyList())
                     .profilePictureId(null)
@@ -119,7 +119,7 @@ public class DatabaseInitialData {
                     .firstname("Test4FirstName")
                     .lastname("Test4LastName")
                     .friends(Collections.emptyList())
-                    .statIds(Collections.emptyList())
+                    .stats(new HashMap<>())
                     .achievementIds(Collections.emptyList())
                     .locationIds(Collections.emptyList())
                     .profilePictureId(null)
@@ -129,6 +129,25 @@ public class DatabaseInitialData {
             userRepository.save(appUser1);
             userRepository.save(appUser2);
             userRepository.save(appUserNoFriends);
+
+            // DE BW BY BE BB HB HH HE MV NI NW RP SL SN ST SH TH
+            achievementRepository.save(new Achievement("ACHVMNT_DE", "Sweet Sixteen", "Besuche jedes Bundesland in Deutschland."));
+            achievementRepository.save(new Achievement("ACHVMNT_BY", "O'zapft is!", "Besuche Bayern."));
+            achievementRepository.save(new Achievement("ACHVMNT_BW", "Nett hier.", "Besuche Baden-Württemberg."));
+            achievementRepository.save(new Achievement("ACHVMNT_BE", "Dit is Berlin.", "Besuche Berlin."));
+            achievementRepository.save(new Achievement("ACHVMNT_BB", "Kann man nicht meckern.", "Besuche Brandenburg."));
+            achievementRepository.save(new Achievement("ACHVMNT_HB", "Wat mutt, dat mutt.", "Besuche Bremen."));
+            achievementRepository.save(new Achievement("ACHVMNT_HH", "Moin!", "Besuche Hamburg."));
+            achievementRepository.save(new Achievement("ACHVMNT_HE", "Gugg emol rum!", "Besuche Hessen."));
+            achievementRepository.save(new Achievement("ACHVMNT_MV", "'n mooien Dag wünsch wi di!", "Besuche Mecklenburg-Vorpommern."));
+            achievementRepository.save(new Achievement("ACHVMNT_NI", "Klar.", "Besuche Niedersachen."));
+            achievementRepository.save(new Achievement("ACHVMNT_NW", "Laot juh guet gaohn", "Besuche Nordrhein-Westfalen."));
+            achievementRepository.save(new Achievement("ACHVMNT_RP", "Allo hopp!", "Besuche Rheinland-Pfalz."));
+            achievementRepository.save(new Achievement("ACHVMNT_SL", "PLATZHALTER_TEXT", "Besuche das Saarland."));
+            achievementRepository.save(new Achievement("ACHVMNT_SN", "PLATZHALTER_TEXT", "Besuche Sachsen."));
+            achievementRepository.save(new Achievement("ACHVMNT_ST", "PLATZHALTER_TEXT", "Besuche Sachsen-Anhalt."));
+            achievementRepository.save(new Achievement("ACHVMNT_SH", "PLATZHALTER_TEXT", "Besuche Schleswig-Holstein."));
+            achievementRepository.save(new Achievement("ACHVMNT_TH", "PLATZHALTER_TEXT", "Besuche Thüringen."));
         };
     }
 }

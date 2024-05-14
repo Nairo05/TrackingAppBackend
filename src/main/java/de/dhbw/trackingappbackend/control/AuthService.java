@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -103,7 +104,7 @@ public class AuthService {
                 signUpRequest.getUsername(),
                 encoder.encode(signUpRequest.getPassword()),
                 Collections.emptyList(),
-                Collections.emptyList(),
+                new HashMap<>(),
                 Collections.emptyList(),
                 Collections.emptyList(),
                 null

@@ -1,7 +1,6 @@
 package de.dhbw.trackingappbackend.boundary;
 
-import de.dhbw.trackingappbackend.entity.user.Achievement;
-import de.dhbw.trackingappbackend.entity.user.Stat;
+import de.dhbw.trackingappbackend.model.response.AchievementDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,6 +12,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
+import java.util.HashMap;
+
 @Tag(name = "Progress Controller")
 public interface ProgressController {
 
@@ -20,7 +21,7 @@ public interface ProgressController {
     @Operation(summary = "Returns the percentage stats of the user's visited locations for germany and each Bundesland.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Successfully returned stats.",
-            content = @Content(array = @ArraySchema(schema = @Schema(implementation = Stat.class)))
+            content = @Content(schema = @Schema(implementation = HashMap.class, subTypes = {String.class, Float.class}))
         ),
         @ApiResponse(responseCode = "401", description = "Invalid credentials provided.",
             content = @Content(schema = @Schema(implementation = String.class),
@@ -30,10 +31,10 @@ public interface ProgressController {
     ResponseEntity<?> getStats();
 
     @SecurityRequirement(name="oauth2")
-    @Operation(summary = "Returns the achievements and if a boolean value if the user achieved them.")
+    @Operation(summary = "Returns all achievements and if the user achieved them.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Successfully returned achievements.",
-            content = @Content(array = @ArraySchema(schema = @Schema(implementation = Achievement.class)))
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = AchievementDTO.class)))
         ),
         @ApiResponse(responseCode = "401", description = "Invalid credentials provided.",
             content = @Content(schema = @Schema(implementation = String.class),
