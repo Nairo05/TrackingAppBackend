@@ -4,7 +4,6 @@ import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
@@ -20,7 +19,7 @@ public class Location {
 
     private Tile tile;
 
-    // private List<String> laenderKuerzel;
+    private List<String> laenderKuerzel;
 
     public Location(Tile tile) {
         this.tile = tile;
@@ -28,6 +27,6 @@ public class Location {
 
     @Override
     public String toString() {
-        return "ID: " + this.id + " Tile: " + this.tile; // + " Land: " + this.laenderKuerzel;
+        return "ID: " + this.id + " Tile: " + this.tile + " Land: " + this.laenderKuerzel;
     }
 }

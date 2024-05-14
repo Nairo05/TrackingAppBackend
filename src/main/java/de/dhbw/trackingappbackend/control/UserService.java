@@ -20,10 +20,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder encoder;
 
-    public boolean hasUserVisitedLocation(String appUserId, String locationId) {
-        return userRepository.existsByIdAndLocationIdsContains(appUserId, locationId);
-    }
-
     /** returns true if the password was set **/
     public boolean setPassword(String password) {
 
