@@ -67,12 +67,4 @@ public interface LocationController {
     @SecurityRequirement(name="oauth2")
     @Operation(summary = "Returns a list of all locations of a user.")
     ResponseEntity<?> getAllLocations();
-
-    @Operation(summary = "Returns all available achievements.")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Successfully returned achievements.",
-            content = @Content(array = @ArraySchema(schema = @Schema(implementation = Achievement.class)))
-        )
-    })
-    ResponseEntity<?> getAllAchievements();
 }

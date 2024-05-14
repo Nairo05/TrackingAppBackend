@@ -180,10 +180,4 @@ public class LocationControllerImpl implements LocationController {
             return ResponseEntity.badRequest().body("Invalid credentials provided");
         }
     }
-
-    @GetMapping("/achievements")
-    public ResponseEntity<?> getAllAchievements() {
-        List<Achievement> achievements = achievementRepository.findAll();
-        return ResponseEntity.ok(achievements);
-    }
 }

@@ -42,7 +42,7 @@ public class ProgressControllerImpl implements ProgressController {
             AppUser appUser = appUserOptional.get();
             Map<String, Float> stats = appUser.getStats();
 
-            if (stats.isEmpty()) { // create new stats if don't exist
+            if (stats == null || stats.isEmpty()) { // create new stats if don't exist
                 stats = progressService.createNewUserStats();
             }
 

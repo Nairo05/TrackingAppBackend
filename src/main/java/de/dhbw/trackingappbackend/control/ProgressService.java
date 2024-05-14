@@ -16,7 +16,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ProgressService {
 
-    private final UserRepository userRepository;
     private final LocationRepository locationRepository;
     private final AchievementRepository achievementRepository;
 
@@ -26,12 +25,12 @@ public class ProgressService {
         int countAllDE = locationRepository.countLocationsByKuerzelContains("DE"); // TODO pre-safe total counts?
         stats.put("DE", (float) countUserDE / countAllDE);
 
-        // TODO add bundeslaender percentages
+        // TODO add other bundeslaender percentages
     }
 
     public void updateAchievements(List<String> achievements, List<String> locationIds) {
 
-        // TODO add achievement implementation
+        // TODO add achievement implementation, comes with bundeslaender -.-
     }
 
     public Map<String, Float> createNewUserStats() {

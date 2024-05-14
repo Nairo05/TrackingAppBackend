@@ -13,9 +13,9 @@ public class LocationWrapper {
     private int yTile;
     private byte zoomLevel;
 
-    //@JsonIgnore
+    @JsonIgnore
     private boolean mergedVertically;
-    //@JsonIgnore
+    @JsonIgnore
     private boolean mergedHorizontally;
 
     private double[] posUpperLeft;
