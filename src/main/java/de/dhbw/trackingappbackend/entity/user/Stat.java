@@ -1,4 +1,4 @@
-package de.dhbw.trackingappbackend.entity.location;
+package de.dhbw.trackingappbackend.entity.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,7 +15,7 @@ public class Stat {
     @Id
     private String id;
 
-    private String laenderKuerzel;
+    private String kuerzel;
 
     private String title;
 

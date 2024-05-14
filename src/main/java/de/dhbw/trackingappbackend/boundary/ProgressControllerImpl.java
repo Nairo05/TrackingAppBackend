@@ -3,8 +3,8 @@ package de.dhbw.trackingappbackend.boundary;
 import de.dhbw.trackingappbackend.control.ProgressService;
 import de.dhbw.trackingappbackend.entity.AchievementRepository;
 import de.dhbw.trackingappbackend.entity.StatRepository;
-import de.dhbw.trackingappbackend.entity.location.Achievement;
-import de.dhbw.trackingappbackend.entity.location.Stat;
+import de.dhbw.trackingappbackend.entity.user.Achievement;
+import de.dhbw.trackingappbackend.entity.user.Stat;
 import de.dhbw.trackingappbackend.entity.user.AppUser;
 import de.dhbw.trackingappbackend.entity.user.UserRepository;
 import de.dhbw.trackingappbackend.security.UserDetailsImpl;
@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -27,7 +28,6 @@ import java.util.Optional;
 public class ProgressControllerImpl implements ProgressController {
 
     private final ProgressService progressService;
-
     private final UserRepository userRepository;
     private final StatRepository statRepository;
     private final AchievementRepository achievementRepository;
@@ -43,14 +43,16 @@ public class ProgressControllerImpl implements ProgressController {
         if (appUserOptional.isPresent()) {
 
             AppUser appUser = appUserOptional.get();
-            List<String> statIds = appUser.getStatIds();
+            Map<String, Float> stats = appUser.getStats();
 
-            if (statIds.isEmpty()) { // create new stats if don't exist
+            if (stats.isEmpty()) { // create new stats if don't exist
 
-                statIds = progressService.createNewStats();
-                appUser.setStatIds(statIds);
+                Map<String, Float> stats = progressService.createNewUserStats();
+                appUser.setStats(statIds);
                 userRepository.save(appUser);
-                progressService.updateStats();
+
+                // update stats
+                progressService.updateStats(appUser.getId(), appUser.getLocationIds());
             }
 
             List<Stat> stats = statRepository.findStatsByIdIn(statIds);
@@ -77,7 +79,7 @@ public class ProgressControllerImpl implements ProgressController {
 
             if (achievementIds.isEmpty()) { // create new achievements if don't exist
 
-                achievementIds = progressService.createNewAchievements();
+                achievementIds = progressService.createNewUserAchievements();
                 appUser.setAchievementIds(achievementIds);
                 userRepository.save(appUser);
                 progressService.updateAchievements();

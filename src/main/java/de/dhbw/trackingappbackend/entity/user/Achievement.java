@@ -1,4 +1,4 @@
-package de.dhbw.trackingappbackend.entity.location;
+package de.dhbw.trackingappbackend.entity.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

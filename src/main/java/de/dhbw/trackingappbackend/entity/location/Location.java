@@ -19,7 +19,7 @@ public class Location {
 
     private Tile tile;
 
-    private List<String> laenderKuerzel;
+    private List<String> kuerzel;
 
     public Location(Tile tile) {
         this.tile = tile;
@@ -27,6 +27,6 @@ public class Location {
 
     @Override
     public String toString() {
-        return "ID: " + this.id + " Tile: " + this.tile + " Land: " + this.laenderKuerzel;
+        return "ID: " + this.id + " Tile: " + this.tile + " Land: " + this.kuerzel;
     }
 }

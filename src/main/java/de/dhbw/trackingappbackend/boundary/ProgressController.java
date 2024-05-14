@@ -1,7 +1,7 @@
 package de.dhbw.trackingappbackend.boundary;
 
-import de.dhbw.trackingappbackend.entity.location.Achievement;
-import de.dhbw.trackingappbackend.entity.location.Stat;
+import de.dhbw.trackingappbackend.entity.user.Achievement;
+import de.dhbw.trackingappbackend.entity.user.Stat;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;

@@ -119,52 +119,29 @@ public class LocationControllerImpl implements LocationController {
         if (appUserOptional.isPresent()) {
 
             AppUser appUser = appUserOptional.get();
-            String appUserId = appUser.getId();
+            List<String> locationIds = appUser.getLocationIds();
 
             Tile newTile = TileService.getTileByCoordinates(latitude, longitude, (byte) 14);
 
             Optional<Location> locationOptional = locationRepository.findByTile(newTile);
 
-            /*
-            if (locationOptional.isEmpty()) { // tile not in db > location outside germany
-                //return ResponseEntity.ok().build(); // TODO not yet implemented
-            }*/
-
             if (locationOptional.isEmpty()) {
-                Location newLocation = new Location(newTile);
-                List<String> locationIds = appUser.getLocationIds();
-                locationIds.add(newLocation.getId());
-                appUser.setLocationIds(locationIds);
-                locationRepository.save(newLocation);
-                userRepository.save(appUser);
-                return ResponseEntity.ok(new LocationWrapper(newLocation));
+                return ResponseEntity.ok().build(); // location outside germany
             }
             else {
-                Location newLocation = locationOptional.get();
-                if (userRepository.existsByIdAndLocationIdsContains(appUserId, newLocation.getId())) {
+                Location location = locationOptional.get();
+
+                if (locationIds.contains(location.getId())) {
                     return ResponseEntity.ok().build(); // location already visited
                 } else {
                     // add new location id to user
-                    List<String> locationIds = appUser.getLocationIds();
-                    locationIds.add(newLocation.getId());
+                    locationIds.add(location.getId());
                     appUser.setLocationIds(locationIds);
                     userRepository.save(appUser);
-                    return ResponseEntity.ok(new LocationWrapper(newLocation));
+
+                    return ResponseEntity.ok(new LocationWrapper(location));
                 }
             }
-            /*
-            if (userRepository.existsByIdAndLocationIdsContains(appUserId, newLocation.getId())) {
-                return ResponseEntity.noContent().build(); // location already visited
-            }
-            else {
-                // add new location id to user
-                List<String> locationIds = appUser.getLocationIds();
-                locationIds.add(newLocation.getId());
-                appUser.setLocationIds(locationIds);
-                userRepository.save(appUser);
-
-                return ResponseEntity.ok().build();
-            }*/
         }
         else {
             return ResponseEntity.badRequest().body("Invalid credentials provided");
