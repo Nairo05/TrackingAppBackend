@@ -1,13 +1,11 @@
 package de.dhbw.trackingappbackend.dev;
 
-import ch.qos.logback.classic.pattern.ClassOfCallerConverter;
 import de.dhbw.trackingappbackend.entity.FileEntity;
-import de.dhbw.trackingappbackend.entity.user.AppUser;
 import de.dhbw.trackingappbackend.entity.FileRepository;
 import de.dhbw.trackingappbackend.entity.LocationRepository;
-import de.dhbw.trackingappbackend.entity.user.UserRepository;
+import de.dhbw.trackingappbackend.entity.user.AppUser;
 import de.dhbw.trackingappbackend.entity.user.Friend;
-import jakarta.persistence.criteria.CriteriaBuilder;
+import de.dhbw.trackingappbackend.entity.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -79,6 +77,8 @@ public class DatabaseInitialData {
                             new Friend(uuid3, Friend.accepted, "test3@test.de", Instant.now(), Instant.now()),
                             new Friend(uuid4, Friend.open, "test4@test.de", Instant.now(), Instant.now())
                             ))
+                    .statIds(Collections.emptyList())
+                    .achievementIds(Collections.emptyList())
                     .locationIds(Collections.emptyList())
                     .profilePictureId(uuidPicture1)
                     .build();
@@ -91,6 +91,8 @@ public class DatabaseInitialData {
                     .firstname("Test2FirstName")
                     .lastname("Test2LastName")
                     .friends(Collections.emptyList())
+                    .statIds(Collections.emptyList())
+                    .achievementIds(Collections.emptyList())
                     .locationIds(Collections.emptyList())
                     .profilePictureId(null)
                     .build();
@@ -103,6 +105,8 @@ public class DatabaseInitialData {
                     .firstname("Test3FirstName")
                     .lastname("Test3LastName")
                     .friends(Collections.emptyList())
+                    .statIds(Collections.emptyList())
+                    .achievementIds(Collections.emptyList())
                     .locationIds(Collections.emptyList())
                     .profilePictureId(null)
                     .build();
@@ -115,10 +119,11 @@ public class DatabaseInitialData {
                     .firstname("Test4FirstName")
                     .lastname("Test4LastName")
                     .friends(Collections.emptyList())
+                    .statIds(Collections.emptyList())
+                    .achievementIds(Collections.emptyList())
                     .locationIds(Collections.emptyList())
                     .profilePictureId(null)
                     .build();
-
 
             userRepository.save(appUser);
             userRepository.save(appUser1);

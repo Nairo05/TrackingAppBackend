@@ -1,5 +1,7 @@
 package de.dhbw.trackingappbackend.entity.user;
 
+import de.dhbw.trackingappbackend.entity.location.Achievement;
+import de.dhbw.trackingappbackend.entity.location.Stat;
 import de.dhbw.trackingappbackend.entity.user.Friend;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -45,6 +47,10 @@ public class AppUser {
     private String password;
 
     List<Friend> friends;
+
+    List<String> statIds;
+
+    List<String> achievementIds;
 
     List<String> locationIds;
 

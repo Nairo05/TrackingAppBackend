@@ -1,5 +1,6 @@
 package de.dhbw.trackingappbackend.boundary;
 
+import de.dhbw.trackingappbackend.entity.StatRepository;
 import de.dhbw.trackingappbackend.model.response.FriendDTO;
 import de.dhbw.trackingappbackend.model.response.InviteDTO;
 import de.dhbw.trackingappbackend.control.FriendService;
@@ -25,6 +26,7 @@ import java.util.*;
 public class FriendControllerImpl implements FriendController {
 
     private final UserRepository userRepository;
+    private final StatRepository statRepository;
     private final FriendService friendService;
 
     @Override
@@ -57,7 +59,7 @@ public class FriendControllerImpl implements FriendController {
                                         .uuid(friend.getUuid())
                                         .email(friend.getEmail())
                                         .acceptedAt(friend.getAcceptedAt().toString())
-                                        .stats(new Random().nextFloat())
+                                        .stats(new Random().nextFloat()) // TODO add proper value
                                         .build())
                 );
             }

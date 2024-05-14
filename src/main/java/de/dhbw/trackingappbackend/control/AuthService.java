@@ -104,6 +104,8 @@ public class AuthService {
                 encoder.encode(signUpRequest.getPassword()),
                 Collections.emptyList(),
                 Collections.emptyList(),
+                Collections.emptyList(),
+                Collections.emptyList(),
                 null
         );
 
