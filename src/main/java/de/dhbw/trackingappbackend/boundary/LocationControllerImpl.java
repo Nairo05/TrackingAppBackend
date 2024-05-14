@@ -4,13 +4,12 @@ import de.dhbw.trackingappbackend.control.CoordinateService;
 import de.dhbw.trackingappbackend.control.LocationService;
 import de.dhbw.trackingappbackend.control.TileService;
 import de.dhbw.trackingappbackend.entity.AchievementRepository;
-import de.dhbw.trackingappbackend.entity.Achievement;
-import de.dhbw.trackingappbackend.entity.user.AppUser;
 import de.dhbw.trackingappbackend.entity.LocationRepository;
-import de.dhbw.trackingappbackend.entity.user.UserRepository;
 import de.dhbw.trackingappbackend.entity.location.Location;
 import de.dhbw.trackingappbackend.entity.location.LocationWrapper;
 import de.dhbw.trackingappbackend.entity.location.Tile;
+import de.dhbw.trackingappbackend.entity.user.AppUser;
+import de.dhbw.trackingappbackend.entity.user.UserRepository;
 import de.dhbw.trackingappbackend.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.mongodb.core.geo.GeoJsonPolygon;
@@ -29,12 +28,11 @@ import java.util.Optional;
 @RequestMapping("/api/v1")
 public class LocationControllerImpl implements LocationController {
 
-    private final UserRepository userRepository;
     private final LocationService locationService;
     private final CoordinateService coordinateService;
 
+    private final UserRepository userRepository;
     private final LocationRepository locationRepository;
-    private final AchievementRepository achievementRepository;
 
     @GetMapping("/locations")
     public ResponseEntity<?> getLocations(@RequestParam double latitude, @RequestParam double longitude, @RequestParam byte zoomLevel) {
@@ -44,7 +42,9 @@ public class LocationControllerImpl implements LocationController {
 
         Optional<AppUser> appUserOptional = userRepository.findById(userDetails.getId());
 
-        if (14 < zoomLevel) return ResponseEntity.badRequest().body("Invalid zoomLevel provided"); // TODO add lower limit, dont return bad request but adjust manually
+        // manually fix out of range zoom level
+        if (14 < zoomLevel) zoomLevel = 14;
+        else if (6 > zoomLevel) zoomLevel = 6;
 
         if (appUserOptional.isPresent()) {
 
@@ -80,7 +80,9 @@ public class LocationControllerImpl implements LocationController {
 
         Optional<AppUser> appUserOptional = userRepository.findById(userDetails.getId());
 
-        if (14 < zoomLevel) return ResponseEntity.badRequest().body("Invalid zoomLevel provided"); // TODO add lower limit, dont return bad request but adjust manually
+        // manually fix out of range zoom level
+        if (14 < zoomLevel) zoomLevel = 14;
+        else if (6 > zoomLevel) zoomLevel = 6;
 
         if (appUserOptional.isPresent()) {
 
@@ -129,13 +131,13 @@ public class LocationControllerImpl implements LocationController {
             Optional<Location> locationOptional = locationRepository.findByTile(newTile);
 
             if (locationOptional.isEmpty()) {
-                return ResponseEntity.ok().build(); // location outside germany
+                return ResponseEntity.ok("Location outside germany.");
             }
             else {
                 Location location = locationOptional.get();
 
                 if (locationIds.contains(location.getId())) {
-                    return ResponseEntity.ok().build(); // location already visited
+                    return ResponseEntity.ok("Location already visited.");
                 } else {
                     // add new location id to user
                     locationIds.add(location.getId());

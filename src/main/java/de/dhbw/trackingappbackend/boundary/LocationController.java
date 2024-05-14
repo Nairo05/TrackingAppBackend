@@ -1,7 +1,6 @@
 package de.dhbw.trackingappbackend.boundary;
 
 import de.dhbw.trackingappbackend.entity.location.LocationWrapper;
-import de.dhbw.trackingappbackend.entity.Achievement;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -47,7 +46,15 @@ public interface LocationController {
     @Operation(summary = "Adds the tile of the given lat/lon coordinates to the visited locations of a user.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully added new location.",
-                    content = @Content(schema = @Schema(implementation = LocationWrapper.class))
+                content = @Content(schema = @Schema(implementation = LocationWrapper.class))
+            ),
+            @ApiResponse(responseCode = "200", description = "No new location added, location is outside of germany.",
+                content = @Content(schema = @Schema(implementation = String.class),
+                    examples = @ExampleObject(value = "Location outside germany."))
+            ),
+            @ApiResponse(responseCode = "200", description = "No new location visited, location already visited.",
+                content = @Content(schema = @Schema(implementation = String.class),
+                    examples = @ExampleObject(value = "Location already visited."))
             ),
             @ApiResponse(responseCode = "401", description = "Invalid credentials provided.",
                     content = @Content(schema = @Schema(implementation = String.class),

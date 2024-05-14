@@ -21,7 +21,14 @@ public interface ProgressController {
     @Operation(summary = "Returns the percentage stats of the user's visited locations for germany and each Bundesland.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Successfully returned stats.",
-            content = @Content(schema = @Schema(implementation = HashMap.class, subTypes = {String.class, Float.class}))
+            content = @Content(schema = @Schema(implementation = HashMap.class, subTypes = {String.class, Float.class}),
+                examples = @ExampleObject(value = "{\n" +
+                    "  \"DE\": 0.0,\n" +
+                    "  \"BW\": 0.0,\n" +
+                    "  \"BY\": 0.0,\n" +
+                    "  \"BE\": 0.0,\n" +
+                    "  ...\n" +
+                    "}"))
         ),
         @ApiResponse(responseCode = "401", description = "Invalid credentials provided.",
             content = @Content(schema = @Schema(implementation = String.class),
@@ -31,11 +38,19 @@ public interface ProgressController {
     ResponseEntity<?> getStats();
 
     @SecurityRequirement(name="oauth2")
-    @Operation(summary = "Returns all achievements and if the user achieved them.")
+    @Operation(summary = "Returns all available achievements and if the user achieved them.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Successfully returned achievements.",
-            content = @Content(array = @ArraySchema(schema = @Schema(implementation = AchievementDTO.class)))
-        ),
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = AchievementDTO.class)),
+                examples = @ExampleObject(value = "[\n" +
+                    "  {\n" +
+                    "    \"title\": \"Sweet Sixteen\",\n" +
+                    "    \"description\": \"Besuche jedes Bundesland in Deutschland.\",\n" +
+                    "    \"achieved\": false\n" +
+                    "  },\n" +
+                    "  ...\n" +
+                    "]")
+        )),
         @ApiResponse(responseCode = "401", description = "Invalid credentials provided.",
             content = @Content(schema = @Schema(implementation = String.class),
                 examples = @ExampleObject(value = "Invalid credentials provided"))
