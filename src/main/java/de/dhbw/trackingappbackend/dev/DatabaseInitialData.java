@@ -3,7 +3,7 @@ package de.dhbw.trackingappbackend.dev;
 import de.dhbw.trackingappbackend.entity.AchievementRepository;
 import de.dhbw.trackingappbackend.entity.FileEntity;
 import de.dhbw.trackingappbackend.entity.FileRepository;
-import de.dhbw.trackingappbackend.entity.LocationRepository;
+import de.dhbw.trackingappbackend.entity.location.LocationRepository;
 import de.dhbw.trackingappbackend.entity.Achievement;
 import de.dhbw.trackingappbackend.entity.user.AppUser;
 import de.dhbw.trackingappbackend.entity.user.Friend;

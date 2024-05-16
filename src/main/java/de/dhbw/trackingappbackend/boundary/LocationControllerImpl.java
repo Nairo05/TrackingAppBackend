@@ -3,8 +3,7 @@ package de.dhbw.trackingappbackend.boundary;
 import de.dhbw.trackingappbackend.control.CoordinateService;
 import de.dhbw.trackingappbackend.control.LocationService;
 import de.dhbw.trackingappbackend.control.TileService;
-import de.dhbw.trackingappbackend.entity.AchievementRepository;
-import de.dhbw.trackingappbackend.entity.LocationRepository;
+import de.dhbw.trackingappbackend.entity.location.LocationRepository;
 import de.dhbw.trackingappbackend.entity.location.Location;
 import de.dhbw.trackingappbackend.entity.location.LocationWrapper;
 import de.dhbw.trackingappbackend.entity.location.Tile;
@@ -128,7 +127,7 @@ public class LocationControllerImpl implements LocationController {
 
             Tile newTile = TileService.getTileByCoordinates(latitude, longitude, (byte) 14);
 
-            Optional<Location> locationOptional = locationRepository.findByTile(newTile);
+            Optional<Location> locationOptional = locationRepository.findByTile_xTileAndTile_yTile(newTile.getXTile(), newTile.getYTile());
 
             if (locationOptional.isEmpty()) {
                 return ResponseEntity.ok("Location outside germany.");

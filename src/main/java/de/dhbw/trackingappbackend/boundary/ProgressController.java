@@ -1,6 +1,7 @@
 package de.dhbw.trackingappbackend.boundary;
 
 import de.dhbw.trackingappbackend.model.response.AchievementDTO;
+import de.dhbw.trackingappbackend.model.response.StatDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,23 +13,21 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 
-import java.util.HashMap;
-
 @Tag(name = "Progress Controller")
 public interface ProgressController {
 
     @SecurityRequirement(name="oauth2")
-    @Operation(summary = "Returns the percentage stats of the user's visited locations for germany and each Bundesland.")
+    @Operation(summary = "Returns the kuerzel and percentage of the user's visited Bundeslaender and sum of germany.")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Successfully returned stats.",
-            content = @Content(schema = @Schema(implementation = HashMap.class, subTypes = {String.class, Float.class}),
-                examples = @ExampleObject(value = "{\n" +
-                    "  \"DE\": 0.0,\n" +
-                    "  \"BW\": 0.0,\n" +
-                    "  \"BY\": 0.0,\n" +
-                    "  \"BE\": 0.0,\n" +
+            content = @Content(array = @ArraySchema(schema = @Schema(implementation = StatDTO.class)),
+                examples = @ExampleObject(value = "[\n" +
+                    "  {\n" +
+                    "    \"kuerzel\": \"DE\",\n" +
+                    "    \"percentage\": 49.15438156\n" +
+                    "  },\n" +
                     "  ...\n" +
-                    "}"))
+                    "]"))
         ),
         @ApiResponse(responseCode = "401", description = "Invalid credentials provided.",
             content = @Content(schema = @Schema(implementation = String.class),

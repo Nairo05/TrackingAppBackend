@@ -5,6 +5,7 @@ import de.dhbw.trackingappbackend.entity.AchievementRepository;
 import de.dhbw.trackingappbackend.entity.user.AppUser;
 import de.dhbw.trackingappbackend.entity.user.UserRepository;
 import de.dhbw.trackingappbackend.model.response.AchievementDTO;
+import de.dhbw.trackingappbackend.model.response.StatDTO;
 import de.dhbw.trackingappbackend.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -40,10 +42,12 @@ public class ProgressControllerImpl implements ProgressController {
         if (appUserOptional.isPresent()) {
 
             AppUser appUser = appUserOptional.get();
-            Map<String, Float> stats = appUser.getStats();
+            Map<String, Float> stats;
 
-            if (stats == null || stats.isEmpty()) { // create new stats if don't exist
+            if (appUser.getStats() == null || appUser.getStats().isEmpty()) { // create new stats if don't exist
                 stats = progressService.createNewUserStats();
+            } else {
+                stats = appUser.getStats();
             }
 
             // update stats
@@ -51,7 +55,12 @@ public class ProgressControllerImpl implements ProgressController {
             appUser.setStats(stats);
             userRepository.save(appUser);
 
-            return ResponseEntity.ok(stats);
+            return ResponseEntity.ok(stats.keySet().stream()
+                .map(key -> StatDTO.builder()
+                    .kuerzel(key)
+                    .percentage(stats.get(key) * 100f)
+                    .build())
+                .toList());
         }
         else {
             return ResponseEntity.badRequest().body("Invalid credentials provided");
@@ -77,7 +86,7 @@ public class ProgressControllerImpl implements ProgressController {
             userRepository.save(appUser);
 
             // collect achieved and not achieved achievements
-            List<AchievementDTO> achievementsDto = new java.util.ArrayList<>(achievementRepository.findAchievementsByIdIn(achievementIds)
+            List<AchievementDTO> achievementsDto = new ArrayList<>(achievementRepository.findAchievementsByIdIn(achievementIds)
                 .stream()
                 .map(AchievementDTO::new)
                 .peek(AchievementDTO::setAchieved)

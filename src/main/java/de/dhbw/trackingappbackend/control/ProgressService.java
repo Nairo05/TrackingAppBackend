@@ -1,8 +1,7 @@
 package de.dhbw.trackingappbackend.control;
 
 import de.dhbw.trackingappbackend.entity.AchievementRepository;
-import de.dhbw.trackingappbackend.entity.LocationRepository;
-import de.dhbw.trackingappbackend.entity.user.UserRepository;
+import de.dhbw.trackingappbackend.entity.location.LocationRepository;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

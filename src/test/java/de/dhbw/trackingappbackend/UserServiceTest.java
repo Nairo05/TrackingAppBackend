@@ -1,6 +1,6 @@
 package de.dhbw.trackingappbackend;
 
-import de.dhbw.trackingappbackend.entity.LocationRepository;
+import de.dhbw.trackingappbackend.entity.location.LocationRepository;
 import de.dhbw.trackingappbackend.entity.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
