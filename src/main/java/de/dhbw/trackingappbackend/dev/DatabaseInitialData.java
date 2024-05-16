@@ -5,6 +5,7 @@ import de.dhbw.trackingappbackend.entity.FileEntity;
 import de.dhbw.trackingappbackend.entity.FileRepository;
 import de.dhbw.trackingappbackend.entity.location.LocationRepository;
 import de.dhbw.trackingappbackend.entity.Achievement;
+import de.dhbw.trackingappbackend.entity.location.Tile;
 import de.dhbw.trackingappbackend.entity.user.AppUser;
 import de.dhbw.trackingappbackend.entity.user.Friend;
 import de.dhbw.trackingappbackend.entity.user.UserRepository;
@@ -131,23 +132,26 @@ public class DatabaseInitialData {
             userRepository.save(appUserNoFriends);
 
             // DE BW BY BE BB HB HH HE MV NI NW RP SL SN ST SH TH
-            achievementRepository.save(new Achievement("ACHVMNT_DE", "Sweet Sixteen", "Besuche jedes Bundesland in Deutschland."));
-            achievementRepository.save(new Achievement("ACHVMNT_BY", "O'zapft is!", "Besuche Bayern."));
-            achievementRepository.save(new Achievement("ACHVMNT_BW", "Nett hier.", "Besuche Baden-Württemberg."));
-            achievementRepository.save(new Achievement("ACHVMNT_BE", "Dit is Berlin.", "Besuche Berlin."));
-            achievementRepository.save(new Achievement("ACHVMNT_BB", "Kann man nicht meckern.", "Besuche Brandenburg."));
-            achievementRepository.save(new Achievement("ACHVMNT_HB", "Wat mutt, dat mutt.", "Besuche Bremen."));
-            achievementRepository.save(new Achievement("ACHVMNT_HH", "Moin!", "Besuche Hamburg."));
-            achievementRepository.save(new Achievement("ACHVMNT_HE", "Gugg emol rum!", "Besuche Hessen."));
-            achievementRepository.save(new Achievement("ACHVMNT_MV", "'n mooien Dag wünsch wi di!", "Besuche Mecklenburg-Vorpommern."));
-            achievementRepository.save(new Achievement("ACHVMNT_NI", "Klar.", "Besuche Niedersachen."));
-            achievementRepository.save(new Achievement("ACHVMNT_NW", "Laot juh guet gaohn", "Besuche Nordrhein-Westfalen."));
-            achievementRepository.save(new Achievement("ACHVMNT_RP", "Allo hopp!", "Besuche Rheinland-Pfalz."));
-            achievementRepository.save(new Achievement("ACHVMNT_SL", "PLATZHALTER_TEXT", "Besuche das Saarland."));
-            achievementRepository.save(new Achievement("ACHVMNT_SN", "PLATZHALTER_TEXT", "Besuche Sachsen."));
-            achievementRepository.save(new Achievement("ACHVMNT_ST", "PLATZHALTER_TEXT", "Besuche Sachsen-Anhalt."));
-            achievementRepository.save(new Achievement("ACHVMNT_SH", "PLATZHALTER_TEXT", "Besuche Schleswig-Holstein."));
-            achievementRepository.save(new Achievement("ACHVMNT_TH", "PLATZHALTER_TEXT", "Besuche Thüringen."));
+            //achievementRepository.save(new Achievement("ACHVMNT_DE", "Sweet Sixteen", "Besuche jedes Bundesland in Deutschland.", null, null));
+
+            achievementRepository.save(new Achievement("ACHVMNT_BY", "O'zapft is!", "Besuche Bayern.", "BY", null));
+            achievementRepository.save(new Achievement("ACHVMNT_BW", "Nett hier.", "Besuche Baden-Württemberg.", "BW", null));
+            achievementRepository.save(new Achievement("ACHVMNT_BE", "Dit is Berlin.", "Besuche Berlin.", "BE", null));
+            achievementRepository.save(new Achievement("ACHVMNT_BB", "Kann man nicht meckern.", "Besuche Brandenburg.", "BB", null));
+            achievementRepository.save(new Achievement("ACHVMNT_HB", "Wat mutt, dat mutt.", "Besuche Bremen.", "HB", null));
+            achievementRepository.save(new Achievement("ACHVMNT_HH", "Moin!", "Besuche Hamburg.", "HH", null));
+            achievementRepository.save(new Achievement("ACHVMNT_HE", "Gugg emol rum!", "Besuche Hessen.", "HE", null));
+            achievementRepository.save(new Achievement("ACHVMNT_MV", "'n mooien Dag wünsch wi di!", "Besuche Mecklenburg-Vorpommern.", "MV", null));
+            achievementRepository.save(new Achievement("ACHVMNT_NI", "Klar.", "Besuche Niedersachen.", "NI", null));
+            achievementRepository.save(new Achievement("ACHVMNT_NW", "Laot juh guet gaohn", "Besuche Nordrhein-Westfalen.", "NW", null));
+            achievementRepository.save(new Achievement("ACHVMNT_RP", "Allo hopp!", "Besuche Rheinland-Pfalz.", "RP", null));
+            achievementRepository.save(new Achievement("ACHVMNT_SL", "PLATZHALTER_TEXT", "Besuche das Saarland.", "SL", null));
+            achievementRepository.save(new Achievement("ACHVMNT_SN", "PLATZHALTER_TEXT", "Besuche Sachsen.", "SN", null));
+            achievementRepository.save(new Achievement("ACHVMNT_ST", "PLATZHALTER_TEXT", "Besuche Sachsen-Anhalt.", "ST", null));
+            achievementRepository.save(new Achievement("ACHVMNT_SH", "PLATZHALTER_TEXT", "Besuche Schleswig-Holstein.", "SH", null));
+            achievementRepository.save(new Achievement("ACHVMNT_TH", "PLATZHALTER_TEXT", "Besuche Thüringen.", "TH", null));
+
+            achievementRepository.save(new Achievement("ACHVMNT_DHBW", "Studentenleben", "Besuche die DHBW Campus Horb.", null, new Tile(8587, 5664, (byte) 14)));
         };
     }
 }

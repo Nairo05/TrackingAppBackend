@@ -1,7 +1,10 @@
 package de.dhbw.trackingappbackend.control;
 
+import de.dhbw.trackingappbackend.entity.Achievement;
 import de.dhbw.trackingappbackend.entity.AchievementRepository;
+import de.dhbw.trackingappbackend.entity.location.Location;
 import de.dhbw.trackingappbackend.entity.location.LocationRepository;
+import de.dhbw.trackingappbackend.entity.location.Tile;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,30 +24,77 @@ public class ProgressService {
     private final Map<String, Integer> TOTAL_TILE_COUNTS = createTotalTileCounts();
     private final List<String> ALL_KUERZEL = List.of("DE", "BE", "BB", "BW", "BY", "HB", "HE", "HH", "MV", "NI", "NW", "RP", "SH", "SL", "SN", "ST", "TH");
 
-    public void updateStatByKuerzel(Map<String, Float> stats, List<String> locationIds, String kuerzel) {
+    public void updateProgress(Map<String, Float> stats, List<String> achievements, Location location, List<String> locationIds) {
+
+        updateStatsByKuerzelList(stats, locationIds, location.getKuerzel());
+        updateAchievements(achievements, location.getKuerzel(), location.getTile());
+    }
+
+    public void updateStatsByKuerzel(Map<String, Float> stats, List<String> locationIds, String kuerzel) {
 
         int countTotal = TOTAL_TILE_COUNTS.get(kuerzel);
         int countUser = locationRepository.countAllByIdInAndKuerzelContains(locationIds, kuerzel);
         stats.put(kuerzel, (float) countUser / countTotal);
     }
 
-    public void updateStatByKuerzelList(Map<String, Float> stats, List<String> locationIds, List<String> kuerzelList) {
+    public void updateStatsByKuerzelList(Map<String, Float> stats, List<String> locationIds, List<String> kuerzelList) {
 
         for (String kuerzel : kuerzelList) {
-            updateStatByKuerzel(stats, locationIds, kuerzel);
+            updateStatsByKuerzel(stats, locationIds, kuerzel);
+        }
+    }
+
+    public void updateAchievements(List<String> achievements, List<String> newLocationKuerzel, Tile newLocationTile) {
+
+        List<Achievement> allAchievements = achievementRepository.findAll();
+
+        for (Achievement achvmnt : allAchievements) {
+
+            if (achvmnt.getKuerzel() != null) {
+                if (newLocationKuerzel.contains(achvmnt.getKuerzel()) && !achievements.contains(achvmnt.getId())) {
+                    achievements.add(achvmnt.getId());
+                }
+            }
+            else if (achvmnt.getTile() != null) {
+                if (achvmnt.getTile().getXTile() == newLocationTile.getXTile() &&
+                    achvmnt.getTile().getYTile() == newLocationTile.getYTile() &&
+                    !achievements.contains(achvmnt.getId())) {
+                    achievements.add(achvmnt.getId());
+                }
+            }
         }
     }
 
     public void updateAllStats(Map<String, Float> stats, List<String> locationIds) {
 
         for (String kuerzel : ALL_KUERZEL) {
-            updateStatByKuerzel(stats, locationIds, kuerzel);
+            updateStatsByKuerzel(stats, locationIds, kuerzel);
         }
     }
 
-    public void updateAchievements(List<String> achievements, List<String> locationIds) {
+    public void updateAllAchievements(List<String> achievementIds, List<String> locationIds) {
 
-        // TODO add achievement implementation, comes with bundeslaender -.-
+        List<Location> locations = locationRepository.findByIdIn(locationIds);
+        List<Achievement> achievements = achievementRepository.findAll();
+
+        for (Achievement achvmnt : achievements) {
+            for (Location location : locations) {
+                if (achvmnt.getKuerzel() != null) {
+                    if (location.getKuerzel().contains(achvmnt.getKuerzel()) && !achievementIds.contains(achvmnt.getId())) {
+                        achievementIds.add(achvmnt.getId());
+                        break;
+                    }
+                }
+                else if (achvmnt.getTile() != null) {
+                    if (location.getTile().getXTile() == achvmnt.getTile().getXTile() &&
+                        location.getTile().getYTile() == achvmnt.getTile().getYTile() &&
+                        !achievementIds.contains(achvmnt.getId())) {
+                            achievementIds.add(achvmnt.getId());
+                            break;
+                    }
+                }
+            }
+        }
     }
 
     public Map<String, Float> createNewUserStats(List<String> locationIds) {

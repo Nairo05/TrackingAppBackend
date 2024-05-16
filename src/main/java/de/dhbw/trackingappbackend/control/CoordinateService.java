@@ -33,7 +33,7 @@ public class CoordinateService {
         double minLong = 5.625;
         double maxLong = 16.875;
 
-        // TODO adjust to what frontend sees, idk how this behaves with lower zoom levels
+        // adjust to what frontend sees
         double latOffset = tileOffset * (latLength / 2.0) * zoomFactor * ownPercentage;
         double lonOffset = tileOffset * (lonLength / 2.0) * zoomFactor * ownPercentage;
 

@@ -16,10 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequiredArgsConstructor
@@ -45,8 +42,10 @@ public class ProgressControllerImpl implements ProgressController {
             List<String> locationIds = appUser.getLocationIds();
             Map<String, Float> stats;
 
-            if (appUser.getStats() == null || appUser.getStats().isEmpty()) { // create new stats if don't exist
-                stats = progressService.createNewUserStats(locationIds);
+            if (appUser.getStats() == null || appUser.getStats().isEmpty()) {
+                // create new stats if don't exist already
+                stats = new HashMap<>();
+                progressService.updateAllStats(stats, locationIds);
                 appUser.setStats(stats);
                 userRepository.save(appUser);
             }
@@ -77,12 +76,16 @@ public class ProgressControllerImpl implements ProgressController {
         if (appUserOptional.isPresent()) {
 
             AppUser appUser = appUserOptional.get();
+            List<String> locationIds = appUser.getLocationIds();
             List<String> achievementIds = appUser.getAchievementIds();
 
-            // update achievements
-            progressService.updateAchievements(achievementIds, appUser.getLocationIds());
-            appUser.setAchievementIds(achievementIds);
-            userRepository.save(appUser);
+            if (appUser.getAchievementIds() == null || appUser.getAchievementIds().isEmpty()) {
+                // create new achievement list if don't exist already
+                achievementIds = new ArrayList<>();
+                progressService.updateAllAchievements(achievementIds, locationIds);
+                appUser.setAchievementIds(achievementIds);
+                userRepository.save(appUser);
+            }
 
             // collect achieved and not achieved achievements
             List<AchievementDTO> achievementsDto = new ArrayList<>(achievementRepository.findAchievementsByIdIn(achievementIds)

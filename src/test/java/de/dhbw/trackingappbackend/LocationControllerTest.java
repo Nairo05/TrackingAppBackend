@@ -31,7 +31,7 @@ public class LocationControllerTest {
     @InjectMocks
     protected LocationControllerImpl sut;
 
-    /*  TODO fuck auth testing
+    /*
     @Test
     public void testGetLocations() throws Exception {
 

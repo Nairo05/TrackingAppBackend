@@ -10,8 +10,6 @@ import java.util.Optional;
 @Repository
 public interface LocationRepository extends MongoRepository<Location, String> {
 
-    // List<Location> findByTilePositionWithin(GeoJsonPolygon p);
-
     List<Location> findByTilePositionWithinAndIdIn(GeoJsonPolygon p, List<String> locationIds);
 
     List<Location> findByIdIn(List<String> locationIds);
@@ -19,6 +17,4 @@ public interface LocationRepository extends MongoRepository<Location, String> {
     Optional<Location> findByTile_xTileAndTile_yTile(int xTile, int yTile);
 
     int countAllByIdInAndKuerzelContains(List<String> locationIds, String kuerzel);
-
-    int countAllByKuerzelContains(String kuerzel);
 }

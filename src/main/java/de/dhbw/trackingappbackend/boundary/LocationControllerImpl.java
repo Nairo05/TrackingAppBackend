@@ -2,6 +2,7 @@ package de.dhbw.trackingappbackend.boundary;
 
 import de.dhbw.trackingappbackend.control.CoordinateService;
 import de.dhbw.trackingappbackend.control.LocationService;
+import de.dhbw.trackingappbackend.control.ProgressService;
 import de.dhbw.trackingappbackend.control.TileService;
 import de.dhbw.trackingappbackend.entity.location.LocationRepository;
 import de.dhbw.trackingappbackend.entity.location.Location;
@@ -29,6 +30,7 @@ public class LocationControllerImpl implements LocationController {
 
     private final LocationService locationService;
     private final CoordinateService coordinateService;
+    private final ProgressService progressService;
 
     private final UserRepository userRepository;
     private final LocationRepository locationRepository;
@@ -141,6 +143,7 @@ public class LocationControllerImpl implements LocationController {
                     // add new location id to user
                     locationIds.add(location.getId());
                     appUser.setLocationIds(locationIds);
+                    progressService.updateProgress(appUser.getStats(), appUser.getAchievementIds(), location, locationIds);
                     userRepository.save(appUser);
 
                     return ResponseEntity.ok(new LocationWrapper(location));

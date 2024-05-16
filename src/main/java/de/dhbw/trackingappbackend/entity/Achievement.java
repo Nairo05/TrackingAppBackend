@@ -1,5 +1,6 @@
 package de.dhbw.trackingappbackend.entity;
 
+import de.dhbw.trackingappbackend.entity.location.Tile;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,5 +20,7 @@ public class Achievement {
 
     private String description;
 
-    // TODO add field for kuerzel or specific tile
+    private String kuerzel;
+
+    private Tile tile;
 }
