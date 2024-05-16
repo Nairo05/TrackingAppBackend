@@ -14,7 +14,6 @@ public class CoordinateService {
 
     /**
      * Returns an area as a GeoJsonPolygon using the given latitude, longitude and zoom level.
-     *
      * @param latitude given latitude
      * @param longitude given longitude
      * @param zoomLevel given zoom level
@@ -37,20 +36,17 @@ public class CoordinateService {
         double latOffset = tileOffset * (latLength / 2.0) * zoomFactor * ownPercentage;
         double lonOffset = tileOffset * (lonLength / 2.0) * zoomFactor * ownPercentage;
 
-        GeoJsonPolygon polygon = new GeoJsonPolygon(
+        return new GeoJsonPolygon(
             new Point(Math.max(latitude - latOffset, minLat), Math.max(longitude - lonOffset, minLong)), // upper left
             new Point(Math.max(latitude - latOffset, minLat), Math.min(longitude + lonOffset, maxLong)), // upper right
             new Point(Math.min(latitude + latOffset, maxLat), Math.min(longitude + lonOffset, maxLong)), // lower right
             new Point(Math.min(latitude + latOffset, maxLat), Math.max(longitude - lonOffset, minLong)), // lower left
             new Point(Math.max(latitude - latOffset, minLat), Math.max(longitude - lonOffset, minLong))); // first and last point have to be the same
-
-        return polygon;
     }
 
     /**
      * Calculates the approximate length of a tile based on given latitude and longitude.
      * Different to the latitude, the distance between longitudes varies due to the earth's shape.
-     *
      * @param latitude given latitude
      * @param longitude given longitude
      * @param zoomLevel given zoom level

@@ -12,7 +12,6 @@ public class TileService {
 
     /**
      * Returns the parent tile of a tile corresponding to the zoomLevel.
-     *
      * @param tile original tile
      * @param zoomLevel zoom level of the parent tile
      * @return parent tile
@@ -24,9 +23,7 @@ public class TileService {
 
     /**
      * Returns the tile based on the given coordinates and zoom level.
-     *
      * @link <a href="https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames">Calculation Method</a>
-     *
      * @param latitude given latitude
      * @param longitude given longitude
      * @param zoomLevel given zoom level
@@ -43,7 +40,6 @@ public class TileService {
 
     /**
      * Returns the upper-left coordinates of a tile based on the given tile.
-     *
      * @param xTile x coordinate of the tile
      * @param yTile y coordinate of the tile
      * @param zoomLevel zoom level of the tile

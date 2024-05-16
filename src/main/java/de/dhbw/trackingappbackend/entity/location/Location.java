@@ -21,10 +21,6 @@ public class Location {
 
     private List<String> kuerzel;
 
-    public Location(Tile tile) {
-        this.tile = tile;
-    }
-
     @Override
     public String toString() {
         return "ID: " + this.id + " Tile: " + this.tile + " Land: " + this.kuerzel;

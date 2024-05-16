@@ -76,7 +76,7 @@ public class LocationServiceTest {
     }
 
     @Test
-    public void testMergeSinglesThenPolygonHorizontally() {
+    public void testMergeLeftSingleThenRightPolygonHorizontally() {
 
         List<LocationWrapper> locations = Stream.of(
                 new Tile(8586, 5664, (byte) 14),
@@ -105,7 +105,7 @@ public class LocationServiceTest {
     }
 
     @Test
-    public void testMergePolygonThenSingleHorizontally() {
+    public void testMergeLeftPolygonThenRightSingleHorizontally() {
 
         List<LocationWrapper> locations = Stream.of(
                 new Tile(8586, 5664, (byte) 14),
@@ -123,6 +123,64 @@ public class LocationServiceTest {
             .posLowerLeft(copy(locations.get(0).getPosLowerLeft()))
             .posUpperRight(copy(locations.get(2).getPosUpperRight()))
             .posLowerRight(copy(locations.get(2).getPosLowerRight()))
+            .mergedVertically(false)
+            .mergedHorizontally(true)
+            .build();
+
+        List<LocationWrapper> mergedLocations = locationService.mergeLocations(locations);
+
+        Assertions.assertEquals(1, mergedLocations.size());
+        Assertions.assertEquals(expectedResult, mergedLocations.get(0));
+    }
+
+    @Test
+    public void testMergeRightSingleThenLeftPolygonHorizontally() {
+
+        List<LocationWrapper> locations = Stream.of(
+                new Tile(8589, 5664, (byte) 14),
+                new Tile(8586, 5664, (byte) 14),
+                new Tile(8587, 5664, (byte) 14),
+                new Tile(8588, 5664, (byte) 14))
+            .map(LocationWrapper::new)
+            .toList();
+
+        LocationWrapper expectedResult = LocationWrapper.builder()
+            .xTile(locations.get(0).getXTile())
+            .yTile(locations.get(0).getYTile())
+            .zoomLevel(locations.get(0).getZoomLevel())
+            .posUpperLeft(copy(locations.get(1).getPosUpperLeft()))
+            .posLowerLeft(copy(locations.get(1).getPosLowerLeft()))
+            .posUpperRight(copy(locations.get(0).getPosUpperRight()))
+            .posLowerRight(copy(locations.get(0).getPosLowerRight()))
+            .mergedVertically(false)
+            .mergedHorizontally(true)
+            .build();
+
+        List<LocationWrapper> mergedLocations = locationService.mergeLocations(locations);
+
+        Assertions.assertEquals(1, mergedLocations.size());
+        Assertions.assertEquals(expectedResult, mergedLocations.get(0));
+    }
+
+    @Test
+    public void testMergeRightPolygonThenLeftSingleHorizontally() {
+
+        List<LocationWrapper> locations = Stream.of(
+                new Tile(8586, 5664, (byte) 14),
+                new Tile(8589, 5664, (byte) 14),
+                new Tile(8588, 5664, (byte) 14),
+                new Tile(8587, 5664, (byte) 14))
+            .map(LocationWrapper::new)
+            .toList();
+
+        LocationWrapper expectedResult = LocationWrapper.builder()
+            .xTile(locations.get(0).getXTile())
+            .yTile(locations.get(0).getYTile())
+            .zoomLevel(locations.get(0).getZoomLevel())
+            .posUpperLeft(copy(locations.get(0).getPosUpperLeft()))
+            .posLowerLeft(copy(locations.get(0).getPosLowerLeft()))
+            .posUpperRight(copy(locations.get(1).getPosUpperRight()))
+            .posLowerRight(copy(locations.get(1).getPosLowerRight()))
             .mergedVertically(false)
             .mergedHorizontally(true)
             .build();

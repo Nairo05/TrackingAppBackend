@@ -10,13 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Tile {
 
-    // x tile id
     private int xTile;
 
-    // y tile id
     private int yTile;
 
-    // zoom level of the tile
     private byte zoomLevel;
 
     // position of the upper-left tile corner

@@ -24,12 +24,25 @@ public class ProgressService {
     private final Map<String, Integer> TOTAL_TILE_COUNTS = createTotalTileCounts();
     private final List<String> ALL_KUERZEL = List.of("DE", "BE", "BB", "BW", "BY", "HB", "HE", "HH", "MV", "NI", "NW", "RP", "SH", "SL", "SN", "ST", "TH");
 
+    /**
+     * Updates the progress of a user by updating stats and achievements with the newly visited location.
+     * @param stats Map with user stats
+     * @param achievements List of user achievements
+     * @param location New location
+     * @param locationIds List of location IDs
+     */
     public void updateProgress(Map<String, Float> stats, List<String> achievements, Location location, List<String> locationIds) {
 
         updateStatsByKuerzelList(stats, locationIds, location.getKuerzel());
         updateAchievements(achievements, location.getKuerzel(), location.getTile());
     }
 
+    /**
+     * Updates the stats of a user by checking a single Bundesland kuerzel.
+     * @param stats Map with user stats
+     * @param locationIds List of location IDs
+     * @param kuerzel Bundesland kuerzel
+     */
     public void updateStatsByKuerzel(Map<String, Float> stats, List<String> locationIds, String kuerzel) {
 
         int countTotal = TOTAL_TILE_COUNTS.get(kuerzel);
@@ -37,6 +50,12 @@ public class ProgressService {
         stats.put(kuerzel, (float) countUser / countTotal);
     }
 
+    /**
+     * Updates the stats of a user by checking a list of Bundesland kuerzels.
+     * @param stats Map with user stats
+     * @param locationIds List of location IDs
+     * @param kuerzelList List of Bundesland kuerzels
+     */
     public void updateStatsByKuerzelList(Map<String, Float> stats, List<String> locationIds, List<String> kuerzelList) {
 
         for (String kuerzel : kuerzelList) {
@@ -44,27 +63,38 @@ public class ProgressService {
         }
     }
 
-    public void updateAchievements(List<String> achievements, List<String> newLocationKuerzel, Tile newLocationTile) {
+    /**
+     * Updates the achievements of a user by checking new kuerzels and new tile.
+     * @param achievementIds List of achievement IDs
+     * @param newLocationKuerzel List of new Bundesland kuerzels
+     * @param newLocationTile New location tile
+     */
+    public void updateAchievements(List<String> achievementIds, List<String> newLocationKuerzel, Tile newLocationTile) {
 
         List<Achievement> allAchievements = achievementRepository.findAll();
 
         for (Achievement achvmnt : allAchievements) {
 
             if (achvmnt.getKuerzel() != null) {
-                if (newLocationKuerzel.contains(achvmnt.getKuerzel()) && !achievements.contains(achvmnt.getId())) {
-                    achievements.add(achvmnt.getId());
+                if (newLocationKuerzel.contains(achvmnt.getKuerzel()) && !achievementIds.contains(achvmnt.getId())) {
+                    achievementIds.add(achvmnt.getId());
                 }
             }
             else if (achvmnt.getTile() != null) {
                 if (achvmnt.getTile().getXTile() == newLocationTile.getXTile() &&
                     achvmnt.getTile().getYTile() == newLocationTile.getYTile() &&
-                    !achievements.contains(achvmnt.getId())) {
-                    achievements.add(achvmnt.getId());
+                    !achievementIds.contains(achvmnt.getId())) {
+                    achievementIds.add(achvmnt.getId());
                 }
             }
         }
     }
 
+    /**
+     * Updates all stats of a user.
+     * @param stats Map with the stats
+     * @param locationIds List of location IDs
+     */
     public void updateAllStats(Map<String, Float> stats, List<String> locationIds) {
 
         for (String kuerzel : ALL_KUERZEL) {
@@ -72,6 +102,11 @@ public class ProgressService {
         }
     }
 
+    /**
+     * Updates the achievements of a user by checking all locations and achievements.
+     * @param achievementIds List of achievement IDs
+     * @param locationIds List of location IDs
+     */
     public void updateAllAchievements(List<String> achievementIds, List<String> locationIds) {
 
         List<Location> locations = locationRepository.findByIdIn(locationIds);
@@ -97,13 +132,10 @@ public class ProgressService {
         }
     }
 
-    public Map<String, Float> createNewUserStats(List<String> locationIds) {
-
-        Map<String, Float> stats = new HashMap<>();
-        updateAllStats(stats, locationIds);
-        return stats;
-    }
-
+    /**
+     * Creates a map with the fixed, total tile counts for each Bundesland.
+     * @return Map with the total tile counts for each Bundesland
+     */
     private Map<String, Integer> createTotalTileCounts() {
 
         Map<String, Integer> totals = new HashMap<>();

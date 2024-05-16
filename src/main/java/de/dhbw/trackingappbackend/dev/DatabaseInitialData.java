@@ -45,6 +45,7 @@ public class DatabaseInitialData {
 
             userRepository.deleteAll();
             fileRepository.deleteAll();
+            achievementRepository.deleteAll();
 
             String password = encoder.encode("password123.");
 

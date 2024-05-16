@@ -11,16 +11,16 @@ import lombok.Data;
 @AllArgsConstructor
 public class LocationWrapper {
 
-    //@JsonIgnore
+    @JsonIgnore
     private int xTile;
-    //@JsonIgnore
+    @JsonIgnore
     private int yTile;
-    private byte zoomLevel;
-
-    //@JsonIgnore
+    @JsonIgnore
     private boolean mergedVertically;
-    //@JsonIgnore
+    @JsonIgnore
     private boolean mergedHorizontally;
+
+    private byte zoomLevel;
 
     private double[] posUpperLeft;
     private double[] posUpperRight;
