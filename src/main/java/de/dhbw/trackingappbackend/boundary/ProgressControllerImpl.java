@@ -42,18 +42,17 @@ public class ProgressControllerImpl implements ProgressController {
         if (appUserOptional.isPresent()) {
 
             AppUser appUser = appUserOptional.get();
+            List<String> locationIds = appUser.getLocationIds();
             Map<String, Float> stats;
 
             if (appUser.getStats() == null || appUser.getStats().isEmpty()) { // create new stats if don't exist
-                stats = progressService.createNewUserStats();
-            } else {
+                stats = progressService.createNewUserStats(locationIds);
+                appUser.setStats(stats);
+                userRepository.save(appUser);
+            }
+            else {
                 stats = appUser.getStats();
             }
-
-            // update stats
-            progressService.updateStats(stats, appUser.getLocationIds());
-            appUser.setStats(stats);
-            userRepository.save(appUser);
 
             return ResponseEntity.ok(stats.keySet().stream()
                 .map(key -> StatDTO.builder()

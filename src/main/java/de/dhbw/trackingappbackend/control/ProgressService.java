@@ -18,13 +18,28 @@ public class ProgressService {
     private final LocationRepository locationRepository;
     private final AchievementRepository achievementRepository;
 
-    public void updateStats(Map<String, Float> stats, List<String> locationIds) {
+    private final Map<String, Integer> TOTAL_TILE_COUNTS = createTotalTileCounts();
+    private final List<String> ALL_KUERZEL = List.of("DE", "BE", "BB", "BW", "BY", "HB", "HE", "HH", "MV", "NI", "NW", "RP", "SH", "SL", "SN", "ST", "TH");
 
-        int countUserDE = locationRepository.countLocationsByIdInAndKuerzelContains(locationIds, "DE");
-        int countAllDE = locationRepository.countLocationsByKuerzelContains("DE"); // TODO pre-safe total counts?
-        stats.put("DE", (float) countUserDE / countAllDE);
+    public void updateStatByKuerzel(Map<String, Float> stats, List<String> locationIds, String kuerzel) {
 
-        // TODO add other bundeslaender percentages
+        int countTotal = TOTAL_TILE_COUNTS.get(kuerzel);
+        int countUser = locationRepository.countAllByIdInAndKuerzelContains(locationIds, kuerzel);
+        stats.put(kuerzel, (float) countUser / countTotal);
+    }
+
+    public void updateStatByKuerzelList(Map<String, Float> stats, List<String> locationIds, List<String> kuerzelList) {
+
+        for (String kuerzel : kuerzelList) {
+            updateStatByKuerzel(stats, locationIds, kuerzel);
+        }
+    }
+
+    public void updateAllStats(Map<String, Float> stats, List<String> locationIds) {
+
+        for (String kuerzel : ALL_KUERZEL) {
+            updateStatByKuerzel(stats, locationIds, kuerzel);
+        }
     }
 
     public void updateAchievements(List<String> achievements, List<String> locationIds) {
@@ -32,29 +47,35 @@ public class ProgressService {
         // TODO add achievement implementation, comes with bundeslaender -.-
     }
 
-    public Map<String, Float> createNewUserStats() {
+    public Map<String, Float> createNewUserStats(List<String> locationIds) {
 
         Map<String, Float> stats = new HashMap<>();
-
-        // DE BW BY BE BB HB HH HE MV NI NW RP SL SN ST SH TH
-        stats.put("DE", 0f);
-        stats.put("BE", 0f);
-        stats.put("BB", 0f);
-        stats.put("BW", 0f);
-        stats.put("BY", 0f);
-        stats.put("HB", 0f);
-        stats.put("HE", 0f);
-        stats.put("HH", 0f);
-        stats.put("MV", 0f);
-        stats.put("NI", 0f);
-        stats.put("NW", 0f);
-        stats.put("RP", 0f);
-        stats.put("SH", 0f);
-        stats.put("SL", 0f);
-        stats.put("SN", 0f);
-        stats.put("ST", 0f);
-        stats.put("TH", 0f);
-
+        updateAllStats(stats, locationIds);
         return stats;
+    }
+
+    private Map<String, Integer> createTotalTileCounts() {
+
+        Map<String, Integer> totals = new HashMap<>();
+
+        totals.put("DE", 154537);
+        totals.put("BE", 484);
+        totals.put("BB", 1155);
+        totals.put("BW", 14246);
+        totals.put("BY", 28178);
+        totals.put("HB", 260);
+        totals.put("HE", 9221);
+        totals.put("HH", 437);
+        totals.put("MV", 11883);
+        totals.put("NI", 22738);
+        totals.put("NW", 15266);
+        totals.put("RP", 8390);
+        totals.put("SH", 8280);
+        totals.put("SL", 1137);
+        totals.put("SN", 8214);
+        totals.put("ST", 9472);
+        totals.put("TH", 7224);
+
+        return totals;
     }
 }

@@ -18,7 +18,7 @@ public interface LocationRepository extends MongoRepository<Location, String> {
 
     Optional<Location> findByTile_xTileAndTile_yTile(int xTile, int yTile);
 
-    int countLocationsByIdInAndKuerzelContains(List<String> locationIds, String kuerzel);
+    int countAllByIdInAndKuerzelContains(List<String> locationIds, String kuerzel);
 
-    int countLocationsByKuerzelContains(String kuerzel);
+    int countAllByKuerzelContains(String kuerzel);
 }
