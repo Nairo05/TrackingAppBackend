@@ -13,6 +13,6 @@ public class FriendDTO {
 
     private String acceptedAt;
 
-    private float stats;
+    private float germanyPercentage;
 
 }
