@@ -46,7 +46,7 @@ public class ProgressService {
     public void updateStatsByKuerzel(Map<String, Float> stats, List<String> locationIds, String kuerzel) {
 
         int countTotal = TOTAL_TILE_COUNTS.get(kuerzel);
-        int countUser = locationRepository.countAllByIdInAndKuerzelContains(locationIds, kuerzel);
+        int countUser = locationRepository.countByIdInAndKuerzelContains(locationIds, kuerzel);
         stats.put(kuerzel, (float) countUser / countTotal);
     }
 
