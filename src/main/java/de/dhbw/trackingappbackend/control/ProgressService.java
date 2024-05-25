@@ -142,17 +142,17 @@ public class ProgressService {
 
         totals.put("DE", 154537);
         totals.put("BE", 484);
-        totals.put("BB", 1155);
+        totals.put("BB", 13913);
         totals.put("BW", 14246);
         totals.put("BY", 28178);
         totals.put("HB", 260);
         totals.put("HE", 9221);
         totals.put("HH", 437);
         totals.put("MV", 11883);
-        totals.put("NI", 22738);
+        totals.put("NI", 22748);
         totals.put("NW", 15266);
         totals.put("RP", 8390);
-        totals.put("SH", 8280);
+        totals.put("SH", 8290);
         totals.put("SL", 1137);
         totals.put("SN", 8214);
         totals.put("ST", 9472);
