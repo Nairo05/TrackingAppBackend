@@ -115,6 +115,8 @@ public class AuthService {
                 .username(signUpRequest.getUsername())
                 .password(encoder.encode(signUpRequest.getPassword()))
                 .locationIds(Collections.emptyList())
+                .stats(new HashMap<>())
+                .achievementIds(Collections.emptyList())
                 .friends(Collections.emptyList())
                 .cipher(signUpRequest.getCipher())
                 .build();
