@@ -63,20 +63,20 @@ public class AuthService {
         return (UserDetailsImpl) authentication.getPrincipal();
     }
 
-    public UserDetailsImpl fingerPrintLogin(String email, String fingerprint) {
+    public void fingerPrintRegister(String token) {
 
-        Optional<AppUser> appUser = userRepository.findFirstByEmail(email);
+        UserDetailsImpl user = getUserFromContext();
 
-        if (appUser.isEmpty()) {
-            return null;
-        }   //TODO add new Authentification extends AbstractAuthentification
+        Optional<AppUser> appUser = userRepository.findFirstByEmail(user.getEmail());
 
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(appUser.get().getUsername(), fingerprint));
+        if (appUser.isPresent()) {
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+            AppUser currentUser = appUser.get();
 
-        return (UserDetailsImpl) authentication.getPrincipal();
+            currentUser.setCipher(token);
+
+            userRepository.save(currentUser);
+        }
 
     }
 
@@ -96,7 +96,19 @@ public class AuthService {
             signUpRequest.setUsername(signUpRequest.getEmail());
         }
 
-        AppUser appUser = new AppUser(
+        AppUser appUser = AppUser
+                .builder()
+                .id(UUID.randomUUID().toString())
+                .firstname(signUpRequest.getFirstname())
+                .lastname(signUpRequest.getLastname())
+                .email(signUpRequest.getEmail())
+                .username(signUpRequest.getUsername())
+                .password(encoder.encode(signUpRequest.getPassword()))
+                .locationIds(Collections.emptyList())
+                .friends(Collections.emptyList())
+                .build();
+
+        /*AppUser appUser = new AppUser(
                 UUID.randomUUID().toString(),
                 signUpRequest.getFirstname(),
                 signUpRequest.getLastname(),
@@ -107,8 +119,9 @@ public class AuthService {
                 new HashMap<>(),
                 Collections.emptyList(),
                 Collections.emptyList(),
+                null,
                 null
-        );
+        ); remove if replacement working */
 
         userRepository.save(appUser);
     }
@@ -225,6 +238,14 @@ public class AuthService {
 
             }
         }
+
+    }
+
+    public void fingerPrintLogin(String token) {
+
+        Authentication auth = new UsernamePasswordAuthenticationToken("test1@test.de", null, null);
+
+        SecurityContextHolder.getContext().setAuthentication(auth);
 
     }
 }

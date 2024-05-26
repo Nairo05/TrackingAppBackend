@@ -120,12 +120,20 @@ public class AuthControllerImpl implements AuthController {
     }
 
     @Override
-    @PostMapping("/fingerprint/{email}")
-    public ResponseEntity<?> authMe(@PathVariable String email, @RequestBody String fingerprint) {
+    @PostMapping("/fingerprints/add")
+    public ResponseEntity<?> registerFingerPrint(@RequestBody String token) {
 
-        authService.fingerPrintLogin(email, fingerprint);
+        authService.fingerPrintRegister(token);
 
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/fingerprints/login")
+    public ResponseEntity<?> loginWithFingerPrint(@RequestBody String token) {
+
+        authService.fingerPrintLogin(token);
+
+        return ResponseEntity.ok().body(authService.generateJWTResponseFromContext());
     }
 
 

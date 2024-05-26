@@ -41,15 +41,15 @@ public interface AuthController {
     @SecurityRequirement(name="oauth2")
     ResponseEntity<?> status();
 
-    @Operation(summary = "sends an email to reset the password")
+    @Operation(summary = "sends an email to reset the password. Email contains a Pin")
     ResponseEntity<?> forgotPassword(@RequestBody String email);
 
-    @Operation(summary = "needs the token from the email, resets the password")
+    @Operation(summary = "needs the pin from the email, resets the password")
     ResponseEntity<?> forgotPasswordAccepted(@Valid @RequestBody ResetPasswordModel resetPasswordModel);
 
     @Operation(summary = "exchange the refresh token for a new JWT")
     ResponseEntity<?> refreshToken(@RequestHeader String token, String bearer);
 
     @Operation(summary = "use biometric fingerprint information to login")
-    ResponseEntity<?> authMe(@PathVariable String email, @RequestBody String fingerprint);
+    public ResponseEntity<?> registerFingerPrint(@RequestBody String token);
 }

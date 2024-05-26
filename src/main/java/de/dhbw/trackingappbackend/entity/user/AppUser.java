@@ -53,6 +53,8 @@ public class AppUser {
 
     String profilePictureId;
 
+    String cipher;
+
     @Override
     public String toString() {
         return "ID: " + this.getId() + " Firstname:" + this.getFirstname() + " Lastname:" + this.getLastname();
