@@ -58,6 +58,7 @@ public class FriendControllerImpl implements FriendController {
                                         .email(friend.getEmail())
                                         .acceptedAt(friend.getAcceptedAt().toString())
                                         .germanyPercentage(friend.getGermanyPercentage() * 100f)
+                                        .username(friend.getUsername() == null ? friend.getEmail() : friend.getUsername())
                                         .build())
                 );
             }
@@ -137,7 +138,7 @@ public class FriendControllerImpl implements FriendController {
 
                     AppUser requester = userRepository.findById(friend.getUuid()).get();
 
-                    Friend friend1 = new Friend(appUser.getId(), Friend.accepted, appUser.getEmail(), Instant.now(), Instant.now(), appUser.getStats().get("DE"));
+                    Friend friend1 = new Friend(appUser.getId(), Friend.accepted, appUser.getEmail(), Instant.now(), Instant.now(), appUser.getStats().get("DE"), appUser.getUsername());
 
                     requester.getFriends().add(friend1);
 
@@ -233,7 +234,7 @@ public class FriendControllerImpl implements FriendController {
 
                 AppUser addUser = addUserOptional.get();
 
-                Friend requestfriend = new Friend(appUser.getId(), Friend.open, appUser.getEmail(), Instant.now(), Instant.now(), appUser.getStats().get("DE"));
+                Friend requestfriend = new Friend(appUser.getId(), Friend.open, appUser.getEmail(), Instant.now(), Instant.now(), appUser.getStats().get("DE"), appUser.getUsername());
                 addUser.getFriends().add(requestfriend);
                 userRepository.save(addUser);
 

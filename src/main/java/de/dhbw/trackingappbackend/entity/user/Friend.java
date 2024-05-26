@@ -26,4 +26,6 @@ public class Friend {
 
     private float germanyPercentage;
 
+    private String username;
+
 }

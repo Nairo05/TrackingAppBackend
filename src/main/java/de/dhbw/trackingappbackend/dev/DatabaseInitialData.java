@@ -75,9 +75,8 @@ public class DatabaseInitialData {
                     .firstname("TestFirstName")
                     .lastname("TestLastName")
                     .friends(List.of(
-                            new Friend(uuid2, Friend.accepted, "test2@test.de", Instant.now(), Instant.now(), 0f),
-                            new Friend(uuid3, Friend.accepted, "test3@test.de", Instant.now(), Instant.now(), 0f),
-                            new Friend(uuid4, Friend.open, "test4@test.de", Instant.now(), Instant.now(), 0f)
+                            new Friend(uuid2, Friend.accepted, "test2@test.de", Instant.now(), Instant.now(), 0f, "test2Username"),
+                            new Friend(uuid4, Friend.open, "test4@test.de", Instant.now(), Instant.now(), 0f, "test4Username")
                             ))
                     .stats(new HashMap<>())
                     .achievementIds(Collections.emptyList())
@@ -92,7 +91,7 @@ public class DatabaseInitialData {
                     .username("test2Username")
                     .firstname("Test2FirstName")
                     .lastname("Test2LastName")
-                    .friends(Collections.emptyList())
+                    .friends(List.of(new Friend(uuid1, Friend.accepted, "test1@test.de", Instant.now(), Instant.now(), 0f, "test1Username")))
                     .stats(new HashMap<>())
                     .achievementIds(Collections.emptyList())
                     .locationIds(Collections.emptyList())

@@ -11,6 +11,8 @@ public class FriendDTO {
 
     private String email;
 
+    private String username;
+
     private String acceptedAt;
 
     private float germanyPercentage;
