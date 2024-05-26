@@ -115,7 +115,7 @@ public class AuthService {
                 .username(signUpRequest.getUsername())
                 .password(encoder.encode(signUpRequest.getPassword()))
                 .locationIds(Collections.emptyList())
-                .stats(new HashMap<>())
+                .stats(new HashMap<>(){{ put("DE", 0f); }})
                 .achievementIds(Collections.emptyList())
                 .friends(Collections.emptyList())
                 .cipher(signUpRequest.getCipher())
