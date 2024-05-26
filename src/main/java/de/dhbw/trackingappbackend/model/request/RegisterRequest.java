@@ -25,4 +25,6 @@ public class RegisterRequest {
     @Size(min=3, max = 20)
     private String lastname;
 
+    private String cipher;
+
 }

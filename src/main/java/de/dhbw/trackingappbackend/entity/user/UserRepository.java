@@ -22,4 +22,6 @@ public interface UserRepository extends MongoRepository<AppUser, String> {
 
     Optional<AppUser> findFirstByEmail(String email);
 
+    Boolean existsByEmailAndCipher(String email, String cipher);
+
 }

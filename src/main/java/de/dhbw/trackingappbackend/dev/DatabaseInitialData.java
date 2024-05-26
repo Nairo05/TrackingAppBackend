@@ -82,6 +82,7 @@ public class DatabaseInitialData {
                     .achievementIds(Collections.emptyList())
                     .locationIds(Collections.emptyList())
                     .profilePictureId(uuidPicture1)
+                    .cipher("889bb645-9e39-4685-a351-99cdd65a1c9f")
                     .build();
 
             AppUser appUser1 = AppUser.builder()

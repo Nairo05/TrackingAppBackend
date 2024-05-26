@@ -1,8 +1,10 @@
 package de.dhbw.trackingappbackend.boundary;
 
 import de.dhbw.trackingappbackend.control.AuthService;
+import de.dhbw.trackingappbackend.model.request.FingerPrintRequest;
 import de.dhbw.trackingappbackend.model.request.LoginRequest;
 import de.dhbw.trackingappbackend.model.request.RegisterRequest;
+import de.dhbw.trackingappbackend.model.response.JwtResponse;
 import de.dhbw.trackingappbackend.model.response.ResetPasswordModel;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -128,18 +130,19 @@ public class AuthControllerImpl implements AuthController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/fingerprints/login")
-    public ResponseEntity<?> loginWithFingerPrint(@RequestBody String token) {
-
-        authService.fingerPrintLogin(token);
-
-        return ResponseEntity.ok().body(authService.generateJWTResponseFromContext());
+    @PostMapping("/fingerprints/login")
+    public ResponseEntity<JwtResponse> loginWithFingerPrint(@RequestBody FingerPrintRequest fingerPrintRequest) throws Exception {
+        return ResponseEntity.ok().body(authService.fingerPrintLogin(fingerPrintRequest));
     }
 
 
     @Override
     @PostMapping("/reset")
     public ResponseEntity<?> forgotPassword(@RequestBody String email) {
+
+        email = email.replaceAll("\"","");
+
+        System.out.println(email);
 
         if (authService.resetPasswordRequest(email)) {
 

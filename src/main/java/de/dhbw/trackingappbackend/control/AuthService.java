@@ -6,6 +6,7 @@ import de.dhbw.trackingappbackend.entity.TokenRepository;
 import de.dhbw.trackingappbackend.entity.user.OneTimeTokenEntity;
 import de.dhbw.trackingappbackend.entity.user.OneTimeTokenRepository;
 import de.dhbw.trackingappbackend.entity.user.UserRepository;
+import de.dhbw.trackingappbackend.model.request.FingerPrintRequest;
 import de.dhbw.trackingappbackend.model.request.RegisterRequest;
 import de.dhbw.trackingappbackend.model.response.JwtResponse;
 import de.dhbw.trackingappbackend.security.JwtUtils;
@@ -44,7 +45,16 @@ public class AuthService {
         String jwt = jwtUtils.generateJwtToken(userDetails.getUsername());
         String refreshToken = jwtUtils.generateRefreshToken(userDetails.getId());
 
-        return new JwtResponse(jwt, refreshToken, userDetails.getEmail());
+        JwtResponse jwtResponse = JwtResponse
+                .builder()
+                .token(jwt)
+                .refreshToken(refreshToken)
+                .type("Bearer")
+                .email(userDetails.getEmail())
+                .username(userDetails.getUsername() == null ? userDetails.getEmail() : userDetails.getUsername())
+                .build();
+
+        return jwtResponse;
     }
 
     public UserDetailsImpl emailLogin(String email, String password) {
@@ -106,6 +116,7 @@ public class AuthService {
                 .password(encoder.encode(signUpRequest.getPassword()))
                 .locationIds(Collections.emptyList())
                 .friends(Collections.emptyList())
+                .cipher(signUpRequest.getCipher())
                 .build();
 
         /*AppUser appUser = new AppUser(
@@ -180,6 +191,8 @@ public class AuthService {
 
         int pin = secureRandom.nextInt(99999999)+1;
 
+        System.out.println("passed pin");
+
         if (!oneTimeTokenRepository.existsByEmail(email) && userRepository.existsByEmail(email)) {
 
             OneTimeTokenEntity oneTimeTokenEntity = OneTimeTokenEntity
@@ -193,11 +206,15 @@ public class AuthService {
 
             oneTimeTokenRepository.save(oneTimeTokenEntity);
 
+            System.out.println("pin added to repo");
+
             emailService.sendSimpleMessage(
-                    "floriansprenger27@gmail.com",
+                    email,
                     "Anfrage Passwort zurück setzten",
                     "Sehr geehrter Herr Sprenger, \n " +
                             "hier ist ihr Code zum zurücksetzen ihres Passwortes bei Trailblazer lautet " + pin);
+
+            System.out.println("mail sent");
 
             return true;
         }
@@ -241,11 +258,35 @@ public class AuthService {
 
     }
 
-    public void fingerPrintLogin(String token) {
+    public JwtResponse fingerPrintLogin(FingerPrintRequest request) throws Exception {
 
-        Authentication auth = new UsernamePasswordAuthenticationToken("test1@test.de", null, null);
+        if (userRepository.existsByEmailAndCipher(request.getEmail(), request.getCipher())) {
 
-        SecurityContextHolder.getContext().setAuthentication(auth);
+            Optional<AppUser> appUser = userRepository.findFirstByEmail(request.getEmail());
+
+            if (appUser.isEmpty()) {
+                return null;
+            }
+
+            String token = jwtUtils.generateJwtToken(appUser.get().getUsername());
+            String refreshToken = jwtUtils.generateRefreshToken(appUser.get().getId());
+
+            JwtResponse jwtResponse = JwtResponse
+                    .builder()
+                    .token(token)
+                    .refreshToken(refreshToken)
+                    .type("Bearer")
+                    .email(appUser.get().getEmail())
+                    .username(appUser.get().getUsername() == null ? appUser.get().getEmail() : appUser.get().getEmail() )
+                    .build();
+
+            return jwtResponse;
+
+        } else {
+
+            throw new Exception();
+
+        }
 
     }
 }

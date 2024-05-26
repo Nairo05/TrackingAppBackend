@@ -23,6 +23,8 @@ public class JwtResponse {
     @NonNull
     private String email;
 
+    private String username;
+
     @JsonIgnore
     private Long id;
 }

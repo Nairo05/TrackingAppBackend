@@ -34,6 +34,14 @@ public class FileControllerImpl implements FileController {
                     || !Objects.equals(multipartFile.getOriginalFilename(), fileName)
                     || multipartFile.getSize() != size) {
 
+                System.out.println(String.format("incorrect meta data stream { %s %s %s } uri { %s %s %s }",
+                        multipartFile.getOriginalFilename(),
+                        multipartFile.getContentType(),
+                        multipartFile.getSize(),
+                        fileName,
+                        fileType,
+                        size));
+
                 return ResponseEntity
                         .badRequest()
                         .body(String.format("incorrect meta data stream { %s %s %s } uri { %s %s %s }",

@@ -17,6 +17,6 @@ public class OAuthController {
 
     @GetMapping("/handlesuccess")
     public ResponseEntity<String> home() {
-        return ResponseEntity.ok("Login successful! Welcome, You can close this Page now");
+        return ResponseEntity.ok("Login successful! Welcome, " + SecurityContextHolder.getContext().getAuthentication().getDetails() + " You can close this Page now");
     }
 }
