@@ -42,7 +42,7 @@ public class ProgressControllerImpl implements ProgressController {
             List<String> locationIds = appUser.getLocationIds();
             Map<String, Float> stats;
 
-            if (appUser.getStats() == null || appUser.getStats().isEmpty()) {
+            if (appUser.getStats() == null || appUser.getStats().size() != 17) {
                 // create new stats if don't exist already
                 stats = new HashMap<>();
                 progressService.updateAllStats(stats, locationIds);

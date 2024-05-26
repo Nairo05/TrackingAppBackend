@@ -44,7 +44,7 @@ public class AuthService {
         String jwt = jwtUtils.generateJwtToken(userDetails.getUsername());
         String refreshToken = jwtUtils.generateRefreshToken(userDetails.getId());
 
-        return new JwtResponse(jwt, refreshToken, userDetails.getUsername());
+        return new JwtResponse(jwt, refreshToken, userDetails.getEmail());
     }
 
     public UserDetailsImpl emailLogin(String email, String password) {
@@ -156,7 +156,7 @@ public class AuthService {
             String jwt = jwtUtils.generateJwtToken(currentUser.getUsername());
             String refreshToken = jwtUtils.generateRefreshToken(currentUser.getId());
 
-            return new JwtResponse(jwt, refreshToken, currentUser.getUsername());
+            return new JwtResponse(jwt, refreshToken, currentUser.getEmail());
         }
     }
 

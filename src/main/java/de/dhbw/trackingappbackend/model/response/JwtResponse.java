@@ -1,7 +1,7 @@
 package de.dhbw.trackingappbackend.model.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
 @Data
@@ -23,6 +23,6 @@ public class JwtResponse {
     @NonNull
     private String email;
 
+    @JsonIgnore
     private Long id;
-
 }

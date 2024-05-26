@@ -24,4 +24,6 @@ public class Friend {
 
     private Instant acceptedAt;
 
+    private float germanyPercentage;
+
 }
