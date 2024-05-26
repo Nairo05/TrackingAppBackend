@@ -14,6 +14,13 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -73,12 +80,52 @@ public class WebSecurityConfig {
                                     .requestMatchers("/login").permitAll()
                                     .requestMatchers("/logout").permitAll()
                                     .requestMatchers("/error").permitAll()
+                                    .requestMatchers("/oauth2/**").permitAll()
+                                    .requestMatchers("/handlesuccess").permitAll()
                                     .anyRequest().authenticated();
                         }
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/login")
+                        .successHandler(customAuthenticationSuccessHandler())
+                        .failureUrl("/login?error=true")
+                        .clientRegistrationRepository(clientRegistrationRepository())
+                        .authorizedClientService(authorizedClientService())
                 )
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .build();
+    }
+
+    @Bean
+    public ClientRegistrationRepository clientRegistrationRepository() {
+        return new InMemoryClientRegistrationRepository(this.githubClientRegistration());
+    }
+
+    @Bean
+    public CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+        return new CustomAuthenticationSuccessHandler();
+    }
+
+    private ClientRegistration githubClientRegistration() {
+        return ClientRegistration.withRegistrationId("github")
+                .clientId("Ov23lieb3EUp5aCFnR3V")
+                .clientSecret("6750e5a350a56f31f346142537ab6973bdc6d337")
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .redirectUri("{baseUrl}/login/oauth2/code/{registrationId}")
+                .scope("read:user")
+                .authorizationUri("https://github.com/login/oauth/authorize")
+                .tokenUri("https://github.com/login/oauth/access_token")
+                .userInfoUri("https://api.github.com/user")
+                .userNameAttributeName("id")
+                .clientName("GitHub")
+                .build();
+    }
+
+    @Bean
+    public OAuth2AuthorizedClientService authorizedClientService() {
+        return new InMemoryOAuth2AuthorizedClientService(clientRegistrationRepository());
     }
 
     @Bean

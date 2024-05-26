@@ -251,6 +251,7 @@ public class FriendControllerImpl implements FriendController {
         return ResponseEntity.badRequest().body("There was a Problem resolving the jwt, cant extract user from context");
     }
 
+
 }
 
 
