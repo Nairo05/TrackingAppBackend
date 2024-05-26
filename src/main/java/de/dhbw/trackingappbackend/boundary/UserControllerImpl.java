@@ -16,6 +16,7 @@ public class UserControllerImpl implements UserController {
     @Override
     @PostMapping("/password/set")
     public Boolean changePassword(@RequestBody String password) {
+        password = password.replaceAll("\"","");
         return userService.setPassword(password);
     }
 
