@@ -191,7 +191,7 @@ public class FriendControllerImpl implements FriendController {
 
                     AppUser currentUser = appUser1.get();
                     currentUser.setFriends(currentUser.getFriends().stream().filter(friend -> !friend.getUuid().equals(appUser.getId())).toList());
-
+                    userRepository.save(currentUser);
                 }
 
 
