@@ -279,7 +279,7 @@ public class AuthService {
                     .refreshToken(refreshToken)
                     .type("Bearer")
                     .email(appUser.get().getEmail())
-                    .username(appUser.get().getUsername() == null ? appUser.get().getEmail() : appUser.get().getEmail() )
+                    .username(appUser.get().getUsername() == null ? appUser.get().getEmail() : appUser.get().getUsername())
                     .build();
 
             return jwtResponse;
